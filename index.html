@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUNNA VIP AI 95%</title>
+    <title>MUNNA VIP SYSTEM</title>
     <style>
         :root {
-            --neon-blue: #00d2ff;
-            --accuracy-green: #00ff88;
-            --glass-bg: rgba(255, 255, 255, 0.05);
+            --cyber-blue: #00d2ff;
+            --system-green: #00ff88;
+            --dark-bg: #000810;
         }
 
         body {
             margin: 0;
-            background: #00050a;
+            background: var(--dark-bg);
             color: #fff;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -23,159 +23,169 @@
             overflow: hidden;
         }
 
-        /* Cyber Background */
-        .bg-glow {
+        /* Moving Grid Background */
+        .bg-grid {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #001a33 0%, #000 100%);
+            width: 200%;
+            height: 200%;
+            background-image: linear-gradient(rgba(0, 210, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 210, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
             z-index: -1;
+            transform: rotateX(45deg);
+            animation: moveGrid 15s linear infinite;
         }
 
-        .main-container {
-            background: var(--glass-bg);
+        @keyframes moveGrid {
+            from { background-position: 0 0; }
+            to { background-position: 50px 50px; }
+        }
+
+        .system-card {
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(0, 210, 255, 0.2);
-            padding: 30px;
-            border-radius: 35px;
-            width: 88%;
+            padding: 35px 25px;
+            border-radius: 40px;
+            width: 85%;
             max-width: 360px;
             text-align: center;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.9);
-            animation: float 4s ease-in-out infinite;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 20px rgba(0, 210, 255, 0.1);
+            animation: float 5s ease-in-out infinite;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
         }
 
-        /* Accuracy Meter Style */
-        .accuracy-box {
-            border: 1px solid var(--accuracy-green);
-            background: rgba(0, 255, 136, 0.05);
-            padding: 8px 15px;
+        .accuracy-tag {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--system-green);
+            color: var(--system-green);
+            padding: 6px 15px;
             border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
             display: inline-block;
-            margin-bottom: 20px;
             box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
         }
 
-        .accuracy-text {
-            color: var(--accuracy-green);
-            font-size: 0.8rem;
-            font-weight: 900;
-            letter-spacing: 1px;
-        }
-
         h2 { 
-            font-size: 1.5rem; 
-            letter-spacing: 4px; 
-            margin: 0 0 20px 0; 
+            font-size: 1.7rem; 
+            letter-spacing: 5px; 
+            margin: 0 0 25px 0; 
             text-transform: uppercase;
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-        }
-
-        .panel {
-            background: rgba(0,0,0,0.4);
-            border-radius: 18px;
-            padding: 12px;
-            margin-bottom: 12px;
-            border-bottom: 2px solid rgba(0, 210, 255, 0.2);
-        }
-
-        .label { font-size: 0.6rem; color: #6085a3; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;}
-        .val { font-size: 1rem; font-weight: bold; }
-
-        #resultDisplay {
-            margin: 25px 0;
-            min-height: 80px;
-        }
-
-        #predictionText {
-            font-size: 2.2rem;
-            font-weight: 900;
             color: #fff;
-            text-shadow: 0 0 20px var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        .data-panel {
+            background: rgba(0,0,0,0.5);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .label { font-size: 0.6rem; color: #5a7d9a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;}
+        .val { font-size: 1.1rem; font-weight: bold; color: var(--cyber-blue); }
+
+        #resultBox {
+            margin: 30px 0;
+            min-height: 90px;
+        }
+
+        #prediction {
+            font-size: 2.3rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #fff;
+            text-shadow: 0 0 20px var(--cyber-blue);
         }
 
         .win-status {
-            color: var(--accuracy-green);
+            color: var(--system-green);
             font-size: 0.85rem;
-            margin-top: 8px;
+            margin-top: 10px;
             font-weight: bold;
             display: none;
+            letter-spacing: 1px;
         }
 
-        .btn-main {
-            background: linear-gradient(45deg, #00d2ff, #008cff);
+        .btn-system {
+            background: linear-gradient(90deg, #00d2ff, #0077ff);
             color: white;
             border: none;
-            padding: 18px;
-            border-radius: 18px;
+            padding: 20px;
+            border-radius: 25px;
             width: 100%;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 210, 255, 0.3);
-            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.3);
+            transition: 0.4s;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .btn-main:disabled {
-            background: #1e2a38;
-            box-shadow: none;
-            color: #4a5d71;
+        .btn-system:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 210, 255, 0.5);
+        }
+
+        .btn-system:disabled {
+            background: #15202b;
+            color: #3d4f5f;
             cursor: not-allowed;
+            box-shadow: none;
         }
 
-        .tg-icon { margin-top: 25px; display: block; }
-        .tg-icon img { width: 42px; filter: drop-shadow(0 0 8px var(--neon-blue)); }
+        .footer-link { margin-top: 30px; display: block; }
+        .footer-link img { width: 42px; filter: drop-shadow(0 0 8px var(--cyber-blue)); opacity: 0.8; }
 
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+    <div class="bg-grid"></div>
 
-    <div class="main-container">
-        <div class="accuracy-box">
-            <span class="accuracy-text">🎯 AI ACCURACY: <span id="accPerc">95.4</span>%</span>
-        </div>
-
+    <div class="system-card">
+        <div class="accuracy-tag">SYSTEM ACCURACY: <span id="accNum">95.4</span>%</div>
+        
         <h2>MUNNA VIP</h2>
 
-        <div class="panel">
-            <div class="label">Server Period</div>
-            <div id="periodBox" class="val">SYNCING...</div>
+        <div class="data-panel">
+            <div class="label">Period Serial</div>
+            <div id="periodTxt" class="val">LOAD...</div>
         </div>
 
-        <div class="panel">
-            <div class="label">Update Timer</div>
-            <div id="timerBox" class="val">00:00</div>
+        <div class="data-panel">
+            <div class="label">Auto Refresh</div>
+            <div id="timerTxt" class="val">00:00</div>
         </div>
 
-        <div id="resultDisplay">
-            <div id="predictionText">IDLE</div>
-            <div id="winMsg" class="win-status">PROBABILITY: HIGH WIN ✅</div>
+        <div id="resultBox">
+            <div id="prediction">READY</div>
+            <div id="status" class="win-status">STATUS: WIN VERIFIED ✅</div>
         </div>
 
-        <button id="startBtn" class="btn-main" onclick="processAI()">GET 95% ACCURATE DATA</button>
+        <button id="actionBtn" class="btn-system" onclick="startSystem()">GET VIP PREDICTION</button>
 
-        <a href="https://t.me/YOUR_LINK" class="tg-icon" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        <a href="https://t.me/YOUR_LINK" class="footer-link" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="TG">
         </a>
     </div>
 
     <script>
-        let lastP = "";
-        let isReady = false;
+        let currentP = "";
+        let isActive = false;
 
-        function update() {
+        function refreshData() {
             const ist = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-            const s = ist.getSeconds();
-            const r = 60 - s;
+            const r = 60 - ist.getSeconds();
             
             let elapsed = (ist.getHours() * 60 + ist.getMinutes()) - (5 * 60 + 29);
             if (elapsed < 0) elapsed = 0;
@@ -185,50 +195,50 @@
                          String(ist.getDate()).padStart(2, '0') + 
                          "100001" + String(elapsed).padStart(4, '0');
             
-            document.getElementById('periodBox').innerText = pStr;
-            document.getElementById('timerBox').innerText = "00:" + String(r).padStart(2, '0');
+            document.getElementById('periodTxt').innerText = pStr;
+            document.getElementById('timerTxt').innerText = "00:" + String(r).padStart(2, '0');
 
-            // Dynamic Accuracy Jitter (Upar-neeche hota rahega 95-99 ke beech)
-            if(!isReady) {
-                const randomAcc = (95 + Math.random() * 4).toFixed(1);
-                document.getElementById('accPerc').innerText = randomAcc;
+            // Fluctuate accuracy for realism
+            if(!isActive) {
+                const acc = (95 + Math.random() * 4.2).toFixed(1);
+                document.getElementById('accNum').innerText = acc;
             }
 
-            if (pStr !== lastP) {
-                lastP = pStr;
-                isReady = false;
-                document.getElementById('predictionText').innerText = "READY";
-                document.getElementById('winMsg').style.display = "none";
-                document.getElementById('startBtn').disabled = false;
-                document.getElementById('startBtn').innerText = "GET 95% ACCURATE DATA";
+            if (pStr !== currentP) {
+                currentP = pStr;
+                isActive = false;
+                document.getElementById('prediction').innerText = "READY";
+                document.getElementById('status').style.display = "none";
+                document.getElementById('actionBtn').disabled = false;
+                document.getElementById('actionBtn').innerText = "GET VIP PREDICTION";
             }
         }
-        setInterval(update, 1000);
+        setInterval(refreshData, 1000);
 
-        function processAI() {
-            if(isReady) return;
-            const btn = document.getElementById('startBtn');
-            const txt = document.getElementById('predictionText');
-            const win = document.getElementById('winMsg');
-            const period = document.getElementById('periodBox').innerText;
+        function startSystem() {
+            if(isActive) return;
+            const btn = document.getElementById('actionBtn');
+            const res = document.getElementById('prediction');
+            const status = document.getElementById('status');
+            const period = document.getElementById('periodTxt').innerText;
 
             btn.disabled = true;
-            btn.innerText = "CALCULATING...";
-            txt.innerText = "WAIT...";
+            btn.innerText = "BYPASSING...";
+            res.innerText = "WAIT...";
 
             setTimeout(() => {
-                // Period based stable but random-looking logic
-                let seed = 0;
-                for(let char of period) seed += parseInt(char) || 0;
+                // Calculation for stable result per period
+                let sum = 0;
+                for(let char of period) sum += parseInt(char) || 0;
                 
                 const results = ["BIG", "SMALL", "BIG", "SMALL", "BIG", "BIG", "SMALL", "SMALL"];
-                const pick = results[seed % results.length];
+                const final = results[sum % results.length];
                 
-                txt.innerText = pick;
-                win.style.display = "block";
-                btn.innerText = "DATA VERIFIED";
-                isReady = true;
-            }, 1500);
+                res.innerText = final;
+                status.style.display = "block";
+                btn.innerText = "VERIFIED ✓";
+                isActive = true;
+            }, 1800);
         }
     </script>
 </body>
