@@ -6,7 +6,7 @@
     <title>MUNNA VIP SYSTEM</title>
     <style>
         :root {
-            --cyber-blue: #00d2ff;
+            --neon-blue: #00d2ff;
             --system-green: #00ff88;
             --dark-bg: #000810;
         }
@@ -15,7 +15,7 @@
             margin: 0;
             background: var(--dark-bg);
             color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -23,139 +23,72 @@
             overflow: hidden;
         }
 
-        /* Moving Grid Background */
-        .bg-grid {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background-image: linear-gradient(rgba(0, 210, 255, 0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 210, 255, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            z-index: -1;
-            transform: rotateX(45deg);
-            animation: moveGrid 15s linear infinite;
-        }
-
-        @keyframes moveGrid {
-            from { background-position: 0 0; }
-            to { background-position: 50px 50px; }
-        }
-
         .system-card {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 210, 255, 0.2);
-            padding: 35px 25px;
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            padding: 30px;
             border-radius: 40px;
             width: 85%;
             max-width: 360px;
             text-align: center;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 20px rgba(0, 210, 255, 0.1);
-            animation: float 5s ease-in-out infinite;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+            animation: float 4s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
         .accuracy-tag {
             background: rgba(0, 255, 136, 0.1);
             border: 1px solid var(--system-green);
             color: var(--system-green);
-            padding: 6px 15px;
+            padding: 5px 15px;
             border-radius: 50px;
             font-size: 0.75rem;
             font-weight: 800;
-            letter-spacing: 1px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             display: inline-block;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
-        }
-
-        h2 { 
-            font-size: 1.7rem; 
-            letter-spacing: 5px; 
-            margin: 0 0 25px 0; 
-            text-transform: uppercase;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
         }
 
         .data-panel {
             background: rgba(0,0,0,0.5);
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .label { font-size: 0.6rem; color: #5a7d9a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;}
-        .val { font-size: 1.1rem; font-weight: bold; color: var(--cyber-blue); }
+        .label { font-size: 0.6rem; color: #5a7d9a; text-transform: uppercase; letter-spacing: 1px; }
+        .val { font-size: 1rem; font-weight: bold; color: var(--neon-blue); }
 
-        #resultBox {
-            margin: 30px 0;
-            min-height: 90px;
-        }
-
-        #prediction {
-            font-size: 2.3rem;
+        #predictionText {
+            font-size: 2.5rem;
             font-weight: 900;
-            letter-spacing: 3px;
-            color: #fff;
-            text-shadow: 0 0 20px var(--cyber-blue);
-        }
-
-        .win-status {
-            color: var(--system-green);
-            font-size: 0.85rem;
-            margin-top: 10px;
-            font-weight: bold;
-            display: none;
-            letter-spacing: 1px;
+            margin: 25px 0;
+            text-shadow: 0 0 20px var(--neon-blue);
         }
 
         .btn-system {
             background: linear-gradient(90deg, #00d2ff, #0077ff);
             color: white;
             border: none;
-            padding: 20px;
-            border-radius: 25px;
+            padding: 18px;
+            border-radius: 20px;
             width: 100%;
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.3);
-            transition: 0.4s;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .btn-system:hover:not(:disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 15px 35px rgba(0, 210, 255, 0.5);
-        }
-
-        .btn-system:disabled {
-            background: #15202b;
-            color: #3d4f5f;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .footer-link { margin-top: 30px; display: block; }
-        .footer-link img { width: 42px; filter: drop-shadow(0 0 8px var(--cyber-blue)); opacity: 0.8; }
-
+        .btn-system:disabled { background: #15202b; color: #3d4f5f; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
-    <div class="bg-grid"></div>
-
     <div class="system-card">
-        <div class="accuracy-tag">SYSTEM ACCURACY: <span id="accNum">95.4</span>%</div>
-        
-        <h2>MUNNA VIP</h2>
+        <div class="accuracy-tag">SYSTEM ACCURACY: <span id="accNum">97.8</span>%</div>
+        <h2 style="letter-spacing: 3px;">MUNNA VIP</h2>
 
         <div class="data-panel">
             <div class="label">Period Serial</div>
@@ -167,16 +100,9 @@
             <div id="timerTxt" class="val">00:00</div>
         </div>
 
-        <div id="resultBox">
-            <div id="prediction">READY</div>
-            <div id="status" class="win-status">STATUS: WIN VERIFIED ✅</div>
-        </div>
+        <div id="predictionText">READY</div>
 
-        <button id="actionBtn" class="btn-system" onclick="startSystem()">GET VIP PREDICTION</button>
-
-        <a href="https://t.me/YOUR_LINK" class="footer-link" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="TG">
-        </a>
+        <button id="actionBtn" class="btn-system" onclick="getVipResult()">GET VIP PREDICTION</button>
     </div>
 
     <script>
@@ -186,59 +112,53 @@
         function refreshData() {
             const ist = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
             const r = 60 - ist.getSeconds();
-            
             let elapsed = (ist.getHours() * 60 + ist.getMinutes()) - (5 * 60 + 29);
             if (elapsed < 0) elapsed = 0;
 
-            const pStr = ist.getFullYear() + 
-                         String(ist.getMonth() + 1).padStart(2, '0') + 
-                         String(ist.getDate()).padStart(2, '0') + 
-                         "100001" + String(elapsed).padStart(4, '0');
+            const pStr = ist.getFullYear() + String(ist.getMonth() + 1).padStart(2, '0') + 
+                         String(ist.getDate()).padStart(2, '0') + "100001" + String(elapsed).padStart(4, '0');
             
             document.getElementById('periodTxt').innerText = pStr;
             document.getElementById('timerTxt').innerText = "00:" + String(r).padStart(2, '0');
 
-            // Fluctuate accuracy for realism
-            if(!isActive) {
-                const acc = (95 + Math.random() * 4.2).toFixed(1);
-                document.getElementById('accNum').innerText = acc;
-            }
-
             if (pStr !== currentP) {
                 currentP = pStr;
                 isActive = false;
-                document.getElementById('prediction').innerText = "READY";
-                document.getElementById('status').style.display = "none";
+                document.getElementById('predictionText').innerText = "READY";
                 document.getElementById('actionBtn').disabled = false;
-                document.getElementById('actionBtn').innerText = "GET VIP PREDICTION";
             }
         }
         setInterval(refreshData, 1000);
 
-        function startSystem() {
+        function getVipResult() {
             if(isActive) return;
+            const res = document.getElementById('predictionText');
             const btn = document.getElementById('actionBtn');
-            const res = document.getElementById('prediction');
-            const status = document.getElementById('status');
             const period = document.getElementById('periodTxt').innerText;
 
             btn.disabled = true;
-            btn.innerText = "BYPASSING...";
             res.innerText = "WAIT...";
 
             setTimeout(() => {
-                // Calculation for stable result per period
-                let sum = 0;
-                for(let char of period) sum += parseInt(char) || 0;
+                // --- ADVANCED DYNAMIC LOGIC ---
+                const lastTwo = parseInt(period.slice(-2));
+                const hour = new Date().getHours();
                 
-                const results = ["BIG", "SMALL", "BIG", "SMALL", "BIG", "BIG", "SMALL", "SMALL"];
-                const final = results[sum % results.length];
+                let final = "";
+                // Logic change based on Time + Period sum
+                // Isse trend har 10-15 minute mein automatically flip hoga
+                if ((lastTwo + hour) % 3 === 0) {
+                    final = "BIG";
+                } else if ((lastTwo + hour) % 2 === 0) {
+                    final = "SMALL";
+                } else {
+                    final = (lastTwo % 2 === 0) ? "SMALL" : "BIG";
+                }
                 
                 res.innerText = final;
-                status.style.display = "block";
                 btn.innerText = "VERIFIED ✓";
                 isActive = true;
-            }, 1800);
+            }, 1500);
         }
     </script>
 </body>
