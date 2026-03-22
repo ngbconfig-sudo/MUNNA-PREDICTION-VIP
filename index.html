@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUNNA VIP SYSTEM</title>
+    <title>MUNNA VIP PRO</title>
     <style>
         :root {
             --neon-blue: #00d2ff;
@@ -16,37 +16,23 @@
             margin: 0;
             background: var(--dark-bg);
             color: #fff;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden;
-            padding: 20px 0;
+            padding-bottom: 30px;
         }
 
         .system-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(25px);
             border: 1px solid rgba(0, 210, 255, 0.3);
-            padding: 25px;
-            border-radius: 35px;
+            padding: 20px;
+            border-radius: 30px;
             width: 90%;
             max-width: 380px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
-        }
-
-        .accuracy-tag {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid var(--system-green);
-            color: var(--system-green);
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            display: inline-block;
         }
 
         .data-panel {
@@ -57,174 +43,145 @@
             border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .label { font-size: 0.6rem; color: #5a7d9a; text-transform: uppercase; }
-        .val { font-size: 1rem; font-weight: bold; color: var(--neon-blue); }
-
         #predictionText {
             font-size: 2.8rem;
             font-weight: 900;
             margin: 15px 0;
-            text-shadow: 0 0 25px var(--neon-blue);
+            text-shadow: 0 0 20px var(--neon-blue);
         }
 
         .history-card {
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.4);
             border-radius: 15px;
-            margin-top: 20px;
+            margin-top: 15px;
             padding: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
+            max-height: 250px;
+            overflow-y: auto;
         }
 
         table { width: 100%; font-size: 0.75rem; border-collapse: collapse; }
-        th { color: #5a7d9a; padding-bottom: 8px; border-bottom: 1px solid #222; }
-        td { padding: 6px 0; border-bottom: 1px solid #111; }
+        th { color: #5a7d9a; border-bottom: 1px solid #222; padding-bottom: 5px; }
+        td { padding: 8px 0; border-bottom: 1px solid #111; }
 
-        .btn-system {
+        .btn-main {
             background: linear-gradient(90deg, #00d2ff, #0077ff);
-            color: white; border: none; padding: 18px; border-radius: 15px;
-            width: 100%; font-size: 1.1rem; font-weight: bold; cursor: pointer;
-            text-transform: uppercase; margin-bottom: 10px;
-            box-shadow: 0 5px 15px rgba(0, 119, 255, 0.4);
+            color: white; border: none; padding: 16px; border-radius: 15px;
+            width: 100%; font-size: 1rem; font-weight: bold; cursor: pointer;
+            text-transform: uppercase;
         }
 
-        .btn-reverse {
-            background: transparent; border: 1px solid var(--warning-red);
-            color: var(--warning-red); padding: 8px; border-radius: 10px;
-            width: 100%; font-size: 0.7rem; font-weight: bold; cursor: pointer;
-            transition: 0.3s;
+        /* Result Verification Input */
+        .verify-box {
+            margin-top: 15px;
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 15px;
+            border: 1px dashed var(--neon-blue);
         }
 
-        .btn-reverse:hover { background: var(--warning-red); color: #fff; }
-
-        /* Telegram Button */
-        .tg-button {
-            background: #24A1DE;
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(36, 161, 222, 0.4);
+        .verify-input {
+            width: 60px;
+            background: #000;
+            border: 1px solid var(--neon-blue);
+            color: #fff;
+            text-align: center;
+            padding: 5px;
+            border-radius: 5px;
         }
 
-        .win-color { color: var(--system-green); }
-        .loss-color { color: var(--warning-red); }
-        .btn-system:disabled { background: #15202b; color: #3d4f5f; cursor: not-allowed; box-shadow: none; }
+        .win-tag { color: var(--system-green); font-weight: bold; }
+        .loss-tag { color: var(--warning-red); font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="system-card">
-        <div class="accuracy-tag">SYSTEM INTEGRITY: 97.2%</div>
-        <h2 style="margin: 0 0 10px 0; letter-spacing: 2px;">MUNNA VIP</h2>
+<div class="system-card">
+    <h2 style="margin: 0 0 10px 0;">MUNNA VIP</h2>
 
-        <div class="data-panel">
-            <div class="label">Current Session</div>
-            <div id="periodTxt" class="val">SYNCING...</div>
-        </div>
-
-        <div id="predictionText">READY</div>
-
-        <button id="actionBtn" class="btn-system" onclick="getVipResult()">GET VIP DATA</button>
-        <button id="revBtn" class="btn-reverse" onclick="toggleTrend()">SWITCH TREND (IF LOSS)</button>
-        
-        <p id="trendStatus" style="font-size: 0.65rem; color: #00ff88; margin: 10px 0;">STATUS: NORMAL MODE</p>
-
-        <div class="history-card">
-            <div class="label" style="margin-bottom:8px;">Live Prediction History</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Period</th>
-                        <th>Result</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="historyBody">
-                    </tbody>
-            </table>
-        </div>
-
-        <a href="https://t.me/+4V3ro6h6AcY3Y2Y1" class="tg-button" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" width="22" alt="TG">
-            JOIN VIP CHANNEL
-        </a>
+    <div class="data-panel">
+        <div style="font-size: 0.6rem; color: #5a7d9a;">CURRENT PERIOD</div>
+        <div id="periodTxt" style="font-weight: bold; color: var(--neon-blue);">SYNC...</div>
     </div>
 
-    <script>
-        let currentP = "";
-        let isLocked = false;
-        let isReverse = false;
+    <div id="predictionText">READY</div>
 
-        function refreshData() {
-            const ist = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-            let elapsed = (ist.getHours() * 60 + ist.getMinutes()) - (5 * 60 + 29);
-            if (elapsed < 0) elapsed = 0;
+    <button id="actionBtn" class="btn-main" onclick="generatePrediction()">GET PREDICTION</button>
 
-            const pStr = ist.getFullYear() + String(ist.getMonth() + 1).padStart(2, '0') + 
-                         String(ist.getDate()).padStart(2, '0') + "100001" + String(elapsed).padStart(4, '0');
-            
-            document.getElementById('periodTxt').innerText = pStr;
+    <div class="verify-box">
+        <span style="font-size: 0.7rem;">Enter Game Result No: </span>
+        <input type="number" id="realNum" class="verify-input" placeholder="0-9">
+        <button onclick="verifyResult()" style="background: var(--system-green); border:none; padding: 5px 10px; border-radius: 5px; font-weight: bold; cursor:pointer;">CHECK</button>
+    </div>
 
-            if (pStr !== currentP) {
-                currentP = pStr;
-                isLocked = false;
-                document.getElementById('predictionText').innerText = "READY";
-                document.getElementById('actionBtn').disabled = false;
-                document.getElementById('actionBtn').innerText = "GET VIP DATA";
-            }
+    <div class="history-card">
+        <table>
+            <thead>
+                <tr><th>Period</th><th>System</th><th>Result</th><th>Status</th></tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let lastP = "";
+    let currentPred = "";
+    let isLocked = false;
+
+    function update() {
+        const ist = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+        let elapsed = (ist.getHours() * 60 + ist.getMinutes()) - (5 * 60 + 29);
+        const pStr = ist.getFullYear() + String(ist.getMonth() + 1).padStart(2, '0') + 
+                     String(ist.getDate()).padStart(2, '0') + "100001" + String(elapsed).padStart(4, '0');
+        
+        document.getElementById('periodTxt').innerText = pStr;
+
+        if (pStr !== lastP) {
+            lastP = pStr;
+            isLocked = false;
+            document.getElementById('predictionText').innerText = "READY";
+            document.getElementById('actionBtn').disabled = false;
         }
-        setInterval(refreshData, 1000);
+    }
+    setInterval(update, 1000);
 
-        function toggleTrend() {
-            isReverse = !isReverse;
-            const status = document.getElementById('trendStatus');
-            status.innerText = isReverse ? "STATUS: REVERSE MODE ⚡" : "STATUS: NORMAL MODE";
-            status.style.color = isReverse ? "#ff3131" : "#00ff88";
-        }
+    function generatePrediction() {
+        if(isLocked) return;
+        const res = document.getElementById('predictionText');
+        const btn = document.getElementById('actionBtn');
 
-        function getVipResult() {
-            if(isLocked) return;
-            const res = document.getElementById('predictionText');
-            const btn = document.getElementById('actionBtn');
-            const table = document.getElementById('historyBody');
+        btn.disabled = true;
+        res.innerText = "WAIT...";
 
-            btn.disabled = true;
-            res.innerText = "DECRYPTING...";
+        setTimeout(() => {
+            const seed = parseInt(lastP.slice(-2));
+            currentPred = (seed % 2 === 0) ? "BIG" : "SMALL";
+            res.innerText = currentPred;
+            isLocked = true;
+            btn.innerText = "WAITING FOR RESULT";
+        }, 1200);
+    }
 
-            setTimeout(() => {
-                const lastDigit = parseInt(currentP.slice(-1));
-                // Advanced Core Logic
-                let final = (lastDigit % 2 === 0) ? "BIG" : "SMALL";
-                
-                // Switch trend if user activated Reverse
-                if (isReverse) {
-                    final = (final === "BIG") ? "SMALL" : "BIG";
-                }
-                
-                res.innerText = final;
-                
-                // Add to History Table
-                const isWin = Math.random() > 0.15; // Realistic 85% Win look
-                const row = `<tr>
-                    <td>${currentP.slice(-4)}</td>
-                    <td>${final}</td>
-                    <td class="${isWin ? 'win-color' : 'loss-color'}">${isWin ? 'WIN' : 'LOSS'}</td>
-                </tr>`;
-                
-                table.innerHTML = row + table.innerHTML;
-                if(table.rows.length > 5) table.deleteRow(5);
+    function verifyResult() {
+        const input = document.getElementById('realNum').value;
+        if(input === "" || currentPred === "") return alert("Pehle prediction le lo!");
 
-                btn.innerText = "SESSION LOCKED";
-                isLocked = true;
-            }, 1400);
-        }
-    </script>
+        const num = parseInt(input);
+        const actualOutcome = (num >= 5) ? "BIG" : "SMALL";
+        const status = (actualOutcome === currentPred) ? "WIN" : "LOSS";
+        
+        const table = document.getElementById('historyBody');
+        const row = `<tr>
+            <td>${lastP.slice(-3)}</td>
+            <td>${currentPred}</td>
+            <td>${actualOutcome}</td>
+            <td class="${status === 'WIN' ? 'win-tag' : 'loss-tag'}">${status}</td>
+        </tr>`;
+        
+        table.innerHTML = row + table.innerHTML;
+        document.getElementById('realNum').value = "";
+    }
+</script>
+
 </body>
 </html>
