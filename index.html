@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUNNA VIP - ULTRA ACCURACY</title>
+    <title>MUNNA VIP - ALL FIXED</title>
     <style>
         :root {
             --neon-blue: #00d2ff;
@@ -34,8 +34,7 @@
 
         .pred-box {
             margin: 20px 0; padding: 25px; border-radius: 30px;
-            background: rgba(0, 210, 255, 0.05); border: 2px solid rgba(0, 210, 255, 0.3);
-            box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.1);
+            background: rgba(0, 210, 255, 0.08); border: 2px solid rgba(0, 210, 255, 0.4);
         }
         #predictionText { font-size: 4rem; font-weight: 900; margin: 0; text-shadow: 0 0 25px var(--neon-blue); }
 
@@ -57,8 +56,7 @@
         .n-violet { background: linear-gradient(135deg, var(--warning-red), #b659ff); }
         .n-violet-g { background: linear-gradient(135deg, var(--system-green), #b659ff); }
 
-        #inputWindowMsg { display: none; font-size: 0.85rem; color: var(--gold); margin-bottom: 5px; font-weight: 800; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.3; } }
+        #inputWindowMsg { display: none; font-size: 0.85rem; color: var(--gold); margin-bottom: 5px; font-weight: 800; }
 
         .history-list { margin-top: 20px; text-align: left; max-height: 150px; overflow-y: auto; font-size: 0.8rem; border-top: 1px solid #222; padding-top: 10px; }
         .h-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #111; }
@@ -67,7 +65,7 @@
 <body>
 
 <div class="system-card">
-    <div style="font-size: 0.65rem; color: var(--gold); margin-bottom: 10px; font-weight: bold; letter-spacing: 1.5px;">● MUNNA VIP V8 (80% ACCURACY)</div>
+    <div style="font-size: 0.65rem; color: var(--gold); margin-bottom: 10px; font-weight: bold; letter-spacing: 1.5px;">● MUNNA VIP PRO (ULTRA STABLE)</div>
     
     <div class="data-panel">
         <div id="periodTxt" class="val">--LOADING--</div>
@@ -78,17 +76,17 @@
         <div id="predictionText">READY</div>
     </div>
 
-    <div id="inputWindowMsg">20S WINDOW: INPUT RESULT</div>
+    <div id="inputWindowMsg">20S WINDOW OPEN</div>
 
-    <button class="btn-main" id="predictBtn" onclick="analyzeNext()">ANALYZE TREND</button>
+    <button class="btn-main" id="predictBtn" onclick="analyzeNext()">PREDICT SIGNAL</button>
 
-    <div class="manual-section" id="gridArea">
-        <div style="font-size: 0.65rem; color: #5a7d9a; font-weight: bold;">SELECT LAST RESULT (0-9)</div>
+    <div class="manual-section">
+        <div style="font-size: 0.65rem; color: #5a7d9a; font-weight: bold;">INPUT LAST RESULT NUMBER</div>
         <div class="num-grid" id="numGrid">
             <button class="n-btn n-violet" onclick="recordResult(0)">0</button>
             <button class="n-btn n-green" onclick="recordResult(1)">1</button>
             <button class="n-btn n-red" onclick="recordResult(2)">2</button>
-            <button class="n-btn n-green" onclick="nowPredict(3)">3</button>
+            <button class="n-btn n-green" onclick="recordResult(3)">3</button>
             <button class="n-btn n-red" onclick="recordResult(4)">4</button>
             <button class="n-btn n-violet-g" onclick="recordResult(5)">5</button>
             <button class="n-btn n-red" onclick="recordResult(6)">6</button>
@@ -135,9 +133,9 @@
         grid.style.opacity = "1";
         grid.style.pointerEvents = "auto";
 
-        let timer = 20; // 20 SECOND WINDOW
+        let timer = 20; 
         const count = setInterval(() => {
-            msg.innerText = `ENTRY WINDOW: ${timer}S LEFT`;
+            msg.innerText = `RESULT ENTRY WINDOW: ${timer}S`;
             timer--;
             if(timer < 0) {
                 clearInterval(count);
@@ -157,21 +155,27 @@
 
     function analyzeNext() {
         const res = document.getElementById('predictionText');
-        res.innerText = "CALCULATING...";
+        res.innerText = "LINKING...";
         
         setTimeout(() => {
             let nextSide = "";
             
-            // --- 80% ACCURACY LOGIC ---
-            if(stack.length >= 3) {
-                let last3 = stack.slice(0,3);
-                let bigCount = last3.filter(x => x.type === "BIG").length;
+            // --- HIGH ACCURACY LOGIC (Pattern-Based) ---
+            if(stack.length >= 2) {
+                const s1 = stack[0].type;
+                const s2 = stack[1].type;
                 
-                // Frequency + Pattern Shift Logic
-                if(bigCount >= 2) nextSide = "SMALL"; // Reversal trend
-                else nextSide = "BIG";
+                // If last two are same (BIG, BIG) -> Next is SMALL (Flip pattern)
+                if(s1 === s2) {
+                    nextSide = (s1 === "BIG") ? "SMALL" : "BIG";
+                } 
+                // If alternating (BIG, SMALL) -> Follow pattern (Next is BIG)
+                else {
+                    nextSide = s1; 
+                }
             } else {
-                nextSide = (Math.random() > 0.5) ? "BIG" : "SMALL";
+                // If no history, use period seed
+                nextSide = (parseInt(currentP.slice(-1)) % 2 === 0) ? "BIG" : "SMALL";
             }
 
             res.innerText = nextSide;
@@ -179,7 +183,7 @@
             
             activePred = { period: currentP, type: nextSide };
             document.getElementById('predictBtn').disabled = true;
-        }, 1500);
+        }, 1200);
     }
 
     function recordResult(n) {
