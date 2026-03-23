@@ -3,143 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NITIN PREDICTION - IMMORTAL VIP</title>
+    <title>MUNNA PREDICTION VIP</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
 
         :root {
-            --legend-gold: #ffcf33;
-            --neon-red: #ff003c;
+            --vip-gold: #ffcf33;
+            --neon-red: #ff3131;
             --neon-green: #00ff88;
-            --bg-dark: #00050a;
+            --deep-black: #000208;
         }
 
         body {
-            margin: 0; background: var(--bg-dark); color: #fff;
+            margin: 0; background: var(--deep-black); color: #fff;
             font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center;
             min-height: 100vh; padding: 10px;
         }
 
-        .main-card {
-            background: linear-gradient(180deg, rgba(255, 207, 51, 0.15), #000);
-            border: 2px solid var(--legend-gold); padding: 20px; border-radius: 40px;
-            width: 100%; max-width: 360px; text-align: center;
-            box-shadow: 0 0 80px rgba(255, 207, 51, 0.2);
+        .vip-card {
+            background: linear-gradient(180deg, rgba(255, 207, 51, 0.2), #000);
+            border: 3px solid var(--vip-gold); padding: 20px; border-radius: 45px;
+            width: 100%; max-width: 370px; text-align: center;
+            box-shadow: 0 0 100px rgba(255, 207, 51, 0.25); position: relative;
         }
 
-        .user-header {
-            font-family: 'Orbitron', sans-serif; color: var(--legend-gold);
-            font-size: 1.2rem; margin-bottom: 15px; border-bottom: 1px solid rgba(255,207,51,0.3);
-            padding-bottom: 10px; text-transform: uppercase;
+        /* SERVER ONLINE DOT */
+        .server-status {
+            position: absolute; top: 25px; right: 30px;
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.65rem; color: var(--neon-green); font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .dot {
+            width: 8px; height: 8px; background: var(--neon-green);
+            border-radius: 50%; box-shadow: 0 0 10px var(--neon-green);
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+
+        .vip-header {
+            font-family: 'Orbitron', sans-serif; color: var(--vip-gold);
+            font-size: 1.4rem; margin-bottom: 15px; text-shadow: 0 0 15px var(--vip-gold);
         }
 
-        .period-box {
-            background: rgba(255,255,255,0.03); padding: 12px; border-radius: 20px;
-            margin-bottom: 15px; border: 1px solid rgba(0, 210, 255, 0.3);
+        .period-panel {
+            background: rgba(0,0,0,0.8); padding: 12px; border-radius: 25px;
+            margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         #predictionText {
-            font-family: 'Orbitron', sans-serif; font-size: 5rem;
-            margin: 20px 0; transition: 0.3s; color: #111;
+            font-family: 'Orbitron', sans-serif; font-size: 3.5rem;
+            margin: 20px 0; color: #444; text-shadow: 0 0 40px currentColor;
+            min-height: 80px; display: flex; align-items: center; justify-content: center;
         }
 
-        .btn-action {
-            background: linear-gradient(135deg, #ffcf33, #ffa500);
-            color: #000; border: none; padding: 18px; border-radius: 25px;
-            width: 100%; font-size: 1.4rem; font-weight: 900; cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.4);
+        .btn-main {
+            background: linear-gradient(90deg, #ffcf33, #ff8c00);
+            color: #000; border: none; padding: 20px; border-radius: 30px;
+            width: 100%; font-size: 1.5rem; font-weight: 900; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 207, 51, 0.4);
         }
+        .btn-main:disabled { background: #333; color: #666; box-shadow: none; cursor: not-allowed; }
 
-        .history-list {
-            margin-top: 20px; max-height: 200px; overflow-y: auto;
-            background: rgba(0,0,0,0.5); border-radius: 20px; padding: 10px;
-            border: 1px solid #222;
-        }
+        .input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+        .n-btn { height: 45px; border: none; border-radius: 12px; color: #fff; font-weight: 900; cursor: pointer; }
+        .r { background: var(--neon-red); } .g { background: var(--neon-green); } .v { background: #b659ff; }
 
-        .row {
-            display: flex; justify-content: space-between; padding: 10px;
-            border-bottom: 1px solid #111; font-size: 0.9rem;
+        .history-container {
+            margin-top: 25px; background: rgba(0,0,0,0.6);
+            border-radius: 30px; border: 1px solid #222; overflow: hidden;
         }
-
-        .num-grid {
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px;
-        }
-
-        .n-btn {
-            height: 40px; border: none; border-radius: 10px; color: #fff; font-weight: bold; cursor: pointer;
-        }
-        .bg-r { background: var(--neon-red); } .bg-g { background: var(--neon-green); }
-        .bg-v { background: purple; }
+        .history-list { max-height: 180px; overflow-y: auto; }
+        .log-row { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #111; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<div class="main-card">
-    <div class="user-header">NITIN PODDAR VIP</div>
+<div class="vip-card">
+    <div class="server-status"><div class="dot"></div> SERVER: ONLINE</div>
+    <div class="vip-header">MUNNA PREDICTION VIP</div>
     
-    <div class="period-box">
-        <div id="pCode" style="font-size: 0.75rem; color: #888;">SYNCING...</div>
-        <div id="pTimer" style="font-size: 2.2rem; color: var(--neon-green); font-weight: 900;">00:00</div>
+    <div class="period-panel">
+        <div id="pCode" style="color: #666; font-size: 0.8rem;">SYNCING...</div>
+        <div id="pTimer" style="color: var(--neon-green); font-size: 2.5rem; font-weight: 900;">00:00</div>
     </div>
 
     <div id="predictionText">READY</div>
 
-    <button class="btn-action" onclick="generateImmortalSignal()">GET IMMORTAL SIGNAL</button>
+    <button class="btn-main" id="predictBtn" onclick="getVipSignal()">GET VIP SIGNAL</button>
 
-    <div class="num-grid" id="inputGrid">
-        <button class="n-btn bg-v" onclick="addHistory(0)">0</button>
-        <button class="n-btn bg-g" onclick="addHistory(1)">1</button>
-        <button class="n-btn bg-r" onclick="addHistory(2)">2</button>
-        <button class="n-btn bg-g" onclick="addHistory(3)">3</button>
-        <button class="n-btn bg-r" onclick="addHistory(4)">4</button>
-        <button class="n-btn bg-g" onclick="addHistory(5)">5</button>
-        <button class="n-btn bg-r" onclick="addHistory(6)">6</button>
-        <button class="n-btn bg-g" onclick="addHistory(7)">7</button>
-        <button class="n-btn bg-r" onclick="addHistory(8)">8</button>
-        <button class="n-btn bg-g" onclick="addHistory(9)">9</button>
+    <div class="input-grid" id="grid">
+        <button class="n-btn v" onclick="recordHistory(0)">0</button>
+        <button class="n-btn g" onclick="recordHistory(1)">1</button>
+        <button class="n-btn r" onclick="recordHistory(2)">2</button>
+        <button class="n-btn g" onclick="recordHistory(3)">3</button>
+        <button class="n-btn r" onclick="recordHistory(4)">4</button>
+        <button class="n-btn g" onclick="recordHistory(5)">5</button>
+        <button class="n-btn r" onclick="recordHistory(6)">6</button>
+        <button class="n-btn g" onclick="recordHistory(7)">7</button>
+        <button class="n-btn r" onclick="recordHistory(8)">8</button>
+        <button class="n-btn g" onclick="recordHistory(9)">9</button>
     </div>
 
-    <div class="history-list" id="log">
-        <div style="color: #666; font-size: 0.8rem;">HISTORY LIST READY</div>
+    <div class="history-container">
+        <div style="background:#111; padding:8px; font-size:0.75rem; color:var(--vip-gold); font-weight:900;">LIVE HISTORY</div>
+        <div class="history-list" id="logList"></div>
     </div>
 </div>
 
 <script>
-    let currentP = ""; let lastSignal = "";
-    function updateEngine() {
-        const now = new Date();
+    let currentP = ""; 
+    let activeSig = ""; 
+    let lockedPeriod = ""; 
+    let lockedSignal = ""; 
+    let timeLeft = 60;
+
+    function sync() {
+        const now = new Date(); const sec = now.getSeconds();
+        timeLeft = 60 - sec;
         const min = now.getHours() * 60 + now.getMinutes();
         const code = now.getFullYear() + "" + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + "100001" + String(min - 329).padStart(4,'0');
-        document.getElementById('pCode').innerText = code;
-        document.getElementById('pTimer').innerText = "00:" + String(60 - now.getSeconds()).padStart(2,'0');
-        if(code !== currentP) { currentP = code; document.getElementById('inputGrid').style.opacity = "1"; }
-    }
-    setInterval(updateEngine, 1000);
-
-    function generateImmortalSignal() {
-        const p = document.getElementById('predictionText');
-        p.innerText = "WAIT"; p.style.color = "#444";
-        setTimeout(() => {
-            lastSignal = (Math.random() > 0.5) ? "BIG" : "SMALL";
-            p.innerText = lastSignal;
-            p.style.color = (lastSignal === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
-        }, 800);
-    }
-
-    function addHistory(num) {
-        let type = (num >= 5) ? "BIG" : "SMALL";
-        let status = (lastSignal === type) ? "<b style='color:var(--neon-green)'>WIN ✅</b>" : "<b style='color:var(--neon-red)'>LOSS ❌</b>";
-        if(lastSignal === "") status = "---";
         
-        const log = document.getElementById('log');
-        const entry = `<div class="row">
+        document.getElementById('pCode').innerText = code;
+        document.getElementById('pTimer').innerText = "00:" + String(timeLeft).padStart(2,'0');
+
+        if(code !== currentP) {
+            currentP = code;
+            activeSig = ""; lockedSignal = ""; 
+            document.getElementById('grid').style.opacity = "1";
+            document.getElementById('predictionText').innerText = "PROCESSING...";
+            document.getElementById('predictionText').style.fontSize = "2rem";
+            document.getElementById('predictionText').style.color = "var(--vip-gold)";
+        }
+    }
+    setInterval(sync, 1000);
+
+    function getVipSignal() {
+        // 30 Seconds Check
+        if (timeLeft > 30) {
+            const t = document.getElementById('predictionText');
+            t.innerText = "WAIT " + (timeLeft - 30) + "s";
+            t.style.fontSize = "2rem";
+            t.style.color = "var(--neon-red)";
+            return;
+        }
+
+        const t = document.getElementById('predictionText');
+        if (lockedPeriod === currentP && lockedSignal !== "") {
+            showSignal(lockedSignal);
+            return;
+        }
+
+        t.innerText = "SCANNING...";
+        t.style.fontSize = "2rem";
+        t.style.color = "#fff";
+        
+        setTimeout(() => {
+            let newSig = (Math.random() > 0.5) ? "BIG" : "SMALL";
+            lockedSignal = newSig;
+            lockedPeriod = currentP;
+            activeSig = newSig;
+            showSignal(newSig);
+        }, 1000);
+    }
+
+    function showSignal(sig) {
+        const t = document.getElementById('predictionText');
+        t.innerText = sig;
+        t.style.fontSize = "5.2rem";
+        t.style.color = (sig === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
+    }
+
+    function recordHistory(num) {
+        if(activeSig === "") return;
+        let resType = (num >= 5) ? "BIG" : "SMALL";
+        let isWin = (activeSig === resType);
+        let statusHtml = isWin ? "<b style='color:var(--neon-green)'>WIN ✅</b>" : "<b style='color:var(--neon-red)'>LOSS ❌</b>";
+        
+        const list = document.getElementById('logList');
+        list.innerHTML = `<div class="log-row">
             <span>P: ${currentP.slice(-3)}</span>
-            <span>${num} (${type})</span>
-            <span>${status}</span>
-        </div>`;
-        log.innerHTML = entry + log.innerHTML;
-        document.getElementById('inputGrid').style.opacity = "0.3";
-        lastSignal = ""; 
+            <span style="font-weight:900;">${num} (${resType})</span>
+            <span>${statusHtml}</span>
+        </div>` + list.innerHTML;
+        
+        activeSig = ""; 
+        document.getElementById('grid').style.opacity = "0.3";
+        if(navigator.vibrate) navigator.vibrate(isWin ? 100 : [100, 50, 100]);
     }
 </script>
 </body>
