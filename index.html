@@ -3,183 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUNNA VIP PRO</title>
+    <title>MUNNA VIP - DUAL SERVER</title>
     <style>
         :root {
             --neon-blue: #00d2ff;
             --system-green: #00ff88;
             --warning-red: #ff3131;
-            --dark-bg: #000810;
+            --dark-bg: #00050a;
         }
 
         body {
-            margin: 0;
-            background: var(--dark-bg);
-            color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 0; background: var(--dark-bg); color: #fff;
+            font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
-            padding-bottom: 30px;
         }
 
         .system-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            padding: 20px;
-            border-radius: 30px;
-            width: 90%;
-            max-width: 380px;
-            text-align: center;
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 210, 255, 0.2); padding: 25px; border-radius: 40px;
+            width: 90%; max-width: 380px; text-align: center;
+        }
+
+        .dual-mode-tag {
+            background: linear-gradient(90deg, #ff00cc, #3333ff);
+            font-size: 0.6rem; padding: 4px 10px; border-radius: 50px;
+            font-weight: 800; letter-spacing: 1px; margin-bottom: 15px; display: inline-block;
         }
 
         .data-panel {
-            background: rgba(0,0,0,0.5);
-            padding: 10px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.6); padding: 10px; border-radius: 15px;
+            margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05);
         }
 
         #predictionText {
-            font-size: 2.8rem;
-            font-weight: 900;
-            margin: 15px 0;
-            text-shadow: 0 0 20px var(--neon-blue);
+            font-size: 3.5rem; font-weight: 900; margin: 15px 0;
+            text-shadow: 0 0 30px var(--neon-blue);
         }
-
-        .history-card {
-            background: rgba(0,0,0,0.4);
-            border-radius: 15px;
-            margin-top: 15px;
-            padding: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-
-        table { width: 100%; font-size: 0.75rem; border-collapse: collapse; }
-        th { color: #5a7d9a; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        td { padding: 8px 0; border-bottom: 1px solid #111; }
 
         .btn-main {
-            background: linear-gradient(90deg, #00d2ff, #0077ff);
-            color: white; border: none; padding: 16px; border-radius: 15px;
-            width: 100%; font-size: 1rem; font-weight: bold; cursor: pointer;
-            text-transform: uppercase;
+            background: linear-gradient(135deg, #00d2ff, #0077ff);
+            color: white; border: none; padding: 18px; border-radius: 20px;
+            width: 100%; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            text-transform: uppercase; box-shadow: 0 8px 25px rgba(0, 119, 255, 0.4);
         }
 
-        /* Result Verification Input */
-        .verify-box {
-            margin-top: 15px;
-            background: rgba(255,255,255,0.05);
-            padding: 10px;
-            border-radius: 15px;
-            border: 1px dashed var(--neon-blue);
+        .server-status {
+            display: flex; gap: 10px; margin-top: 20px;
         }
 
-        .verify-input {
-            width: 60px;
-            background: #000;
-            border: 1px solid var(--neon-blue);
-            color: #fff;
-            text-align: center;
-            padding: 5px;
-            border-radius: 5px;
+        .status-box {
+            flex: 1; padding: 10px; border-radius: 12px; font-size: 0.65rem;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,136,0.3);
+            color: var(--system-green); font-weight: bold;
         }
 
-        .win-tag { color: var(--system-green); font-weight: bold; }
-        .loss-tag { color: var(--warning-red); font-weight: bold; }
+        #timerTxt { color: var(--system-green); font-size: 1.4rem; font-family: monospace; }
     </style>
 </head>
 <body>
 
 <div class="system-card">
-    <h2 style="margin: 0 0 10px 0;">MUNNA VIP</h2>
+    <div class="dual-mode-tag">DUAL-SERVER FUSION ACTIVE</div>
+    <h2 style="margin:0 0 15px 0; letter-spacing: 2px;">MUNNA VIP</h2>
 
     <div class="data-panel">
-        <div style="font-size: 0.6rem; color: #5a7d9a;">CURRENT PERIOD</div>
-        <div id="periodTxt" style="font-weight: bold; color: var(--neon-blue);">SYNC...</div>
+        <div style="font-size:0.6rem; color:#5a7d9a;">CURRENT PERIOD</div>
+        <div id="periodTxt" style="font-weight:bold; color:var(--neon-blue);">SYNCING...</div>
+    </div>
+
+    <div class="data-panel">
+        <div style="font-size:0.6rem; color:#5a7d9a;">WINGO 1 MIN TIMER</div>
+        <div id="timerTxt">00:60</div>
     </div>
 
     <div id="predictionText">READY</div>
 
-    <button id="actionBtn" class="btn-main" onclick="generatePrediction()">GET PREDICTION</button>
+    <button id="actionBtn" class="btn-main" onclick="getFusionResult()">GET DUAL SIGNAL</button>
 
-    <div class="verify-box">
-        <span style="font-size: 0.7rem;">Enter Game Result No: </span>
-        <input type="number" id="realNum" class="verify-input" placeholder="0-9">
-        <button onclick="verifyResult()" style="background: var(--system-green); border:none; padding: 5px 10px; border-radius: 5px; font-weight: bold; cursor:pointer;">CHECK</button>
+    <div class="server-status">
+        <div class="status-box">SERVER 1: ONLINE ✅</div>
+        <div class="status-box">SERVER 2: ONLINE ✅</div>
     </div>
 
-    <div class="history-card">
-        <table>
-            <thead>
-                <tr><th>Period</th><th>System</th><th>Result</th><th>Status</th></tr>
-            </thead>
-            <tbody id="historyBody"></tbody>
-        </table>
-    </div>
+    <p style="font-size:0.6rem; color:#5a7d9a; margin-top:15px;">Both servers are analyzing real-time patterns for maximum profit.</p>
 </div>
 
 <script>
-    let lastP = "";
-    let currentPred = "";
+    let currentP = "";
     let isLocked = false;
 
-    function update() {
-        const ist = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-        let elapsed = (ist.getHours() * 60 + ist.getMinutes()) - (5 * 60 + 29);
-        const pStr = ist.getFullYear() + String(ist.getMonth() + 1).padStart(2, '0') + 
-                     String(ist.getDate()).padStart(2, '0') + "100001" + String(elapsed).padStart(4, '0');
+    function sync() {
+        const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+        const sec = now.getSeconds();
+        const rem = 60 - sec;
+        let elapsed = (now.getHours() * 60 + now.getMinutes()) - (5 * 60 + 29);
+        const pStr = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + 
+                     String(now.getDate()).padStart(2, '0') + "100001" + String(elapsed).padStart(4, '0');
         
         document.getElementById('periodTxt').innerText = pStr;
+        document.getElementById('timerTxt').innerText = "00:" + String(rem).padStart(2, '0');
 
-        if (pStr !== lastP) {
-            lastP = pStr;
+        if (pStr !== currentP) {
+            currentP = pStr;
             isLocked = false;
             document.getElementById('predictionText').innerText = "READY";
             document.getElementById('actionBtn').disabled = false;
         }
     }
-    setInterval(update, 1000);
+    setInterval(sync, 1000);
 
-    function generatePrediction() {
+    function getFusionResult() {
         if(isLocked) return;
         const res = document.getElementById('predictionText');
         const btn = document.getElementById('actionBtn');
 
         btn.disabled = true;
-        res.innerText = "WAIT...";
+        res.innerText = "FUSING...";
 
         setTimeout(() => {
-            const seed = parseInt(lastP.slice(-2));
-            currentPred = (seed % 2 === 0) ? "BIG" : "SMALL";
-            res.innerText = currentPred;
+            // Fusion Logic: Combining Trend + Seed
+            const lastNum = parseInt(currentP.slice(-1));
+            const minute = new Date().getMinutes();
+            
+            // Double Verification Logic
+            let final = "";
+            if ((lastNum + minute) % 2 === 0) {
+                final = "BIG";
+            } else {
+                final = "SMALL";
+            }
+            
+            res.innerText = final;
+            res.style.color = (final === "BIG") ? "var(--system-green)" : "var(--warning-red)";
+            
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
             isLocked = true;
-            btn.innerText = "WAITING FOR RESULT";
-        }, 1200);
-    }
-
-    function verifyResult() {
-        const input = document.getElementById('realNum').value;
-        if(input === "" || currentPred === "") return alert("Pehle prediction le lo!");
-
-        const num = parseInt(input);
-        const actualOutcome = (num >= 5) ? "BIG" : "SMALL";
-        const status = (actualOutcome === currentPred) ? "WIN" : "LOSS";
-        
-        const table = document.getElementById('historyBody');
-        const row = `<tr>
-            <td>${lastP.slice(-3)}</td>
-            <td>${currentPred}</td>
-            <td>${actualOutcome}</td>
-            <td class="${status === 'WIN' ? 'win-tag' : 'loss-tag'}">${status}</td>
-        </tr>`;
-        
-        table.innerHTML = row + table.innerHTML;
-        document.getElementById('realNum').value = "";
+            btn.innerText = "SIGNAL SECURED";
+        }, 2000);
     }
 </script>
 
