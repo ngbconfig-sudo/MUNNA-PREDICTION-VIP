@@ -37,7 +37,7 @@
 
         #predictionText {
             font-family: 'Orbitron', sans-serif; font-size: 3rem; margin: 20px 0; color: #444;
-            min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100px; display: flex; align-items: center; justify-content: center;
         }
 
         .btn-main {
@@ -47,9 +47,8 @@
             box-shadow: 0 10px 30px rgba(255, 207, 51, 0.4); text-transform: uppercase;
         }
 
-        .input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; transition: 0.3s; }
-        .n-btn { height: 45px; border: none; border-radius: 12px; color: #fff; font-weight: 900; cursor: pointer; transition: 0.2s; }
-        .n-btn:disabled { background: #111; color: #333; cursor: not-allowed; }
+        .input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; opacity: 0.3; pointer-events: none; transition: 0.3s; }
+        .n-btn { height: 45px; border: none; border-radius: 12px; color: #fff; font-weight: 900; cursor: pointer; }
         .r { background: var(--neon-red); } .g { background: var(--neon-green); } .v { background: #b659ff; }
 
         .history-container { margin-top: 25px; background: rgba(0,0,0,0.6); border-radius: 30px; border: 1px solid #222; overflow: hidden; }
@@ -72,20 +71,20 @@
 
     <div id="predictionText">READY</div>
 
-    <button class="btn-main" id="predictBtn" onclick="getNeuralSignal()">GET VIP SIGNAL</button>
+    <button class="btn-main" id="predictBtn" onclick="getLockedSignal()">GET VIP SIGNAL</button>
 
-    <div style="font-size: 0.7rem; color: var(--vip-gold); margin-top: 15px; font-weight: bold;">INPUT PREVIOUS RESULT (00:60 to 00:30)</div>
+    <div style="font-size: 0.7rem; color: var(--vip-gold); margin-top: 15px; font-weight: bold;">LAST RESULT INPUT (00:60 - 00:30)</div>
     <div class="input-grid" id="grid">
-        <button class="n-btn v" onclick="verifyLastPeriod(0)">0</button>
-        <button class="n-btn g" onclick="verifyLastPeriod(1)">1</button>
-        <button class="n-btn r" onclick="verifyLastPeriod(2)">2</button>
-        <button class="n-btn g" onclick="verifyLastPeriod(3)">3</button>
-        <button class="n-btn r" onclick="verifyLastPeriod(4)">4</button>
-        <button class="n-btn g" onclick="verifyLastPeriod(5)">5</button>
-        <button class="n-btn r" onclick="checkVerdict(6)">6</button>
-        <button class="n-btn g" onclick="verifyLastPeriod(7)">7</button>
-        <button class="n-btn r" onclick="verifyLastPeriod(8)">8</button>
-        <button class="n-btn g" onclick="verifyLastPeriod(9)">9</button>
+        <button class="n-btn v" onclick="verifyResult(0)">0</button>
+        <button class="n-btn g" onclick="verifyResult(1)">1</button>
+        <button class="n-btn r" onclick="verifyResult(2)">2</button>
+        <button class="n-btn g" onclick="verifyResult(3)">3</button>
+        <button class="n-btn r" onclick="verifyResult(4)">4</button>
+        <button class="n-btn g" onclick="verifyResult(5)">5</button>
+        <button class="n-btn r" onclick="verifyResult(6)">6</button>
+        <button class="n-btn g" onclick="verifyResult(7)">7</button>
+        <button class="n-btn r" onclick="verifyResult(8)">8</button>
+        <button class="n-btn g" onclick="verifyResult(9)">9</button>
     </div>
 
     <div class="history-container">
@@ -96,10 +95,10 @@
 
 <script>
     let currentP = ""; 
-    let lastPrediction = ""; 
-    let lastPeriodCode = "";
+    let activeLockedSignal = ""; 
+    let lastGeneratedFor = "";
     let timeLeft = 60;
-    let resultSubmitted = false;
+    let hasSubmitted = false;
 
     function sync() {
         const now = new Date(); const sec = now.getSeconds();
@@ -111,63 +110,72 @@
         document.getElementById('pTimer').innerText = "00:" + String(timeLeft).padStart(2,'0');
 
         if(code !== currentP) {
-            lastPeriodCode = currentP; // Purana period save kiya
             currentP = code;
-            resultSubmitted = false;
+            hasSubmitted = false;
+            // Period change par interface reset
+            document.getElementById('predictionText').innerText = "PROCESSING...";
+            document.getElementById('predictionText').style.fontSize = "1.8rem";
+            document.getElementById('predictionText').style.color = "var(--vip-gold)";
             
-            const pt = document.getElementById('predictionText');
-            pt.innerHTML = "<span style='font-size:1.2rem; color:var(--vip-gold)'>SUBMIT LAST RESULT...</span>";
-            
-            // Grid enable for input
+            // 60-30 sec tak input allow
             document.getElementById('grid').style.opacity = "1";
-            document.querySelectorAll('.n-btn').forEach(b => b.disabled = false);
+            document.getElementById('grid').style.pointerEvents = "auto";
         }
 
-        // Jab 30 sec se kam bachein toh input band, sirf prediction chalu
+        // 30 sec ke baad input band, sirf prediction chalu
         if(timeLeft <= 30) {
             document.getElementById('grid').style.opacity = "0.3";
-            document.querySelectorAll('.n-btn').forEach(b => b.disabled = true);
-            if(document.getElementById('predictionText').innerText.includes("SUBMIT")) {
-                document.getElementById('predictionText').innerText = "READY FOR SIGNAL";
-            }
+            document.getElementById('grid').style.pointerEvents = "none";
         }
     }
     setInterval(sync, 1000);
 
-    function getNeuralSignal() {
+    function getLockedSignal() {
         if (timeLeft > 30) {
-            alert("Wait for 00:30 timer!"); return;
+            document.getElementById('predictionText').innerText = "WAIT " + (timeLeft-30) + "s";
+            return;
+        }
+
+        // AGAR SIGNAL PEHLE SE GENERATED HAI, TOH WAHI DIKHAO
+        if (lastGeneratedFor === currentP) {
+            showFinal(activeLockedSignal);
+            return;
         }
 
         const t = document.getElementById('predictionText');
-        t.innerText = "ANALYZING..."; t.style.fontSize = "1.8rem"; t.style.color = "#fff";
+        t.innerText = "LOCKING..."; t.style.color = "#fff";
         
         setTimeout(() => {
-            lastPrediction = (Math.random() > 0.5) ? "BIG" : "SMALL";
-            t.innerText = lastPrediction;
-            t.style.fontSize = "5.5rem";
-            t.style.color = (lastPrediction === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
-        }, 1000);
+            // EK BAAR GENERATE HUA AUR LOCK HO GAYA
+            activeLockedSignal = (Math.random() > 0.5) ? "BIG" : "SMALL";
+            lastGeneratedFor = currentP;
+            showFinal(activeLockedSignal);
+        }, 800);
     }
 
-    function verifyLastPeriod(num) {
-        if(resultSubmitted) return;
+    function showFinal(sig) {
+        const t = document.getElementById('predictionText');
+        t.innerText = sig;
+        t.style.fontSize = "5.5rem";
+        t.style.color = (sig === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
+    }
+
+    function verifyResult(num) {
+        if(hasSubmitted || activeLockedSignal === "") return;
         
-        let actualType = (num >= 5) ? "BIG" : "SMALL";
-        let isWin = (lastPrediction === actualType);
-        let statusText = isWin ? "<b style='color:var(--neon-green)'>WIN ✅</b>" : "<b style='color:var(--neon-red)'>LOSS ❌</b>";
-        if(lastPrediction === "") statusText = "DATA ADDED";
+        let actual = (num >= 5) ? "BIG" : "SMALL";
+        let isWin = (activeLockedSignal === actual);
+        let status = isWin ? "<b style='color:var(--neon-green)'>WIN ✅</b>" : "<b style='color:var(--neon-red)'>LOSS ❌</b>";
 
         const list = document.getElementById('logList');
         list.innerHTML = `<div class="log-row">
-            <span>P: ${lastPeriodCode.slice(-3) || '---'}</span>
-            <span style="font-weight:900;">${num} (${actualType})</span>
-            <span>${statusText}</span>
+            <span>P: ${currentP.slice(-3)}</span>
+            <span style="font-weight:900;">${num} (${actual})</span>
+            <span>${status}</span>
         </div>` + list.innerHTML;
         
-        resultSubmitted = true;
-        document.getElementById('predictionText').innerHTML = `<span style='font-size:1.5rem; color:#fff'>RESULT: ${statusText}</span>`;
-        
+        hasSubmitted = true;
+        document.getElementById('grid').style.opacity = "0.3";
         if(navigator.vibrate) navigator.vibrate(isWin ? 100 : [100, 50, 100]);
     }
 </script>
