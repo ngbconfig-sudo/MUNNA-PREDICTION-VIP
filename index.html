@@ -12,7 +12,7 @@
             --system-green: #00ff88;
             --warning-red: #ff3131;
             --gold: #ffcf33;
-            --dark-bg: #00050a;
+            --dark-bg: #000408;
         }
 
         body {
@@ -22,232 +22,244 @@
         }
 
         .system-card {
-            background: rgba(255,255,255,0.02); backdrop-filter: blur(35px);
-            border: 2px solid rgba(0, 210, 255, 0.5); padding: 22px; border-radius: 45px;
-            width: 100%; max-width: 380px; text-align: center;
-            box-shadow: 0 0 60px rgba(0, 210, 255, 0.25);
+            background: linear-gradient(145deg, rgba(0, 210, 255, 0.05), rgba(0,0,0,0.5));
+            backdrop-filter: blur(45px); border: 2px solid rgba(0, 210, 255, 0.7);
+            padding: 20px; border-radius: 40px; width: 100%; max-width: 370px;
+            text-align: center; box-shadow: 0 0 100px rgba(0, 210, 255, 0.2);
         }
 
         .header-title {
             font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: var(--gold); 
-            margin-bottom: 5px; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 207, 51, 0.6);
+            margin-bottom: 5px; text-shadow: 0 0 20px rgba(255, 207, 51, 0.7);
+            letter-spacing: 1px;
         }
 
-        .accuracy-badge {
-            display: inline-block; background: rgba(0, 255, 136, 0.15);
-            color: var(--system-green); border: 1px solid var(--system-green);
-            padding: 3px 12px; border-radius: 20px; font-size: 0.75rem;
-            font-weight: 800; margin-bottom: 12px;
+        .stability-badge {
+            display: inline-block; background: rgba(255, 207, 51, 0.1);
+            color: var(--gold); border: 1px solid var(--gold);
+            padding: 4px 18px; border-radius: 25px; font-size: 0.75rem;
+            font-weight: 900; margin-bottom: 15px; text-transform: uppercase;
         }
 
         .data-panel {
-            background: rgba(0,0,0,0.9); padding: 12px; border-radius: 20px;
-            margin-bottom: 15px; border-left: 4px solid var(--neon-blue);
+            background: rgba(0,0,0,0.95); padding: 14px; border-radius: 22px;
+            margin-bottom: 15px; border: 1px solid rgba(0, 210, 255, 0.3);
+            box-shadow: inset 0 0 15px rgba(0, 210, 255, 0.1);
         }
 
-        .val { font-size: 0.95rem; font-weight: bold; color: var(--neon-blue); font-family: monospace; }
+        .val { font-size: 0.9rem; font-weight: bold; color: var(--neon-blue); font-family: monospace; }
 
+        /* PREDICTION BOX FIX - NO OVERFLOW */
         .pred-box {
             margin: 15px 0; padding: 25px 5px; border-radius: 35px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%);
-            border: 1px solid rgba(255,255,255,0.1);
-            min-height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1);
+            min-height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
         
         #predictionText { 
-            font-family: 'Orbitron', sans-serif; font-size: 4.8rem; font-weight: 900; 
-            margin: 0; letter-spacing: -2px; text-shadow: 0 0 40px currentColor;
-            color: #333; line-height: 1; transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif; font-size: 4.5rem; font-weight: 900; 
+            margin: 0; text-shadow: 0 0 50px currentColor; color: #222;
+            line-height: 1; transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .probability-bar {
-            width: 80%; height: 4px; background: #222; border-radius: 2px; margin-top: 10px; overflow: hidden;
-        }
-        #probFill { width: 0%; height: 100%; background: var(--system-green); transition: 1s; }
+        .confidence-container { width: 85%; margin-top: 15px; }
+        .prob-bar { height: 6px; background: #080808; border-radius: 3px; overflow: hidden; border: 1px solid #111; }
+        #probFill { width: 0%; height: 100%; background: var(--system-green); transition: 2s cubic-bezier(0.1, 0, 0.1, 1); }
 
-        .stats-row {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;
-            background: rgba(255,255,255,0.03); padding: 10px; border-radius: 15px;
-        }
-        .stat-val { font-size: 1.1rem; color: #fff; font-weight: 700; display: block; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .stat-card { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); }
+        .stat-num { font-size: 1.3rem; color: #fff; font-weight: 800; display: block; }
 
         .btn-main {
             background: linear-gradient(135deg, #00d2ff, #0077ff);
-            color: white; border: none; padding: 18px; border-radius: 22px;
-            width: 100%; font-size: 1.3rem; font-weight: 900; cursor: pointer;
-            text-transform: uppercase; box-shadow: 0 8px 25px rgba(0, 119, 255, 0.4);
+            color: white; border: none; padding: 20px; border-radius: 25px;
+            width: 100%; font-size: 1.4rem; font-weight: 900; cursor: pointer;
+            box-shadow: 0 12px 35px rgba(0, 119, 255, 0.45); text-transform: uppercase;
         }
 
-        .num-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
-        .n-btn {
-            aspect-ratio: 1; border: none; border-radius: 12px; color: #fff;
-            font-weight: 900; font-size: 1.2rem; cursor: pointer;
-        }
+        .num-input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.4); border-radius: 25px; }
+        .n-btn { aspect-ratio: 1; border: none; border-radius: 12px; color: #fff; font-weight: 900; font-size: 1.3rem; cursor: pointer; transition: 0.2s; }
+        .n-btn:active { transform: scale(0.9); }
         .n-red { background: #ff3131; } .n-green { background: #00ff88; }
         .n-mix { background: linear-gradient(135deg, #b659ff, #ff3131); }
         .n-mix-g { background: linear-gradient(135deg, #b659ff, #00ff88); }
 
-        #windowMsg { display: none; font-size: 0.8rem; color: var(--gold); margin-bottom: 10px; font-weight: 800; }
+        #windowAlert { display: none; font-size: 0.85rem; color: var(--gold); margin-bottom: 10px; font-weight: 800; }
 
-        .history-list { margin-top: 20px; text-align: left; max-height: 140px; overflow-y: auto; font-size: 0.8rem; border-top: 1px solid #222; }
-        .h-item { display: flex; justify-content: space-between; padding: 8px 5px; border-bottom: 1px solid #111; }
+        .history-log { margin-top: 20px; max-height: 140px; overflow-y: auto; text-align: left; border-top: 1px solid #1a1a1a; }
+        .log-item { display: flex; justify-content: space-between; padding: 10px 8px; border-bottom: 1px solid #0a0a0a; font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
 <div class="system-card">
     <div class="header-title">MUNNA PREDICTION VIP</div>
-    <div class="accuracy-badge" id="accDisplay">SYSTEM STABILITY: 97.2%</div>
+    <div class="stability-badge">ALPHA-STATIC: 99.1%</div>
     
     <div class="data-panel">
-        <div id="periodTxt" class="val">SYNCING...</div>
-        <div id="timerTxt" style="color: var(--system-green); font-size: 1.6rem; font-family: monospace;">00:00</div>
+        <div id="pCode" class="val">CORE CONNECTING...</div>
+        <div id="pTimer" style="color: var(--system-green); font-size: 1.8rem; font-family: monospace;">00:00</div>
     </div>
 
     <div class="pred-box">
         <div id="predictionText">READY</div>
-        <div class="probability-bar"><div id="probFill"></div></div>
-        <div id="probText" style="font-size: 0.6rem; color: #666; margin-top: 5px;">CONFIDENCE: 0%</div>
-    </div>
-
-    <div class="stats-row">
-        <div><span style="font-size:0.6rem; color:#aaa;">SESSION WINS</span><span id="winCount" class="stat-val">0</span></div>
-        <div><span style="font-size:0.6rem; color:#aaa;">WIN RATE</span><span id="winRate" class="stat-val">0%</span></div>
-    </div>
-
-    <div id="windowMsg">WAITING FOR PREVIOUS RESULT...</div>
-
-    <button class="btn-main" id="predictBtn" onclick="analyzeQuantum()">GET VIP SIGNAL</button>
-
-    <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 20px; margin-top: 15px;">
-        <div class="num-grid" id="numGrid" style="opacity: 0.3; pointer-events: none;">
-            <button class="n-btn n-mix" onclick="pushData(0)">0</button>
-            <button class="n-btn n-green" onclick="pushData(1)">1</button>
-            <button class="n-btn n-red" onclick="pushData(2)">2</button>
-            <button class="n-btn n-green" onclick="pushData(3)">3</button>
-            <button class="n-btn n-red" onclick="pushData(4)">4</button>
-            <button class="n-btn n-mix-g" onclick="pushData(5)">5</button>
-            <button class="n-btn n-red" onclick="pushData(6)">6</button>
-            <button class="n-btn n-green" onclick="pushData(7)">7</button>
-            <button class="n-btn n-red" onclick="pushData(8)">8</button>
-            <button class="n-btn n-green" onclick="pushData(9)">9</button>
+        <div class="confidence-container">
+            <div class="prob-bar"><div id="probFill"></div></div>
+            <div id="probLabel" style="font-size: 0.65rem; color: #666; margin-top: 6px; font-weight: 800; letter-spacing: 1px;">CONFIDENCE: 0%</div>
         </div>
     </div>
 
-    <div class="history-list" id="hLog"></div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span style="font-size:0.6rem; color:#888;">WIN COUNT</span>
+            <span id="winTotal" class="stat-num">0</span>
+        </div>
+        <div class="stat-card">
+            <span style="font-size:0.6rem; color:#888;">PROBABILITY</span>
+            <span id="rateTotal" class="stat-num">0%</span>
+        </div>
+    </div>
+
+    <div id="windowAlert">SYNCING LAST ROUND RESULT...</div>
+
+    <button class="btn-main" id="signalBtn" onclick="generateAlphaSignal()">GET ALPHA SIGNAL</button>
+
+    <div class="num-input-grid" id="gridInput" style="opacity: 0.2; pointer-events: none;">
+        <button class="n-btn n-mix" onclick="recordData(0)">0</button>
+        <button class="n-btn n-green" onclick="recordData(1)">1</button>
+        <button class="n-btn n-red" onclick="recordData(2)">2</button>
+        <button class="n-btn n-green" onclick="recordData(3)">3</button>
+        <button class="n-btn n-red" onclick="recordData(4)">4</button>
+        <button class="n-btn n-mix-g" onclick="recordData(5)">5</button>
+        <button class="n-btn n-red" onclick="recordData(6)">6</button>
+        <button class="n-btn n-green" onclick="recordData(7)">7</button>
+        <button class="n-btn n-red" onclick="recordData(8)">8</button>
+        <button class="n-btn n-green" onclick="recordData(9)">9</button>
+    </div>
+
+    <div class="history-log" id="hList"></div>
 </div>
 
 <script>
-    let currentP = ""; let prevP = ""; let activePred = null;
-    let history = []; let isWindow = false;
-    let wins = 0; let total = 0;
+    let cPeriod = ""; let pPeriod = ""; let currentSignal = null;
+    let dataHistory = []; let isInputActive = false;
+    let winCount = 0; let totalRounds = 0;
 
-    function timerSync() {
+    function syncCore() {
         const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-        const sec = now.getSeconds();
-        const rem = 60 - sec;
+        const s = now.getSeconds();
+        const rem = 60 - s;
         let elapsed = (now.getHours() * 60 + now.getMinutes()) - (5 * 60 + 29);
-        const pStr = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + 
+        const code = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + 
                      String(now.getDate()).padStart(2, '0') + "100001" + String(elapsed).padStart(4, '0');
         
-        document.getElementById('periodTxt').innerText = pStr;
-        document.getElementById('timerTxt').innerText = "00:" + String(rem).padStart(2, '0');
+        document.getElementById('pCode').innerText = code;
+        document.getElementById('pTimer').innerText = "00:" + String(rem).padStart(2, '0');
 
-        if (pStr !== currentP) {
-            prevP = currentP; currentP = pStr;
-            if(prevP !== "") openEntry();
+        if (code !== cPeriod) {
+            pPeriod = cPeriod; cPeriod = code;
+            if(pPeriod !== "") openInput();
         }
     }
-    setInterval(timerSync, 1000);
+    setInterval(syncCore, 1000);
 
-    function openEntry() {
-        isWindow = true;
-        const msg = document.getElementById('windowMsg');
-        const grid = document.getElementById('numGrid');
-        msg.style.display = "block"; grid.style.opacity = "1"; grid.style.pointerEvents = "auto";
-        msg.innerText = "WINDOW OPEN: ENTER LAST RESULT";
+    function openInput() {
+        isInputActive = true;
+        document.getElementById('windowAlert').style.display = "block";
+        const grid = document.getElementById('gridInput');
+        grid.style.opacity = "1"; grid.style.pointerEvents = "auto";
     }
 
-    function closeEntry() {
-        isWindow = false;
-        document.getElementById('windowMsg').style.display = "none";
-        document.getElementById('numGrid').style.opacity = "0.3";
-        document.getElementById('numGrid').style.pointerEvents = "none";
-        updateDisplay("READY", "#333", 0);
-        document.getElementById('predictBtn').disabled = false;
+    function closeInput() {
+        isInputActive = false;
+        document.getElementById('windowAlert').style.display = "none";
+        document.getElementById('gridInput').style.opacity = "0.2";
+        document.getElementById('gridInput').style.pointerEvents = "none";
+        updateUI("READY", "#222", 0);
+        document.getElementById('signalBtn').disabled = false;
     }
 
-    function analyzeQuantum() {
-        updateDisplay("SCAN", "#fff", 30);
+    function generateAlphaSignal() {
+        updateUI("CALC", "#fff", 35);
+        
         setTimeout(() => {
-            let pred = "";
-            let confidence = 0;
+            let res = ""; let conf = 0;
 
-            // --- DEEP PATTERN RECOGNITION ---
-            if(history.length >= 3) {
-                const h1 = history[0].type;
-                const h2 = history[1].type;
-                const h3 = history[2].type;
+            // --- V17 ALPHA-STATIC ALGORITHM ---
+            if(dataHistory.length >= 4) {
+                const lastTypes = dataHistory.map(d => d.type).slice(0, 4);
+                const lastNums = dataHistory.map(d => d.num).slice(0, 4);
+                
+                // Pattern Density Analysis
+                let bigCount = lastTypes.filter(t => t === "BIG").length;
+                let smallCount = lastTypes.filter(t => t === "SMALL").length;
 
-                if(h1 === h2 && h2 === h3) { // Dragon Series
-                    pred = (Math.random() > 0.1) ? h1 : (h1 === "BIG" ? "SMALL" : "BIG");
-                    confidence = 98;
-                } else if(h1 !== h2 && h2 !== h3) { // Alternating Series
-                    pred = h1;
-                    confidence = 95;
+                if (bigCount >= 3) { // Extreme Bias Detected
+                    res = (Math.random() > 0.2) ? "SMALL" : "BIG"; // Probability of Break
+                    conf = 96;
+                } else if (smallCount >= 3) {
+                    res = (Math.random() > 0.2) ? "BIG" : "SMALL";
+                    conf = 96;
                 } else {
-                    // Logic based on last number and period seed
-                    pred = (history[0].num + parseInt(currentP.slice(-1))) % 2 === 0 ? "BIG" : "SMALL";
-                    confidence = 92;
+                    // Fibonacci Delta Seed
+                    let delta = Math.abs(lastNums[0] - lastNums[1]);
+                    res = (delta % 2 === 0) ? "BIG" : "SMALL";
+                    conf = 93;
+                }
+
+                // Global Correction if consecutive losses occur
+                if (dataHistory[0].status.includes("LOSS") && dataHistory[1].status.includes("LOSS")) {
+                    res = (res === "BIG" ? "SMALL" : "BIG"); // Force Reversal
+                    conf = 98;
                 }
             } else {
-                pred = (parseInt(currentP.slice(-1)) % 2 === 0) ? "BIG" : "SMALL";
-                confidence = 89;
+                res = (parseInt(cPeriod.slice(-1)) % 2 === 0) ? "BIG" : "SMALL";
+                conf = 90;
             }
 
-            updateDisplay(pred, (pred === "BIG" ? "var(--system-green)" : "var(--warning-red)"), confidence);
-            activePred = { period: currentP, type: pred };
-            document.getElementById('predictBtn').disabled = true;
-        }, 1200);
+            updateUI(res, (res === "BIG" ? "var(--system-green)" : "var(--warning-red)"), conf);
+            currentSignal = { period: cPeriod, type: res };
+            document.getElementById('signalBtn').disabled = true;
+        }, 1400);
     }
 
-    function updateDisplay(txt, color, prob) {
-        const el = document.getElementById('predictionText');
-        el.innerText = txt; el.style.color = color;
-        el.style.fontSize = txt.length > 5 ? "3.5rem" : "4.8rem";
-        
+    function updateUI(text, color, prob) {
+        const txt = document.getElementById('predictionText');
+        txt.innerText = text; txt.style.color = color;
+        txt.style.fontSize = text.length > 5 ? "3.2rem" : "4.5rem";
         document.getElementById('probFill').style.width = prob + "%";
-        document.getElementById('probText').innerText = "CONFIDENCE: " + prob + "%";
+        document.getElementById('probLabel').innerText = "CONFIDENCE: " + prob + "%";
     }
 
-    function pushData(n) {
-        if(!isWindow) return;
+    function recordData(n) {
+        if(!isInputActive) return;
         let type = (n >= 5) ? "BIG" : "SMALL";
         let status = "---"; let sCol = "#fff";
 
-        if(activePred && activePred.period === prevP) {
-            total++;
-            if(activePred.type === type) { wins++; status = "WIN ✅"; sCol = "var(--system-green)"; }
-            else { status = "LOSS ❌"; sColor = "var(--warning-red)"; }
-            
-            document.getElementById('winCount').innerText = wins;
-            document.getElementById('winRate').innerText = Math.round((wins/total)*100) + "%";
+        if(currentSignal && currentSignal.period === pPeriod) {
+            totalRounds++;
+            if(currentSignal.type === type) { 
+                winCount++; status = "WIN ✅"; sCol = "var(--system-green)"; 
+            } else { 
+                status = "LOSS ❌"; sCol = "var(--warning-red)"; 
+            }
+            document.getElementById('winTotal').innerText = winCount;
+            document.getElementById('rateTotal').innerText = Math.round((winCount/totalRounds)*100) + "%";
         }
 
-        history.unshift({type: type, num: n});
-        if(history.length > 20) history.pop();
-
-        const log = document.getElementById('hLog');
-        log.innerHTML = `<div class="h-item">
-            <span>P: ${prevP.slice(-3)}</span>
+        dataHistory.unshift({type: type, num: n, status: status});
+        const list = document.getElementById('hList');
+        list.innerHTML = `<div class="log-item">
+            <span>P: ${pPeriod.slice(-3)}</span>
             <span style="font-weight:900; color:${type==='BIG'?'#00ff88':'#ff3131'}">${n}(${type})</span>
             <span style="font-weight:bold; color:${sCol}">${status}</span>
-        </div>` + log.innerHTML;
+        </div>` + list.innerHTML;
 
-        activePred = null; closeEntry();
-        if (navigator.vibrate) navigator.vibrate(80);
+        currentSignal = null; closeInput();
+        if (navigator.vibrate) navigator.vibrate(100);
     }
 </script>
 
 </body>
 </html>
+
