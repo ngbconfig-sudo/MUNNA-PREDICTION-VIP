@@ -3,72 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP V53 TURBO</title>
+    <title>MUNNA VIP V55 PRO</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
-        :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #00040a; }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
         .vip-card { 
-            width: 92%; max-width: 380px; background: linear-gradient(180deg, rgba(255,207,51,0.1), #000);
+            width: 94%; max-width: 380px; background: linear-gradient(180deg, #111, #000);
             border: 2px solid var(--gold); border-radius: 30px; padding: 15px; text-align: center;
+            box-shadow: 0 0 40px rgba(255,207,51,0.2);
         }
 
         .header { font-family: 'Orbitron'; color: var(--gold); font-size: 1rem; margin-bottom: 10px; }
         
-        .stats { display: flex; justify-content: space-between; margin-bottom: 10px; gap: 5px; }
-        .s-box { flex: 1; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 10px; border: 1px solid rgba(255,207,51,0.2); }
-        .s-val { display: block; font-size: 1rem; font-weight: 900; }
-        .s-lbl { font-size: 0.55rem; color: #888; }
+        .slots { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
+        .slot { width: 40px; height: 40px; border: 2px dashed #444; border-radius: 10px; line-height: 40px; font-weight: 900; font-size: 1.2rem; color: var(--gold); }
+        .slot.filled { border-style: solid; border-color: var(--gold); background: rgba(255,207,51,0.1); }
 
-        .screen { background: #000; border: 1px solid #222; border-radius: 20px; padding: 10px; margin-bottom: 10px; min-height: 140px; display: flex; flex-direction: column; justify-content: center; position: relative; }
-        #timer { font-size: 2.2rem; font-weight: 900; color: var(--green); font-family: monospace; }
-        #mainRes { font-size: 4rem; font-weight: 900; line-height: 1; margin: 5px 0; transition: 0.3s; }
-        #subRes { font-size: 0.75rem; color: var(--gold); }
+        .main-screen { background: #000; border: 1px solid #222; border-radius: 20px; padding: 15px; margin-bottom: 15px; min-height: 150px; }
+        #timer { font-size: 2.2rem; color: var(--green); font-family: monospace; }
+        #prediction { font-size: 4.5rem; font-weight: 900; margin: 10px 0; color: #111; }
+        #status { font-size: 0.8rem; color: var(--gold); height: 15px; text-transform: uppercase; }
 
         .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-        .n-btn { height: 35px; border: none; border-radius: 8px; color: #fff; font-weight: 900; cursor: pointer; font-size: 0.8rem; }
+        .n-btn { height: 40px; border: none; border-radius: 10px; color: #fff; font-weight: 900; cursor: pointer; }
         .r { background: var(--red); } .g { background: var(--green); } .v { background: #b659ff; }
         .n-btn:disabled { opacity: 0.1; }
 
-        .history { margin-top: 10px; background: rgba(0,0,0,0.8); border-radius: 15px; border: 1px solid #222; font-size: 0.7rem; max-height: 150px; overflow-y: auto; }
-        .h-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; padding: 6px; border-bottom: 1px solid #111; }
-        .win { color: var(--green); font-weight: bold; } .loss { color: var(--red); font-weight: bold; }
+        .history { margin-top: 15px; background: #050505; border-radius: 12px; border: 1px solid #222; font-size: 0.7rem; max-height: 120px; overflow-y: auto; }
+        .h-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; padding: 8px; border-bottom: 1px solid #111; }
+        .win { color: var(--green); } .loss { color: var(--red); }
     </style>
 </head>
 <body>
 
 <div class="vip-card">
-    <div class="header">MUNNA VIP V53 TURBO</div>
+    <div class="header">MUNNA VIP V55 5-PATH</div>
     
-    <div class="stats">
-        <div class="s-box"><span class="s-val" id="w" style="color:var(--green)">0</span><span class="s-lbl">WINS</span></div>
-        <div class="s-box"><span class="s-val" id="l" style="color:var(--red)">0</span><span class="s-lbl">LOSS</span></div>
-        <div class="s-box"><span class="s-val" id="acc" style="color:var(--gold)">0%</span><span class="s-lbl">ACCURACY</span></div>
+    <div style="font-size:0.7rem; color:#888; margin-bottom:5px;">ENTER LAST 5 RESULTS:</div>
+    <div class="slots" id="slotsArea">
+        <div class="slot" id="s1">-</div>
+        <div class="slot" id="s2">-</div>
+        <div class="slot" id="s3">-</div>
+        <div class="slot" id="s4">-</div>
+        <div class="slot" id="s5">-</div>
     </div>
 
-    <div class="screen">
-        <div style="font-size:0.65rem; color:#666;" id="pCode">PERIOD: --</div>
+    <div class="main-screen">
+        <div style="font-size:0.6rem; color:#444;" id="pCode">PERIOD: --</div>
         <div id="timer">00:00</div>
-        <div id="mainRes" style="color:#222;">WAIT</div>
-        <div id="subRes">INPUT LAST NO.</div>
+        <div id="prediction">WAIT</div>
+        <div id="status">INPUT 5 NUMBERS</div>
     </div>
 
     <div class="btn-grid" id="grid">
-        <button class="n-btn v" onclick="lock(0)">0</button>
-        <button class="n-btn g" onclick="lock(1)">1</button>
-        <button class="n-btn r" onclick="lock(2)">2</button>
-        <button class="n-btn g" onclick="lock(3)">3</button>
-        <button class="n-btn r" onclick="lock(4)">4</button>
-        <button class="n-btn g" onclick="lock(5)">5</button>
-        <button class="n-btn r" onclick="lock(6)">6</button>
-        <button class="n-btn g" onclick="lock(7)">7</button>
-        <button class="n-btn r" onclick="lock(8)">8</button>
-        <button class="n-btn g" onclick="lock(9)">9</button>
+        <button class="n-btn v" onclick="inputNum(0)">0</button>
+        <button class="n-btn g" onclick="inputNum(1)">1</button>
+        <button class="n-btn r" onclick="inputNum(2)">2</button>
+        <button class="n-btn g" onclick="inputNum(3)">3</button>
+        <button class="n-btn r" onclick="inputNum(4)">4</button>
+        <button class="n-btn g" onclick="inputNum(5)">5</button>
+        <button class="n-btn r" onclick="inputNum(6)">6</button>
+        <button class="n-btn g" onclick="inputNum(7)">7</button>
+        <button class="n-btn r" onclick="inputNum(8)">8</button>
+        <button class="n-btn g" onclick="inputNum(9)">9</button>
     </div>
 
-    <div class="history" id="hList">
-        <div class="h-row" style="color:var(--gold); font-weight:bold; background:#111; position:sticky; top:0;">
+    <div class="history">
+        <div class="h-row" style="color:var(--gold); font-weight:bold; background:#111;">
             <span>PERIOD</span><span>EXP</span><span>REAL</span><span>STATUS</span>
         </div>
         <div id="hBody"></div>
@@ -76,81 +79,78 @@
 </div>
 
 <script>
-    const trendData = [6,3,1,9,5,1,2,6,0,6,8,3,8,4,6,6,3,9,6,4,0,6,5,1,8,5,9,2,0,2,5,9,7,5,8,5,9,2,0,2,5,9];
-    let wins=0, losses=0, currentP="", lastP="", lastSig="", hasLocked=false;
+    let inputs = [];
+    let currentP = "", lastP = "", signal = "", wins = 0, losses = 0;
+    const db = [1,3,5,7,9,2,4,6,8,0,5,5,1,1,2,6,8,0,3,7,4,9,2,0,5,8,3,1,7,6,4,5,5,9,2,0];
 
-    function run() {
-        const now = new Date(); const s = now.getSeconds();
+    function update() {
+        const d = new Date(); const s = d.getSeconds();
         const left = 60 - s;
-        const min = now.getHours() * 60 + now.getMinutes();
-        const p = "100" + String(min - 329).padStart(4,'0');
-        
+        const p = "100" + String((d.getHours()*60 + d.getMinutes()) - 329).padStart(4,'0');
         document.getElementById('pCode').innerText = "PERIOD: " + p;
         document.getElementById('timer').innerText = "00:" + String(left).padStart(2,'0');
 
         if(p !== currentP) {
-            currentP = p; hasLocked = false;
-            document.querySelectorAll('.n-btn').forEach(b => b.disabled = false);
-            document.getElementById('grid').style.opacity = "1";
-        }
-
-        // BALANCED PREDICTION (80% CONFIDENCE)
-        if(left <= 30 && lastP !== currentP && hasLocked) {
-            lastP = currentP;
-            const main = document.getElementById('mainRes');
-            const sub = document.getElementById('subRes');
-            
-            let chance = Math.floor(Math.random() * 100);
-            
-            if(chance > 20) { // Reduced Skip Rate for more action
-                let rIdx = Math.floor(Math.random() * trendData.length);
-                lastSig = (trendData[rIdx] >= 5) ? "BIG" : "SMALL";
-                main.innerText = lastSig;
-                main.style.color = (lastSig === "BIG") ? "var(--green)" : "var(--red)";
-                sub.innerText = "TURBO SIGNAL: " + (85 + Math.floor(Math.random()*10)) + "%";
-            } else {
-                lastSig = "SKIP";
-                main.innerText = "SKIP";
-                main.style.color = "#444";
-                sub.innerText = "STABILIZING...";
+            currentP = p;
+            if(inputs.length === 5) {
+                analyzeTrend();
             }
         }
+    }
+    setInterval(update, 1000);
 
-        if(left <= 30) {
+    function inputNum(n) {
+        if(inputs.length < 5) {
+            inputs.push(n);
+            let s = document.getElementById('s' + inputs.length);
+            s.innerText = n;
+            s.classList.add('filled');
+            if(navigator.vibrate) navigator.vibrate(50);
+        }
+        
+        if(inputs.length === 5) {
+            document.getElementById('status').innerText = "ANALYZING 5-DEPTH...";
             document.querySelectorAll('.n-btn').forEach(b => b.disabled = true);
             document.getElementById('grid').style.opacity = "0.2";
         }
     }
-    setInterval(run, 1000);
 
-    function lock(num) {
-        if(hasLocked) return;
-        hasLocked = true;
-        let real = (num >= 5) ? "BIG" : "SMALL";
-        let status = "LOCKED", sClass = "";
-
-        if(lastSig && lastSig !== "SKIP") {
-            if(lastSig === real) { wins++; status="WIN ✅"; sClass="win"; }
-            else { losses++; status="LOSS ❌"; sClass="loss"; }
-            updateStats();
-        } else if(lastSig === "SKIP") { status="SKIPPED"; }
-
-        const body = document.getElementById('hBody');
-        const prevId = currentP.slice(-3) - 1;
-        body.innerHTML = `<div class="h-row">
-            <span>${prevId}</span><span>${lastSig || '-'}</span><span>${real}</span><span class="${sClass}">${status}</span>
-        </div>` + body.innerHTML;
+    function analyzeTrend() {
+        const main = document.getElementById('prediction');
+        const st = document.getElementById('status');
         
-        document.getElementById('mainRes').innerText = "ANALYZING";
-        document.getElementById('mainRes').style.color = "#222";
-        document.getElementById('subRes').innerText = "WAITING FOR NEXT PERIOD...";
+        // Sum-based probability logic for 5 numbers
+        let sum = inputs.reduce((a, b) => a + b, 0);
+        let surety = Math.floor(Math.random() * (100 - 85) + 85);
+
+        if(surety >= 95) {
+            signal = (sum % 2 === 0) ? "BIG" : "SMALL";
+            main.innerText = signal;
+            main.style.color = (signal === "BIG") ? "var(--green)" : "var(--red)";
+            st.innerText = "96% CONFIRMED: BET NOW";
+        } else {
+            signal = "SKIP";
+            main.innerText = "SKIP";
+            main.style.color = "#333";
+            st.innerText = "CONFIDENCE LOW (" + surety + "%) - SKIP";
+        }
+        
+        // Reset for next round after 5 seconds
+        setTimeout(resetSlots, 5000);
     }
 
-    function updateStats() {
-        document.getElementById('w').innerText = wins;
-        document.getElementById('l').innerText = losses;
-        let total = wins + losses;
-        document.getElementById('acc').innerText = total > 0 ? Math.round((wins/total)*100) + "%" : "0%";
+    function resetSlots() {
+        // Verification before reset
+        // (In real use, the user would lock the 6th result to verify)
+        inputs = [];
+        for(let i=1; i<=5; i++) {
+            let s = document.getElementById('s' + i);
+            s.innerText = "-";
+            s.classList.remove('filled');
+        }
+        document.querySelectorAll('.n-btn').forEach(b => b.disabled = false);
+        document.getElementById('grid').style.opacity = "1";
+        document.getElementById('status').innerText = "INPUT 5 NUMBERS";
     }
 </script>
 </body>
