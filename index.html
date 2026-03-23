@@ -36,8 +36,8 @@
         #pTimer { color: var(--neon-green); font-size: 2.6rem; font-weight: 900; font-family: monospace; }
 
         #predictionText {
-            font-family: 'Orbitron', sans-serif; font-size: 3.5rem; margin: 20px 0; color: #444;
-            min-height: 90px; display: flex; align-items: center; justify-content: center;
+            font-family: 'Orbitron', sans-serif; font-size: 3rem; margin: 20px 0; color: #444;
+            min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
         .btn-main {
@@ -47,14 +47,14 @@
             box-shadow: 0 10px 30px rgba(255, 207, 51, 0.4); text-transform: uppercase;
         }
 
-        .input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+        .input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; transition: 0.3s; }
         .n-btn { height: 45px; border: none; border-radius: 12px; color: #fff; font-weight: 900; cursor: pointer; transition: 0.2s; }
-        .n-btn:active { transform: scale(0.9); }
+        .n-btn:disabled { background: #111; color: #333; cursor: not-allowed; }
         .r { background: var(--neon-red); } .g { background: var(--neon-green); } .v { background: #b659ff; }
 
         .history-container { margin-top: 25px; background: rgba(0,0,0,0.6); border-radius: 30px; border: 1px solid #222; overflow: hidden; }
         .history-list { max-height: 180px; overflow-y: auto; }
-        .log-row { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #111; font-size: 0.9rem; }
+        .log-row { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #111; font-size: 0.9rem; align-items: center; }
     </style>
 </head>
 <body>
@@ -74,30 +74,32 @@
 
     <button class="btn-main" id="predictBtn" onclick="getNeuralSignal()">GET VIP SIGNAL</button>
 
+    <div style="font-size: 0.7rem; color: var(--vip-gold); margin-top: 15px; font-weight: bold;">INPUT PREVIOUS RESULT (00:60 to 00:30)</div>
     <div class="input-grid" id="grid">
-        <button class="n-btn v" onclick="inputResult(0)">0</button>
-        <button class="n-btn g" onclick="inputResult(1)">1</button>
-        <button class="n-btn r" onclick="inputResult(2)">2</button>
-        <button class="n-btn g" onclick="inputResult(3)">3</button>
-        <button class="n-btn r" onclick="inputResult(4)">4</button>
-        <button class="n-btn g" onclick="inputResult(5)">5</button>
-        <button class="n-btn r" onclick="inputResult(6)">6</button>
-        <button class="n-btn g" onclick="inputResult(7)">7</button>
-        <button class="n-btn r" onclick="inputResult(8)">8</button>
-        <button class="n-btn g" onclick="inputResult(9)">9</button>
+        <button class="n-btn v" onclick="verifyLastPeriod(0)">0</button>
+        <button class="n-btn g" onclick="verifyLastPeriod(1)">1</button>
+        <button class="n-btn r" onclick="verifyLastPeriod(2)">2</button>
+        <button class="n-btn g" onclick="verifyLastPeriod(3)">3</button>
+        <button class="n-btn r" onclick="verifyLastPeriod(4)">4</button>
+        <button class="n-btn g" onclick="verifyLastPeriod(5)">5</button>
+        <button class="n-btn r" onclick="checkVerdict(6)">6</button>
+        <button class="n-btn g" onclick="verifyLastPeriod(7)">7</button>
+        <button class="n-btn r" onclick="verifyLastPeriod(8)">8</button>
+        <button class="n-btn g" onclick="verifyLastPeriod(9)">9</button>
     </div>
 
     <div class="history-container">
-        <div style="background:#111; padding:8px; font-size:0.75rem; color:var(--vip-gold); font-weight:900;">NEURAL HISTORY LOG</div>
+        <div style="background:#111; padding:8px; font-size:0.75rem; color:var(--vip-gold); font-weight:900;">ACCURACY LOG</div>
         <div class="history-list" id="logList"></div>
     </div>
 </div>
 
 <script>
     let currentP = ""; 
-    let activeSig = ""; 
+    let lastPrediction = ""; 
+    let lastPeriodCode = "";
     let timeLeft = 60;
-    let dataBank = []; // Pichle numbers store karne ke liye
+    let resultSubmitted = false;
 
     function sync() {
         const now = new Date(); const sec = now.getSeconds();
@@ -109,71 +111,64 @@
         document.getElementById('pTimer').innerText = "00:" + String(timeLeft).padStart(2,'0');
 
         if(code !== currentP) {
+            lastPeriodCode = currentP; // Purana period save kiya
             currentP = code;
-            activeSig = "";
-            document.getElementById('grid').style.opacity = "1";
-            document.getElementById('grid').style.pointerEvents = "auto";
+            resultSubmitted = false;
+            
             const pt = document.getElementById('predictionText');
-            pt.innerText = "PROCESSING...";
-            pt.style.fontSize = "1.8rem";
-            pt.style.color = "var(--vip-gold)";
+            pt.innerHTML = "<span style='font-size:1.2rem; color:var(--vip-gold)'>SUBMIT LAST RESULT...</span>";
+            
+            // Grid enable for input
+            document.getElementById('grid').style.opacity = "1";
+            document.querySelectorAll('.n-btn').forEach(b => b.disabled = false);
+        }
+
+        // Jab 30 sec se kam bachein toh input band, sirf prediction chalu
+        if(timeLeft <= 30) {
+            document.getElementById('grid').style.opacity = "0.3";
+            document.querySelectorAll('.n-btn').forEach(b => b.disabled = true);
+            if(document.getElementById('predictionText').innerText.includes("SUBMIT")) {
+                document.getElementById('predictionText').innerText = "READY FOR SIGNAL";
+            }
         }
     }
     setInterval(sync, 1000);
 
     function getNeuralSignal() {
         if (timeLeft > 30) {
-            const t = document.getElementById('predictionText');
-            t.innerText = "WAIT " + (timeLeft - 30) + "s";
-            t.style.fontSize = "2rem"; t.style.color = "var(--neon-red)";
-            return;
+            alert("Wait for 00:30 timer!"); return;
         }
 
         const t = document.getElementById('predictionText');
-        t.innerText = "ANALYZING...";
-        t.style.fontSize = "1.8rem"; t.style.color = "#fff";
+        t.innerText = "ANALYZING..."; t.style.fontSize = "1.8rem"; t.style.color = "#fff";
         
         setTimeout(() => {
-            let prediction = "";
-            
-            // --- ASLI LOGIC: Pichle results ke base par ---
-            if(dataBank.length >= 2) {
-                let sum = dataBank.slice(0, 3).reduce((a, b) => a + b, 0);
-                // Agar pichle numbers ka sum bada hai toh trend change hone ke chance 70%
-                prediction = (sum > 12) ? "SMALL" : "BIG";
-            } else {
-                // Default agar data nahi hai
-                prediction = (Math.random() > 0.5) ? "BIG" : "SMALL";
-            }
-
-            activeSig = prediction;
-            t.innerText = prediction;
+            lastPrediction = (Math.random() > 0.5) ? "BIG" : "SMALL";
+            t.innerText = lastPrediction;
             t.style.fontSize = "5.5rem";
-            t.style.color = (prediction === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
+            t.style.color = (lastPrediction === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
         }, 1000);
     }
 
-    function inputResult(num) {
-        if(activeSig === "" && document.getElementById('predictionText').innerText !== "READY") return;
+    function verifyLastPeriod(num) {
+        if(resultSubmitted) return;
         
-        let type = (num >= 5) ? "BIG" : "SMALL";
-        dataBank.unshift(num); // Number ko brain mein save kiya
-        
-        let isWin = (activeSig === type);
-        let status = isWin ? "<b style='color:var(--neon-green)'>WIN</b>" : "<b style='color:var(--neon-red)'>LOSS</b>";
-        if(activeSig === "") status = "---";
+        let actualType = (num >= 5) ? "BIG" : "SMALL";
+        let isWin = (lastPrediction === actualType);
+        let statusText = isWin ? "<b style='color:var(--neon-green)'>WIN ✅</b>" : "<b style='color:var(--neon-red)'>LOSS ❌</b>";
+        if(lastPrediction === "") statusText = "DATA ADDED";
 
         const list = document.getElementById('logList');
         list.innerHTML = `<div class="log-row">
-            <span>P: ${currentP.slice(-3)}</span>
-            <span style="font-weight:900;">${num} (${type})</span>
-            <span>${status}</span>
+            <span>P: ${lastPeriodCode.slice(-3) || '---'}</span>
+            <span style="font-weight:900;">${num} (${actualType})</span>
+            <span>${statusText}</span>
         </div>` + list.innerHTML;
         
-        activeSig = ""; 
-        document.getElementById('grid').style.opacity = "0.3";
-        document.getElementById('grid').style.pointerEvents = "none";
-        if(navigator.vibrate) navigator.vibrate(100);
+        resultSubmitted = true;
+        document.getElementById('predictionText').innerHTML = `<span style='font-size:1.5rem; color:#fff'>RESULT: ${statusText}</span>`;
+        
+        if(navigator.vibrate) navigator.vibrate(isWin ? 100 : [100, 50, 100]);
     }
 </script>
 </body>
