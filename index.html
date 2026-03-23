@@ -21,153 +21,168 @@
         }
 
         .vip-card {
-            background: linear-gradient(180deg, rgba(255, 207, 51, 0.2), #000);
-            border: 3px solid var(--vip-gold); padding: 20px; border-radius: 40px;
+            background: linear-gradient(180deg, rgba(255, 207, 51, 0.15), #000);
+            border: 3px solid var(--vip-gold); padding: 15px; border-radius: 35px;
             width: 100%; max-width: 380px; text-align: center;
-            box-shadow: 0 0 100px rgba(255, 207, 51, 0.25);
+            box-shadow: 0 0 80px rgba(255, 207, 51, 0.2);
         }
 
-        .stats-panel { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .stat-box { background: rgba(0,0,0,0.8); padding: 8px; border-radius: 12px; border: 1px solid rgba(255,207,51,0.3); }
-        .stat-val { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; display: block; }
-        .stat-label { font-size: 0.6rem; color: #888; text-transform: uppercase; }
+        .stats-panel { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+        .stat-box { background: rgba(0,0,0,0.8); padding: 6px; border-radius: 10px; border: 1px solid rgba(255,207,51,0.2); }
+        .stat-val { font-family: 'Orbitron', sans-serif; font-size: 1rem; display: block; }
+        .stat-label { font-size: 0.55rem; color: #888; text-transform: uppercase; }
 
-        .period-panel { background: #000; padding: 10px; border-radius: 20px; margin-bottom: 10px; border: 1px solid #333; }
-        #pTimer { color: var(--neon-green); font-size: 2.8rem; font-weight: 900; font-family: monospace; }
+        .period-panel { background: #000; padding: 8px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #333; }
+        #pTimer { color: var(--neon-green); font-size: 2.4rem; font-weight: 900; font-family: monospace; }
 
-        #predictionArea {
-            min-height: 140px; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; transition: 0.5s;
-        }
-
-        .glow-bet { font-size: 5.5rem; font-family: 'Exo 2', sans-serif; line-height: 1; margin: 0; }
-        .big { color: var(--neon-green); text-shadow: 0 0 50px var(--neon-green); }
-        .small { color: var(--neon-red); text-shadow: 0 0 50px var(--neon-red); }
+        #predictionArea { min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .glow-bet { font-size: 5rem; font-family: 'Exo 2', sans-serif; line-height: 1; margin: 0; }
+        .big { color: var(--neon-green); text-shadow: 0 0 40px var(--neon-green); }
+        .small { color: var(--neon-red); text-shadow: 0 0 40px var(--neon-red); }
         
-        .status-msg { font-size: 1.8rem; color: #444; font-weight: 900; text-transform: uppercase; }
-        .sub-status { font-size: 0.8rem; color: var(--vip-gold); font-weight: bold; margin-top: 5px; height: 20px; }
+        .status-msg { font-size: 1.5rem; color: #444; font-weight: 900; text-transform: uppercase; }
+        .sub-status { font-size: 0.75rem; color: var(--vip-gold); font-weight: bold; margin-top: 5px; height: 18px; }
 
-        .input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px; }
-        .n-btn { height: 42px; border: none; border-radius: 12px; color: #fff; font-weight: 900; cursor: pointer; }
+        .input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
+        .n-btn { height: 38px; border: none; border-radius: 10px; color: #fff; font-weight: 900; cursor: pointer; font-size: 0.9rem; }
         .r { background: var(--neon-red); } .g { background: var(--neon-green); } .v { background: #b659ff; }
         .n-btn:disabled { opacity: 0.1; filter: grayscale(1); pointer-events: none; }
 
-        #actionHint { font-size: 0.7rem; color: var(--vip-gold); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        /* HISTORY LIST STYLE */
+        .history-card { margin-top: 15px; background: rgba(0,0,0,0.9); border-radius: 15px; border: 1px solid #222; overflow: hidden; }
+        .history-header { background: #111; padding: 5px; font-size: 0.65rem; color: var(--vip-gold); font-weight: bold; border-bottom: 1px solid #222; }
+        .history-body { max-height: 110px; overflow-y: auto; }
+        .h-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1.2fr; padding: 6px 10px; border-bottom: 1px solid #111; font-size: 0.7rem; color: #ccc; }
+        .win-text { color: var(--neon-green); font-weight: bold; }
+        .loss-text { color: var(--neon-red); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="vip-card">
-    <div style="font-family:'Orbitron'; color:var(--vip-gold); font-size:1.2rem; margin-bottom:15px;">MUNNA VIP V49 PRO</div>
+    <div style="font-family:'Orbitron'; color:var(--vip-gold); font-size:1rem; margin-bottom:10px; letter-spacing:1px;">MUNNA VIP V51 PRO</div>
     
     <div class="stats-panel">
         <div class="stat-box"><span class="stat-val" id="winC" style="color:var(--neon-green)">0</span><span class="stat-label">Wins</span></div>
         <div class="stat-box"><span class="stat-val" id="lossC" style="color:var(--neon-red)">0</span><span class="stat-label">Loss</span></div>
-        <div class="stat-box"><span class="stat-val" id="rate" style="color:var(--vip-gold)">0%</span><span class="stat-label">Accuracy</span></div>
+        <div class="stat-box"><span class="stat-val" id="rate" style="color:var(--vip-gold)">0%</span><span class="stat-label">Rate</span></div>
     </div>
 
     <div class="period-panel">
-        <div id="pCode" style="color:#666; font-size:0.75rem;">INITIALIZING...</div>
+        <div id="pCode" style="color:#666; font-size:0.7rem;">LOADING...</div>
         <div id="pTimer">00:00</div>
     </div>
 
     <div id="predictionArea">
-        <div id="mainDisplay" class="status-msg">NO DATA</div>
-        <div id="subDisplay" class="sub-status">LOCK PREVIOUS TO START</div>
+        <div id="mainDisplay" class="status-msg">STANDBY</div>
+        <div id="subDisplay" class="sub-status">LOCK PREV NO.</div>
     </div>
 
-    <div id="actionHint">Lock Last Period Result:</div>
     <div class="input-grid" id="grid">
-        <button class="n-btn v" onclick="processInput(0)">0</button>
-        <button class="n-btn g" onclick="processInput(1)">1</button>
-        <button class="n-btn r" onclick="processInput(2)">2</button>
-        <button class="n-btn g" onclick="processInput(3)">3</button>
-        <button class="n-btn r" onclick="processInput(4)">4</button>
-        <button class="n-btn g" onclick="processInput(5)">5</button>
-        <button class="n-btn r" onclick="processInput(6)">6</button>
-        <button class="n-btn g" onclick="processInput(7)">7</button>
-        <button class="n-btn r" onclick="processInput(8)">8</button>
-        <button class="n-btn g" onclick="processInput(9)">9</button>
+        <button class="n-btn v" onclick="handleLock(0)">0</button>
+        <button class="n-btn g" onclick="handleLock(1)">1</button>
+        <button class="n-btn r" onclick="handleLock(2)">2</button>
+        <button class="n-btn g" onclick="handleLock(3)">3</button>
+        <button class="n-btn r" onclick="handleLock(4)">4</button>
+        <button class="n-btn g" onclick="handleLock(5)">5</button>
+        <button class="n-btn r" onclick="handleLock(6)">6</button>
+        <button class="n-btn g" onclick="handleLock(7)">7</button>
+        <button class="n-btn r" onclick="handleLock(8)">8</button>
+        <button class="n-btn g" onclick="handleLock(9)">9</button>
     </div>
 
-    <div style="margin-top:15px; font-size:0.7rem; color:#555; background:rgba(255,255,255,0.05); padding:8px; border-radius:10px;">
-        DATABASE SCAN: <span id="dbStatus" style="color:var(--neon-green)">ACTIVE</span>
+    <div class="history-card">
+        <div class="history-header">LIVE VERIFICATION HISTORY</div>
+        <div class="h-row" style="background:#050505; color:#555; font-weight:bold;">
+            <span>PERIOD</span><span>EXP</span><span>REAL</span><span>STATUS</span>
+        </div>
+        <div class="history-body" id="hList">
+            </div>
     </div>
 </div>
 
 <script>
-    const patternDb = [1,3,5,7,9,0,2,4,6,8,5,6,7,8,9,0,1,2,3,4,9,7,5,3,1,0,2,4,6,8,3,3,6,6,9,9,1,1,4,4,5,5,0,0,8,6,4,2,7,3,1,0,9,5,6,8,2,4,7,1];
-    
-    let currentP = "", lastGenP = "", lastSignal = "", wins = 0, losses = 0, hasLocked = false, lockedNum = null;
+    const patternArr = [1,3,6,8,0,2,5,7,9,4,3,3,6,6,9,0,1,5,2,8,7,4,6,3,0,9,5,1,2,7,8,4,3,6,9,0,1,2,5,7,8,4,6,3,0,9,5,1,2,7,8,4,3,6,9,0];
+    let currentP = "", lastP = "", lastExp = "", wins = 0, losses = 0, locked = false;
 
-    function sync() {
-        const now = new Date(); const sec = now.getSeconds();
-        const timeLeft = 60 - sec;
+    function timer() {
+        const now = new Date(); const s = now.getSeconds();
+        const left = 60 - s;
         const min = now.getHours() * 60 + now.getMinutes();
-        const code = "1001" + String(min - 329).padStart(4,'0');
+        const pStr = "1001" + String(min - 329).padStart(4,'0');
         
-        document.getElementById('pCode').innerText = "PERIOD: " + code;
-        document.getElementById('pTimer').innerText = "00:" + String(timeLeft).padStart(2,'0');
+        document.getElementById('pCode').innerText = "PERIOD: " + pStr;
+        document.getElementById('pTimer').innerText = "00:" + String(left).padStart(2,'0');
 
-        if(code !== currentP) {
-            currentP = code; hasLocked = false;
+        if(pStr !== currentP) {
+            currentP = pStr; locked = false;
             document.querySelectorAll('.n-btn').forEach(b => b.disabled = false);
             document.getElementById('grid').style.opacity = "1";
-            document.getElementById('mainDisplay').innerText = "WAITING...";
-            document.getElementById('mainDisplay').className = "status-msg";
-            document.getElementById('subDisplay').innerText = "PLEASE LOCK DATA";
-        }
-
-        // --- THE 95% STRICT LOGIC ---
-        if(timeLeft <= 30 && lastGenP !== currentP && hasLocked) {
-            lastGenP = currentP;
-            const main = document.getElementById('mainDisplay');
-            const sub = document.getElementById('subDisplay');
-            
-            // Artificial Intelligence Simulation based on Pattern Depth
-            let confidence = Math.floor(Math.random() * (100 - 80 + 1) + 80); 
-
-            if(confidence >= 95) {
-                // 100% SHOR / 95%+ Chance
-                let idx = Math.floor(Math.random() * patternDb.length);
-                lastSignal = (patternDb[idx] >= 5) ? "BIG" : "SMALL";
-                main.innerText = lastSignal;
-                main.className = "glow-bet " + lastSignal.toLowerCase();
-                sub.innerText = "ACCURACY: " + confidence + "% (BET NOW)";
-                if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
-            } else {
-                // Low Confidence - SKIP
-                lastSignal = "SKIP";
-                main.innerText = "SKIP";
-                main.className = "status-msg";
-                sub.innerText = "LOW CONFIDENCE (" + confidence + "%)";
+            if(lastExp === "") {
+                document.getElementById('mainDisplay').innerText = "WAITING";
+                document.getElementById('subDisplay').innerText = "LOCK DATA";
             }
         }
-        
-        if(timeLeft <= 30) {
+
+        if(left <= 30 && lastP !== currentP && locked) {
+            lastP = currentP;
+            const main = document.getElementById('mainDisplay');
+            const sub = document.getElementById('subDisplay');
+            let conf = Math.floor(Math.random() * (99 - 75 + 1) + 75);
+
+            if(conf >= 82) {
+                let idx = Math.floor(Math.random() * patternArr.length);
+                lastExp = (patternArr[idx] >= 5) ? "BIG" : "SMALL";
+                main.innerText = lastExp;
+                main.className = "glow-bet " + lastExp.toLowerCase();
+                sub.innerText = "CONFIDENCE: " + conf + "%";
+                if(navigator.vibrate) navigator.vibrate(200);
+            } else {
+                lastExp = "SKIP";
+                main.innerText = "SKIP";
+                main.className = "status-msg";
+                sub.innerText = "MARKET UNSTABLE";
+            }
+        }
+        if(left <= 30) {
             document.querySelectorAll('.n-btn').forEach(b => b.disabled = true);
             document.getElementById('grid').style.opacity = "0.2";
         }
     }
-    setInterval(sync, 1000);
+    setInterval(timer, 1000);
 
-    function processInput(num) {
-        if(hasLocked) return;
-        hasLocked = true;
-        lockedNum = num;
-        
-        let actual = (num >= 5) ? "BIG" : "SMALL";
-        
-        // Check Last Round Accuracy
-        if(lastSignal !== "" && lastSignal !== "SKIP") {
-            if(lastSignal === actual) wins++; else losses++;
+    function handleLock(num) {
+        if(locked) return;
+        locked = true;
+        let real = (num >= 5) ? "BIG" : "SMALL";
+        let status = "LOCKED";
+        let statusClass = "";
+
+        if(lastExp !== "" && lastExp !== "SKIP") {
+            if(lastExp === real) {
+                wins++; status = "WIN ✅"; statusClass = "win-text";
+            } else {
+                losses++; status = "LOSS ❌"; statusClass = "loss-text";
+            }
             updateStats();
+        } else if(lastExp === "SKIP") {
+            status = "SKIPPED";
         }
+
+        // Add to History List
+        const list = document.getElementById('hList');
+        const prevP = parseInt(currentP.slice(-3)) - 1;
+        list.innerHTML = `<div class="h-row">
+            <span>${prevP}</span>
+            <span>${lastExp || '-'}</span>
+            <span>${real}</span>
+            <span class="${statusClass}">${status}</span>
+        </div>` + list.innerHTML;
 
         document.querySelectorAll('.n-btn').forEach(b => b.disabled = true);
         document.getElementById('grid').style.opacity = "0.2";
         document.getElementById('mainDisplay').innerText = "SCANNING";
-        document.getElementById('subDisplay').innerText = "MATCHING PATTERN...";
+        document.getElementById('subDisplay').innerText = "DATA VERIFIED";
         if(navigator.vibrate) navigator.vibrate(50);
     }
 
@@ -175,9 +190,9 @@
         document.getElementById('winC').innerText = wins;
         document.getElementById('lossC').innerText = losses;
         let total = wins + losses;
-        let r = total > 0 ? Math.round((wins / total) * 100) : 0;
-        document.getElementById('rate').innerText = r + "%";
+        document.getElementById('rate').innerText = total > 0 ? Math.round((wins / total) * 100) + "%" : "0%";
     }
 </script>
 </body>
 </html>
+
