@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUNNA VIP - ULTRA ACCURACY</title>
+    <title>MUNNA VIP - COLOR PREDICTOR</title>
     <style>
         :root {
             --neon-blue: #00d2ff;
             --system-green: #00ff88;
             --warning-red: #ff3131;
+            --violet: #b659ff;
             --gold: #ffcf33;
             --dark-bg: #00050a;
         }
@@ -23,48 +24,42 @@
             background: rgba(255,255,255,0.03); backdrop-filter: blur(25px);
             border: 2px solid rgba(0, 210, 255, 0.3); padding: 22px; border-radius: 40px;
             width: 100%; max-width: 380px; text-align: center;
-            box-shadow: 0 0 50px rgba(0, 210, 255, 0.15);
-        }
-
-        .accuracy-badge {
-            background: rgba(0, 255, 136, 0.1); color: var(--system-green);
-            font-size: 0.7rem; padding: 6px 15px; border-radius: 50px;
-            border: 1px solid var(--system-green); margin-bottom: 15px; display: inline-block;
-            font-weight: 800; text-transform: uppercase;
         }
 
         .data-panel {
-            background: rgba(0,0,0,0.7); padding: 12px; border-radius: 20px;
-            margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.7); padding: 10px; border-radius: 15px;
+            margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .val { font-size: 1.2rem; font-weight: bold; color: var(--neon-blue); }
+        .val { font-size: 1.1rem; font-weight: bold; color: var(--neon-blue); }
 
-        #predictionText {
-            font-size: 3.5rem; font-weight: 900; margin: 15px 0;
-            text-shadow: 0 0 30px var(--neon-blue);
-        }
+        /* PREDICTION AREA */
+        .pred-display { margin: 15px 0; padding: 10px; border: 1px dashed var(--neon-blue); border-radius: 20px; }
+        #predictionText { font-size: 3rem; font-weight: 900; margin: 0; text-shadow: 0 0 20px var(--neon-blue); }
+        #colorSuggest { font-size: 1.2rem; font-weight: bold; margin-top: 5px; letter-spacing: 2px; }
 
         .btn-main {
             background: linear-gradient(135deg, #00d2ff, #0077ff);
-            color: white; border: none; padding: 18px; border-radius: 20px;
-            width: 100%; font-size: 1.2rem; font-weight: bold; cursor: pointer;
-            text-transform: uppercase; box-shadow: 0 8px 25px rgba(0, 119, 255, 0.4);
+            color: white; border: none; padding: 16px; border-radius: 18px;
+            width: 100%; font-size: 1.1rem; font-weight: bold; cursor: pointer; text-transform: uppercase;
         }
 
-        .manual-section { margin-top: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 25px; }
-        .num-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px; }
+        /* MANUAL INPUT GRID */
+        .manual-section { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 25px; margin-top: 15px; }
+        .num-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
         
         .n-btn {
-            aspect-ratio: 1; border: none; border-radius: 12px; color: #fff;
-            font-weight: 900; font-size: 1.1rem; cursor: pointer;
+            aspect-ratio: 1; border: none; border-radius: 10px; color: #fff;
+            font-weight: 900; font-size: 1.1rem; cursor: pointer; transition: 0.2s;
         }
         .n-red { background: var(--warning-red); }
         .n-green { background: var(--system-green); }
-        .n-violet { background: linear-gradient(135deg, var(--warning-red), #b659ff); }
-        .n-violet-g { background: linear-gradient(135deg, var(--system-green), #b659ff); }
+        .n-violet { background: linear-gradient(135deg, var(--warning-red), var(--violet)); }
+        .n-violet-g { background: linear-gradient(135deg, var(--system-green), var(--violet)); }
 
-        .history-list { margin-top: 15px; text-align: left; max-height: 120px; overflow-y: auto; font-size: 0.8rem; }
+        #waitOverlay { display: none; font-size: 0.75rem; color: var(--gold); margin-top: 10px; font-weight: bold; }
+
+        .history-list { margin-top: 15px; text-align: left; max-height: 140px; overflow-y: auto; font-size: 0.75rem; }
         .h-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #111; }
         .win-tag { color: var(--system-green); font-weight: bold; }
         .loss-tag { color: var(--warning-red); font-weight: bold; }
@@ -73,42 +68,46 @@
 <body>
 
 <div class="system-card">
-    <div class="accuracy-badge" id="accRate">ACCURACY: 95.8% ANALYZING...</div>
+    <div style="font-size: 0.65rem; color: var(--gold); margin-bottom: 8px; font-weight: bold; letter-spacing: 1px;">● MUNNA VIP PRO (COLOR + TREND)</div>
     
     <div class="data-panel">
         <div id="periodTxt" class="val">SYNCING...</div>
-        <div id="timerTxt" style="color: var(--system-green); font-family: monospace; font-size: 1.5rem;">00:60</div>
+        <div id="timerTxt" style="color: var(--system-green); font-size: 1.4rem;">00:60</div>
     </div>
 
-    <div id="predictionText">READY</div>
+    <div class="pred-display">
+        <div id="predictionText">READY</div>
+        <div id="colorSuggest">COLOR: --</div>
+    </div>
+    
+    <div id="waitOverlay">WAITING 5S FOR TREND...</div>
 
-    <button class="btn-main" id="predictBtn" onclick="deepAnalyzeSignal()">PREDICT NEXT ROUND</button>
+    <button class="btn-main" id="predictBtn" onclick="analyzeColorTrend()">GET MULTI-SIGNAL</button>
 
-    <div class="manual-section">
-        <div style="font-size: 0.65rem; color: #5a7d9a; font-weight: bold;">INPUT ACTUAL RESULT (0-9)</div>
+    <div class="manual-section" id="numSection">
+        <div style="font-size: 0.65rem; color: #5a7d9a; font-weight: bold;">INPUT RESULT (0-9)</div>
         <div class="num-grid">
-            <button class="n-btn n-violet" onclick="recordActual(0)">0</button>
-            <button class="n-btn n-green" onclick="recordActual(1)">1</button>
-            <button class="n-btn n-red" onclick="recordActual(2)">2</button>
-            <button class="n-btn n-green" onclick="recordActual(3)">3</button>
-            <button class="n-btn n-red" onclick="recordActual(4)">4</button>
-            <button class="n-btn n-violet-g" onclick="recordActual(5)">5</button>
-            <button class="n-btn n-red" onclick="recordActual(6)">6</button>
-            <button class="n-btn n-green" onclick="recordActual(7)">7</button>
-            <button class="n-btn n-red" onclick="recordActual(8)">8</button>
-            <button class="n-btn n-green" onclick="recordActual(9)">9</button>
+            <button class="n-btn n-violet" onclick="submitData(0)">0</button>
+            <button class="n-btn n-green" onclick="submitData(1)">1</button>
+            <button class="n-btn n-red" onclick="submitData(2)">2</button>
+            <button class="n-btn n-green" onclick="submitData(3)">3</button>
+            <button class="n-btn n-red" onclick="submitData(4)">4</button>
+            <button class="n-btn n-violet-g" onclick="submitData(5)">5</button>
+            <button class="n-btn n-red" onclick="submitData(6)">6</button>
+            <button class="n-btn n-green" onclick="submitData(7)">7</button>
+            <button class="n-btn n-red" onclick="submitData(8)">8</button>
+            <button class="n-btn n-green" onclick="submitData(9)">9</button>
         </div>
     </div>
 
-    <div class="history-list" id="hLog">
-        <div style="color:#5a7d9a; text-align: center; padding: 10px;">AWAITING TREND DATA...</div>
-    </div>
+    <div class="history-list" id="hLog"></div>
 </div>
 
 <script>
     let currentP = "";
-    let lastSignal = "";
-    let historyStack = []; // Full history for deep analysis
+    let lastSignal = null;
+    let hStack = [];
+    let isWait = false;
 
     function sync() {
         const ist = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
@@ -123,85 +122,89 @@
 
         if (pStr !== currentP) {
             currentP = pStr;
-            document.getElementById('predictionText').innerText = "READY";
-            document.getElementById('predictBtn').disabled = false;
+            if(!isWait) resetAll();
         }
     }
     setInterval(sync, 1000);
 
-    function deepAnalyzeSignal() {
-        const res = document.getElementById('predictionText');
-        const acc = document.getElementById('accRate');
-        res.innerText = "READING...";
-        
-        setTimeout(() => {
-            let next = "";
-            
-            // --- DEEP TREND ANALYSIS LOGIC ---
-            if (historyStack.length >= 3) {
-                const l1 = historyStack[0].type;
-                const l2 = historyStack[1].type;
-                const l3 = historyStack[2].type;
-
-                // Pattern 1: Dragon (Same 3) -> Follow Trend
-                if (l1 === l2 && l2 === l3) {
-                    next = l1;
-                    acc.innerText = "TREND: DRAGON DETECTED (98%)";
-                } 
-                // Pattern 2: Alternating (S-B-S) -> Follow Flip
-                else if (l1 !== l2 && l2 !== l3) {
-                    next = (l1 === "BIG") ? "SMALL" : "BIG";
-                    acc.innerText = "TREND: ALTERNATING (94%)";
-                }
-                // Pattern 3: Symmetry (BB-S-BB)
-                else {
-                    next = (l1 === "BIG") ? "SMALL" : "BIG";
-                    acc.innerText = "TREND: PATTERN SHIFT (92%)";
-                }
-            } else {
-                // Fallback: Use Period Number for initial accuracy
-                const seed = parseInt(currentP.slice(-1));
-                next = (seed % 2 === 0) ? "BIG" : "SMALL";
-                acc.innerText = "ANALYZING RECENT DATA...";
-            }
-
-            res.innerText = next;
-            res.style.color = (next === "BIG") ? "var(--system-green)" : "var(--warning-red)";
-            lastSignal = next;
-            document.getElementById('predictBtn').disabled = true;
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-        }, 1500);
+    function resetAll() {
+        document.getElementById('predictionText').innerText = "READY";
+        document.getElementById('colorSuggest').innerText = "COLOR: --";
+        document.getElementById('colorSuggest').style.color = "#fff";
+        document.getElementById('predictBtn').disabled = false;
+        document.getElementById('waitOverlay').style.display = "none";
     }
 
-    function recordActual(n) {
-        let actualType = (n >= 5) ? "BIG" : "SMALL";
-        let statusText = "---";
-        let statusClass = "";
+    function analyzeColorTrend() {
+        const res = document.getElementById('predictionText');
+        const col = document.getElementById('colorSuggest');
+        res.innerText = "FUSING...";
+        
+        setTimeout(() => {
+            let nextSide = (Math.random() > 0.5) ? "BIG" : "SMALL";
+            let nextCol = "";
+            
+            // Basic Trend Logic
+            if(hStack.length >= 2 && hStack[0].side === hStack[1].side) nextSide = hStack[0].side;
 
-        if(lastSignal !== "") {
-            if(lastSignal === actualType) {
-                statusText = "WIN ✅";
-                statusClass = "win-tag";
+            // Color logic: 1,3,7,9 are Green | 2,4,6,8 are Red | 0,5 are Mixed
+            if(nextSide === "BIG") {
+                nextCol = (Math.random() > 0.5) ? "GREEN" : "RED";
             } else {
-                statusText = "LOSS ❌";
-                statusClass = "loss-tag";
+                nextCol = (Math.random() > 0.5) ? "RED" : "GREEN";
             }
+
+            res.innerText = nextSide;
+            res.style.color = (nextSide === "BIG") ? "var(--system-green)" : "var(--warning-red)";
+            col.innerText = "COLOR: " + nextCol;
+            col.style.color = (nextCol === "GREEN") ? "var(--system-green)" : "var(--warning-red)";
+            
+            lastSignal = { side: nextSide, col: nextCol };
+            document.getElementById('predictBtn').disabled = true;
+        }, 1200);
+    }
+
+    function submitData(n) {
+        if(isWait) return;
+        let actualSide = (n >= 5) ? "BIG" : "SMALL";
+        let actualCol = ([1,3,7,9].includes(n)) ? "GREEN" : ([2,4,6,8].includes(n) ? "RED" : "VIOLET");
+        let status = "---";
+        let sClass = "";
+
+        if(lastSignal) {
+            if(lastSignal.side === actualSide) { status = "WIN ✅"; sClass = "win-tag"; }
+            else { status = "LOSS ❌"; sClass = "loss-tag"; }
         }
 
-        historyStack.unshift({num: n, type: actualType});
-        if(historyStack.length > 10) historyStack.pop();
-
+        hStack.unshift({side: actualSide, col: actualCol, num: n});
         const log = document.getElementById('hLog');
-        if(historyStack.length === 1) log.innerHTML = "";
-        
-        const item = `<div class="h-item">
-            <span>Period ${currentP.slice(-3)}</span>
-            <span style="font-weight:900; color:${actualType === 'BIG' ? '#00ff88' : '#ff3131'}">${n} (${actualType})</span>
-            <span class="${statusClass}">${statusText}</span>
-        </div>`;
-        log.innerHTML = item + log.innerHTML;
-        lastSignal = ""; // Reset
-        if (navigator.vibrate) navigator.vibrate(60);
+        log.innerHTML = `<div class="h-item">
+            <span>P: ${currentP.slice(-3)}</span>
+            <span style="color:${actualSide === 'BIG' ? '#00ff88' : '#ff3131'}">${n} (${actualSide})</span>
+            <span class="${sClass}">${status}</span>
+        </div>` + log.innerHTML;
+
+        startDelay();
+    }
+
+    function startDelay() {
+        isWait = true;
+        const over = document.getElementById('waitOverlay');
+        const btns = document.querySelectorAll('.n-btn');
+        over.style.display = "block";
+        btns.forEach(b => b.style.opacity = "0.3");
+
+        let sec = 5;
+        const t = setInterval(() => {
+            over.innerText = `NEXT TREND IN ${sec}S...`;
+            sec--;
+            if(sec < 0) {
+                clearInterval(t);
+                isWait = false;
+                btns.forEach(b => b.style.opacity = "1");
+                resetAll();
+            }
+        }, 1000);
     }
 </script>
 
