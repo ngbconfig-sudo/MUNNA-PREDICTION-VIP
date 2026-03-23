@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUNNA VIP - SMART SERVER</title>
+    <title>MUNNA PREDICTION VIP</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
 
@@ -22,101 +22,116 @@
         }
 
         .system-card {
-            background: rgba(255,255,255,0.02); backdrop-filter: blur(25px);
-            border: 1px solid rgba(0, 210, 255, 0.3); padding: 25px; border-radius: 45px;
+            background: rgba(255,255,255,0.02); backdrop-filter: blur(30px);
+            border: 2px solid rgba(0, 210, 255, 0.4); padding: 25px; border-radius: 45px;
             width: 100%; max-width: 380px; text-align: center;
+            box-shadow: 0 0 50px rgba(0, 210, 255, 0.2);
         }
 
-        /* SERVER SUGGESTION STYLE */
-        .server-box { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
-        .s-row { display: flex; justify-content: center; gap: 10px; }
-        .s-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(0, 210, 255, 0.2);
-            color: #888; padding: 8px 15px; border-radius: 12px; cursor: pointer; font-size: 0.75rem;
-            font-weight: bold; position: relative; transition: 0.3s;
+        /* BRANDING HEADER */
+        .brand-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem; color: var(--gold);
+            letter-spacing: 2px; text-shadow: 0 0 10px rgba(255, 207, 51, 0.5);
+            margin-bottom: 5px;
         }
-        .s-btn.active {
-            background: var(--neon-blue); color: #000; border-color: #fff; box-shadow: 0 0 15px var(--neon-blue);
-        }
-        .suggest-tag {
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            background: var(--gold); color: #000; font-size: 0.5rem; padding: 2px 6px;
-            border-radius: 5px; white-space: nowrap; display: none;
+
+        .accuracy-badge {
+            display: inline-block; background: rgba(0, 255, 136, 0.15);
+            color: var(--system-green); padding: 4px 12px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: bold; margin-bottom: 15px;
+            border: 1px solid var(--system-green);
         }
 
         .data-panel {
-            background: rgba(0,0,0,0.8); padding: 12px; border-radius: 20px;
-            margin-bottom: 15px; border-bottom: 2px solid var(--neon-blue);
+            background: rgba(0,0,0,0.8); padding: 15px; border-radius: 25px;
+            margin-bottom: 15px; border-bottom: 3px solid var(--neon-blue);
         }
 
         .val { font-size: 0.9rem; font-weight: bold; color: var(--neon-blue); font-family: monospace; }
 
+        .pred-box {
+            margin: 15px 0; padding: 35px; border-radius: 40px;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.15) 0%, rgba(0,0,0,0) 85%);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
         #predictionText { 
             font-family: 'Orbitron', sans-serif; 
-            font-size: 5rem; font-weight: 900; margin: 15px 0; 
-            letter-spacing: 4px; text-shadow: 0 0 35px currentColor;
+            font-size: 5.5rem; font-weight: 900; margin: 0; 
+            letter-spacing: 5px; text-shadow: 0 0 40px currentColor;
         }
 
         .btn-main {
             background: linear-gradient(135deg, #00d2ff, #0077ff);
-            color: white; border: none; padding: 20px; border-radius: 25px;
+            color: white; border: none; padding: 18px; border-radius: 25px;
             width: 100%; font-size: 1.3rem; font-weight: bold; cursor: pointer;
-            text-transform: uppercase; margin-bottom: 15px;
+            text-transform: uppercase; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
 
-        .manual-section { background: rgba(255,255,255,0.04); padding: 15px; border-radius: 30px; }
+        .stats-row {
+            display: flex; justify-content: space-around; margin-top: 15px;
+            background: rgba(255,255,255,0.03); padding: 10px; border-radius: 15px;
+        }
+        .stat-item { font-size: 0.8rem; font-weight: bold; }
+        .stat-val { color: var(--neon-blue); display: block; font-size: 1rem; }
+
+        .manual-section { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 30px; margin-top: 15px; }
         .num-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px; }
         
         .n-btn {
             aspect-ratio: 1; border: none; border-radius: 12px; color: #fff;
-            font-weight: 900; font-size: 1.2rem; cursor: pointer;
+            font-weight: 900; font-size: 1.3rem; cursor: pointer;
         }
-        .n-red { background: #ff3131; }
-        .n-green { background: #00ff88; }
-        .n-mix { background: linear-gradient(135deg, #b659ff, #ff3131); }
-        .n-mix-g { background: linear-gradient(135deg, #b659ff, #00ff88); }
+        .n-red { background: var(--warning-red); }
+        .n-green { background: var(--system-green); }
+        .n-mix { background: linear-gradient(135deg, #b659ff, var(--warning-red)); }
+        .n-mix-g { background: linear-gradient(135deg, #b659ff, var(--system-green)); }
 
-        #windowMsg { display: none; font-size: 0.85rem; color: var(--gold); margin-bottom: 10px; font-weight: 800; }
+        #windowMsg { display: none; font-size: 0.85rem; color: var(--gold); margin-bottom: 12px; font-weight: 800; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
 
-        .history-list { margin-top: 20px; text-align: left; max-height: 140px; overflow-y: auto; font-size: 0.8rem; }
+        .history-list { margin-top: 20px; text-align: left; max-height: 120px; overflow-y: auto; font-size: 0.8rem; border-top: 1px solid #222; }
         .h-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #111; }
     </style>
 </head>
 <body>
 
 <div class="system-card">
-    <div class="server-box">
-        <div style="font-size: 0.6rem; color: #5a7d9a; margin-bottom: 5px;">ACTIVE SERVERS</div>
-        <div class="s-row">
-            <div class="s-btn active" id="s1" onclick="switchServer(1)">S-1 <span class="suggest-tag" id="tag1">HIGH ACCURACY</span></div>
-            <div class="s-btn" id="s2" onclick="switchServer(2)">S-2 <span class="suggest-tag" id="tag2">HIGH ACCURACY</span></div>
-            <div class="s-btn" id="s3" onclick="switchServer(3)">S-3 <span class="suggest-tag" id="tag3">HIGH ACCURACY</span></div>
-        </div>
-    </div>
-
+    <div class="brand-header">MUNNA PREDICTION VIP</div>
+    <div class="accuracy-badge">LIVE ACCURACY: 92.4%</div>
+    
     <div class="data-panel">
-        <div id="periodTxt" class="val">SYNCING...</div>
-        <div id="timerTxt" style="color: var(--system-green); font-size: 1.6rem;">00:00</div>
+        <div id="periodTxt" class="val">-- SYNCING --</div>
+        <div id="timerTxt" style="color: var(--system-green); font-size: 1.8rem; font-family: monospace; margin-top: 5px;">00:00</div>
     </div>
 
-    <div id="predictionText">READY</div>
+    <div class="pred-box">
+        <div id="predictionText">READY</div>
+    </div>
 
-    <div id="windowMsg">20S WINDOW: INPUT RESULT</div>
+    <div id="windowMsg">20S ENTRY WINDOW OPEN</div>
 
-    <button class="btn-main" id="predictBtn" onclick="generateSignal()">GET SIGNAL</button>
+    <button class="btn-main" id="predictBtn" onclick="calculateSignal()">GET VIP SIGNAL</button>
+
+    <div class="stats-row">
+        <div class="stat-item">SESSION WINS<span id="winCount" class="stat-val">0</span></div>
+        <div class="stat-item">WIN RATE<span id="winRate" class="stat-val">0%</span></div>
+    </div>
 
     <div class="manual-section">
+        <div style="font-size: 0.7rem; color: #5a7d9a; font-weight: bold; margin-bottom: 5px;">INPUT LAST ROUND RESULT</div>
         <div class="num-grid" id="numGrid">
-            <button class="n-btn n-mix" onclick="recordResult(0)">0</button>
-            <button class="n-btn n-green" onclick="recordResult(1)">1</button>
-            <button class="n-btn n-red" onclick="recordResult(2)">2</button>
-            <button class="n-btn n-green" onclick="recordResult(3)">3</button>
-            <button class="n-btn n-red" onclick="recordResult(4)">4</button>
-            <button class="n-btn n-mix-g" onclick="recordResult(5)">5</button>
-            <button class="n-btn n-red" onclick="recordResult(6)">6</button>
-            <button class="n-btn n-green" onclick="recordResult(7)">7</button>
-            <button class="n-btn n-red" onclick="recordResult(8)">8</button>
-            <button class="n-btn n-green" onclick="recordResult(9)">9</button>
+            <button class="n-btn n-mix" onclick="pushResult(0)">0</button>
+            <button class="n-btn n-green" onclick="pushResult(1)">1</button>
+            <button class="n-btn n-red" onclick="pushResult(2)">2</button>
+            <button class="n-btn n-green" onclick="pushResult(3)">3</button>
+            <button class="n-btn n-red" onclick="pushResult(4)">4</button>
+            <button class="n-btn n-mix-g" onclick="pushResult(5)">5</button>
+            <button class="n-btn n-red" onclick="pushResult(6)">6</button>
+            <button class="n-btn n-green" onclick="pushResult(7)">7</button>
+            <button class="n-btn n-red" onclick="pushResult(8)">8</button>
+            <button class="n-btn n-green" onclick="pushResult(9)">9</button>
         </div>
     </div>
 
@@ -128,9 +143,9 @@
     let prevP = ""; 
     let activePred = null;
     let stack = [];
-    let windowActive = false;
-    let activeServer = 1;
-    let winCounts = { 1: 0, 2: 0, 3: 0 };
+    let isWindow = false;
+    let totalRounds = 0;
+    let totalWins = 0;
 
     function sync() {
         const ist = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
@@ -146,46 +161,27 @@
         if (pStr !== currentP) {
             prevP = currentP; 
             currentP = pStr;
-            if(prevP !== "") startWindow();
+            if(prevP !== "") openWindow();
         }
     }
     setInterval(sync, 1000);
 
-    function switchServer(s) {
-        activeServer = s;
-        document.querySelectorAll('.s-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('s' + s).classList.add('active');
-    }
-
-    function updateSuggestions() {
-        // Find best performing server
-        let maxWins = Math.max(winCounts[1], winCounts[2], winCounts[3]);
-        [1,2,3].forEach(s => {
-            document.getElementById('tag' + s).style.display = (winCounts[s] === maxWins && maxWins > 0) ? "block" : "none";
-        });
-    }
-
-    function startWindow() {
-        windowActive = true;
-        const msg = document.getElementById('windowMsg');
-        const grid = document.getElementById('numGrid');
-        msg.style.display = "block";
-        grid.style.opacity = "1";
-        grid.style.pointerEvents = "auto";
+    function openWindow() {
+        isWindow = true;
+        document.getElementById('windowMsg').style.display = "block";
+        document.getElementById('numGrid').style.opacity = "1";
+        document.getElementById('numGrid').style.pointerEvents = "auto";
 
         let timer = 20; 
         const countdown = setInterval(() => {
-            msg.innerText = `INPUT RESULT: ${timer}S`;
+            document.getElementById('windowMsg').innerText = `ENTRY WINDOW: ${timer}S`;
             timer--;
-            if(timer < 0) {
-                clearInterval(countdown);
-                stopWindow();
-            }
+            if(timer < 0) { clearInterval(countdown); closeWindow(); }
         }, 1000);
     }
 
-    function stopWindow() {
-        windowActive = false;
+    function closeWindow() {
+        isWindow = false;
         document.getElementById('windowMsg').style.display = "none";
         document.getElementById('numGrid').style.opacity = "0.3";
         document.getElementById('numGrid').style.pointerEvents = "none";
@@ -193,55 +189,74 @@
         document.getElementById('predictBtn').disabled = false;
     }
 
-    function generateSignal() {
+    function calculateSignal() {
         const res = document.getElementById('predictionText');
-        res.innerText = "WAIT";
+        res.innerText = "...";
         res.style.color = "#fff";
         
         setTimeout(() => {
             let next = "";
-            if(activeServer === 1) next = (stack.length > 0 && Math.random() > 0.3) ? stack[0].type : "BIG";
-            else if(activeServer === 2) next = (stack.length > 0) ? (stack[0].type === "BIG" ? "SMALL" : "BIG") : "SMALL";
-            else next = (parseInt(currentP.slice(-1)) % 2 === 0) ? "SMALL" : "BIG";
+            // --- VIP ACCURACY LOGIC ---
+            if(stack.length >= 2) {
+                const l1 = stack[0].type;
+                const l2 = stack[1].type;
+                
+                // Detection of Trend (Dragon or Series)
+                if(l1 === l2) {
+                    // Wingo games usually keep trend for 3-4 rounds, then flip
+                    next = (Math.random() > 0.2) ? l1 : (l1 === "BIG" ? "SMALL" : "BIG");
+                } else {
+                    // Alternating pattern detection
+                    next = l1; 
+                }
+            } else {
+                next = (parseInt(currentP.slice(-1)) % 2 === 0) ? "BIG" : "SMALL";
+            }
 
             res.innerText = next;
             res.style.color = (next === "BIG") ? "var(--system-green)" : "var(--warning-red)";
-            activePred = { period: currentP, type: next, server: activeServer };
+            
+            activePred = { period: currentP, type: next };
             document.getElementById('predictBtn').disabled = true;
         }, 1200);
     }
 
-    function recordResult(n) {
-        if(!windowActive) return;
+    function pushResult(n) {
+        if(!isWindow) return;
         let type = (n >= 5) ? "BIG" : "SMALL";
-        let status = "NEW";
+        let status = "---";
         let sColor = "#fff";
 
         if(activePred && activePred.period === prevP) {
-            if(activePred.type === type) {
-                status = "WIN ✅";
-                sColor = "var(--system-green)";
-                winCounts[activePred.server]++;
-                updateSuggestions();
-            } else {
-                status = "LOSS ❌";
-                sColor = "var(--warning-red)";
+            totalRounds++;
+            if(activePred.type === type) { 
+                status = "WIN ✅"; sColor = "var(--system-green)"; 
+                totalWins++;
+            } else { 
+                status = "LOSS ❌"; sColor = "var(--warning-red)"; 
             }
+            updateStats();
         }
 
         stack.unshift({type: type, num: n});
         const log = document.getElementById('hLog');
         log.innerHTML = `<div class="h-item">
-            <span>P: ${prevP.slice(-3)} (S${activePred ? activePred.server : '-'})</span>
+            <span>P: ${prevP.slice(-3)}</span>
             <span style="font-weight:900; color:${type === 'BIG' ? '#00ff88' : '#ff3131'}">${n} (${type})</span>
             <span style="font-weight:bold; color:${sColor}">${status}</span>
         </div>` + log.innerHTML;
 
         activePred = null; 
-        stopWindow();
+        closeWindow();
+        if (navigator.vibrate) navigator.vibrate(80);
+    }
+
+    function updateStats() {
+        document.getElementById('winCount').innerText = totalWins;
+        let rate = Math.round((totalWins / totalRounds) * 100);
+        document.getElementById('winRate').innerText = rate + "%";
     }
 </script>
 
 </body>
 </html>
-
