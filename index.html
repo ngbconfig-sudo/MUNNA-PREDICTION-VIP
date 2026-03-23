@@ -21,49 +21,48 @@
         }
 
         .vip-card {
-            background: linear-gradient(180deg, rgba(255, 207, 51, 0.2), #000);
-            border: 3px solid var(--vip-gold); padding: 20px; border-radius: 45px;
+            background: linear-gradient(180deg, rgba(255, 207, 51, 0.15), #000);
+            border: 2px solid var(--vip-gold); padding: 25px 20px; border-radius: 45px;
             width: 100%; max-width: 370px; text-align: center;
-            box-shadow: 0 0 100px rgba(255, 207, 51, 0.25); position: relative;
+            box-shadow: 0 0 100px rgba(255, 207, 51, 0.2); position: relative;
         }
 
-        /* SERVER ONLINE DOT */
-        .server-status {
-            position: absolute; top: 25px; right: 30px;
-            display: flex; align-items: center; gap: 6px;
-            font-size: 0.65rem; color: var(--neon-green); font-weight: 900;
-            text-transform: uppercase; letter-spacing: 1px;
+        /* HEADER & DOT ADJUSTMENT */
+        .header-container {
+            display: flex; justify-content: center; align-items: center;
+            gap: 10px; margin-bottom: 15px; position: relative;
         }
-        .dot {
-            width: 8px; height: 8px; background: var(--neon-green);
-            border-radius: 50%; box-shadow: 0 0 10px var(--neon-green);
-            animation: blink 1.5s infinite;
-        }
-        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
 
         .vip-header {
             font-family: 'Orbitron', sans-serif; color: var(--vip-gold);
-            font-size: 1.4rem; margin-bottom: 15px; text-shadow: 0 0 15px var(--vip-gold);
+            font-size: 1.3rem; text-shadow: 0 0 15px var(--vip-gold);
+            margin: 0; letter-spacing: 1px;
         }
 
+        .dot {
+            width: 10px; height: 10px; background: var(--neon-green);
+            border-radius: 50%; box-shadow: 0 0 12px var(--neon-green);
+            animation: blink 1.5s infinite; flex-shrink: 0;
+        }
+        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+
         .period-panel {
-            background: rgba(0,0,0,0.8); padding: 12px; border-radius: 25px;
+            background: rgba(0,0,0,0.85); padding: 12px; border-radius: 25px;
             margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         #predictionText {
             font-family: 'Orbitron', sans-serif; font-size: 3.5rem;
             margin: 20px 0; color: #444; text-shadow: 0 0 40px currentColor;
-            min-height: 80px; display: flex; align-items: center; justify-content: center;
+            min-height: 90px; display: flex; align-items: center; justify-content: center;
         }
 
         .btn-main {
             background: linear-gradient(90deg, #ffcf33, #ff8c00);
             color: #000; border: none; padding: 20px; border-radius: 30px;
             width: 100%; font-size: 1.5rem; font-weight: 900; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(255, 207, 51, 0.4);
+            box-shadow: 0 10px 30px rgba(255, 207, 51, 0.4); text-transform: uppercase;
         }
-        .btn-main:disabled { background: #333; color: #666; box-shadow: none; cursor: not-allowed; }
 
         .input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
         .n-btn { height: 45px; border: none; border-radius: 12px; color: #fff; font-weight: 900; cursor: pointer; }
@@ -80,12 +79,14 @@
 <body>
 
 <div class="vip-card">
-    <div class="server-status"><div class="dot"></div> SERVER: ONLINE</div>
-    <div class="vip-header">MUNNA PREDICTION VIP</div>
+    <div class="header-container">
+        <h1 class="vip-header">MUNNA PREDICTION VIP</h1>
+        <div class="dot"></div>
+    </div>
     
     <div class="period-panel">
-        <div id="pCode" style="color: #666; font-size: 0.8rem;">SYNCING...</div>
-        <div id="pTimer" style="color: var(--neon-green); font-size: 2.5rem; font-weight: 900;">00:00</div>
+        <div id="pCode" style="color: #666; font-size: 0.8rem; letter-spacing: 1px;">SYNCING PERIOD...</div>
+        <div id="pTimer" style="color: var(--neon-green); font-size: 2.6rem; font-weight: 900; font-family: monospace;">00:00</div>
     </div>
 
     <div id="predictionText">READY</div>
@@ -106,7 +107,7 @@
     </div>
 
     <div class="history-container">
-        <div style="background:#111; padding:8px; font-size:0.75rem; color:var(--vip-gold); font-weight:900;">LIVE HISTORY</div>
+        <div style="background:#111; padding:8px; font-size:0.75rem; color:var(--vip-gold); font-weight:900;">LIVE PREDICTION HISTORY</div>
         <div class="history-list" id="logList"></div>
     </div>
 </div>
@@ -131,15 +132,16 @@
             currentP = code;
             activeSig = ""; lockedSignal = ""; 
             document.getElementById('grid').style.opacity = "1";
-            document.getElementById('predictionText').innerText = "PROCESSING...";
-            document.getElementById('predictionText').style.fontSize = "2rem";
-            document.getElementById('predictionText').style.color = "var(--vip-gold)";
+            const pt = document.getElementById('predictionText');
+            pt.innerText = "PROCESSING...";
+            pt.style.fontSize = "2rem";
+            pt.style.color = "var(--vip-gold)";
         }
     }
     setInterval(sync, 1000);
 
     function getVipSignal() {
-        // 30 Seconds Check
+        // 30 Seconds Limit
         if (timeLeft > 30) {
             const t = document.getElementById('predictionText');
             t.innerText = "WAIT " + (timeLeft - 30) + "s";
@@ -148,14 +150,14 @@
             return;
         }
 
-        const t = document.getElementById('predictionText');
         if (lockedPeriod === currentP && lockedSignal !== "") {
             showSignal(lockedSignal);
             return;
         }
 
+        const t = document.getElementById('predictionText');
         t.innerText = "SCANNING...";
-        t.style.fontSize = "2rem";
+        t.style.fontSize = "2.2rem";
         t.style.color = "#fff";
         
         setTimeout(() => {
@@ -164,13 +166,13 @@
             lockedPeriod = currentP;
             activeSig = newSig;
             showSignal(newSig);
-        }, 1000);
+        }, 1200);
     }
 
     function showSignal(sig) {
         const t = document.getElementById('predictionText');
         t.innerText = sig;
-        t.style.fontSize = "5.2rem";
+        t.style.fontSize = "5.5rem";
         t.style.color = (sig === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
     }
 
@@ -194,3 +196,4 @@
 </script>
 </body>
 </html>
+
