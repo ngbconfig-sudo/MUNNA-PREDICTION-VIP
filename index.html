@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA PREDICTION VIP</title>
+    <title>NITIN PREDICTION VIP</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
 
@@ -36,8 +36,14 @@
         #pTimer { color: var(--neon-green); font-size: 2.6rem; font-weight: 900; font-family: monospace; }
 
         #predictionText {
-            font-family: 'Orbitron', sans-serif; font-size: 3rem; margin: 20px 0; color: #444;
-            min-height: 100px; display: flex; align-items: center; justify-content: center;
+            font-family: 'Orbitron', sans-serif; font-size: 3rem; margin: 15px 0; color: #444;
+            min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        #digitBox {
+            background: rgba(255, 207, 51, 0.1); border: 1px solid var(--vip-gold);
+            padding: 5px 15px; border-radius: 10px; font-size: 0.9rem; color: #fff;
+            margin-bottom: 10px; display: none; text-shadow: 0 0 5px var(--vip-gold);
         }
 
         .btn-main {
@@ -69,6 +75,8 @@
         <div id="pTimer">00:00</div>
     </div>
 
+    <div id="digitBox">NEXT POTENTIAL: --</div>
+
     <div id="predictionText">READY</div>
 
     <button class="btn-main" id="predictBtn" onclick="getLockedSignal()">GET VIP SIGNAL</button>
@@ -94,9 +102,13 @@
 </div>
 
 <script>
+    // Data from your screenshots (Period 331-440)
+    const patternData = [9,3,7,6,5,0,0,3,3,6,6,5,4,8,6,7,7,3,3,6,6,2,6,3,0,2,6,4,6,3,6,2,8,1,4,4,5,1,8,6,7,2,1,0,3,6,9,6,7,7,8,4,7,8,2,1,0,3,6,9,0,9,6,4,7,9,9,5,6,4];
+    
     let currentP = ""; 
     let activeLockedSignal = ""; 
     let lastGeneratedFor = "";
+    let lockedDigit = "";
     let timeLeft = 60;
     let hasSubmitted = false;
 
@@ -112,17 +124,15 @@
         if(code !== currentP) {
             currentP = code;
             hasSubmitted = false;
-            // Period change par interface reset
             document.getElementById('predictionText').innerText = "PROCESSING...";
             document.getElementById('predictionText').style.fontSize = "1.8rem";
             document.getElementById('predictionText').style.color = "var(--vip-gold)";
+            document.getElementById('digitBox').style.display = "none";
             
-            // 60-30 sec tak input allow
             document.getElementById('grid').style.opacity = "1";
             document.getElementById('grid').style.pointerEvents = "auto";
         }
 
-        // 30 sec ke baad input band, sirf prediction chalu
         if(timeLeft <= 30) {
             document.getElementById('grid').style.opacity = "0.3";
             document.getElementById('grid').style.pointerEvents = "none";
@@ -136,28 +146,33 @@
             return;
         }
 
-        // AGAR SIGNAL PEHLE SE GENERATED HAI, TOH WAHI DIKHAO
         if (lastGeneratedFor === currentP) {
-            showFinal(activeLockedSignal);
+            showFinal(activeLockedSignal, lockedDigit);
             return;
         }
 
         const t = document.getElementById('predictionText');
-        t.innerText = "LOCKING..."; t.style.color = "#fff";
+        t.innerText = "ANALYZING..."; t.style.color = "#fff";
         
         setTimeout(() => {
-            // EK BAAR GENERATE HUA AUR LOCK HO GAYA
-            activeLockedSignal = (Math.random() > 0.5) ? "BIG" : "SMALL";
+            // Logic based on your pattern data
+            let idx = Math.floor(Math.random() * patternData.length);
+            lockedDigit = patternData[idx];
+            activeLockedSignal = (lockedDigit >= 5) ? "BIG" : "SMALL";
             lastGeneratedFor = currentP;
-            showFinal(activeLockedSignal);
+            showFinal(activeLockedSignal, lockedDigit);
         }, 800);
     }
 
-    function showFinal(sig) {
+    function showFinal(sig, dig) {
         const t = document.getElementById('predictionText');
         t.innerText = sig;
         t.style.fontSize = "5.5rem";
         t.style.color = (sig === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
+        
+        const db = document.getElementById('digitBox');
+        db.innerText = "NEXT POTENTIAL: " + dig;
+        db.style.display = "inline-block";
     }
 
     function verifyResult(num) {
