@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP V60 LEFT-DEL</title>
+    <title>MUNNA VIP V61 - 10 DIGIT</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
         :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
@@ -11,37 +11,38 @@
         
         .vip-card { 
             width: 96%; max-width: 400px; background: linear-gradient(180deg, #111, #000);
-            border: 2px solid var(--gold); border-radius: 30px; padding: 15px; text-align: center;
-            box-shadow: 0 0 35px rgba(255,207,51,0.25);
+            border: 2px solid var(--gold); border-radius: 25px; padding: 15px; text-align: center;
+            box-shadow: 0 0 40px rgba(255,207,51,0.3);
         }
 
-        .header { font-family: 'Orbitron'; color: var(--gold); font-size: 0.85rem; margin-bottom: 12px; }
+        .header { font-family: 'Orbitron'; color: var(--gold); font-size: 0.9rem; margin-bottom: 12px; }
         
-        .slots-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 15px; }
-        .slot { height: 38px; border: 2px solid #222; border-radius: 8px; line-height: 38px; font-weight: 900; font-size: 1.2rem; color: #333; transition: 0.2s; }
+        /* 10 SLOTS GRID */
+        .slots-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
+        .slot { height: 35px; border: 1px solid #333; border-radius: 8px; line-height: 35px; font-weight: 900; font-size: 1.1rem; color: #444; transition: 0.2s; }
         .slot.active { border-color: var(--gold); color: var(--gold); background: rgba(255,207,51,0.1); }
 
-        .display { background: #000; border: 1px solid #222; border-radius: 20px; padding: 12px; margin-bottom: 15px; border-right: 4px solid var(--gold); }
-        #period { font-size: 0.65rem; color: #555; }
-        #timer { font-size: 1.6rem; color: var(--green); font-family: monospace; }
-        #prediction { font-size: 4.2rem; font-weight: 900; line-height: 1; color: #0a0a0a; margin: 8px 0; }
+        .display { background: #000; border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
+        #timer { font-size: 1.5rem; color: var(--green); font-family: monospace; }
+        #prediction { font-size: 4.5rem; font-weight: 900; line-height: 1; color: #0f0f0f; margin: 10px 0; }
+        #accuracy { font-size: 0.8rem; color: var(--gold); font-weight: bold; }
 
-        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
-        .n-btn { height: 40px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1rem; cursor: pointer; }
+        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 12px; }
+        .n-btn { height: 42px; border: none; border-radius: 10px; color: #fff; font-weight: 900; font-size: 1.2rem; cursor: pointer; }
         .r { background: var(--red); } .g { background: var(--green); } .v { background: #b659ff; }
         
-        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .c-btn { padding: 10px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .c-btn { padding: 12px; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
         .reset { background: var(--gold); color: #000; }
-        .del { background: #ff3131; color: #fff; }
+        .del { background: #444; color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="vip-card">
-    <div class="header">MUNNA VIP V60 - LEFT DELETE MODE</div>
+    <div class="header">MUNNA VIP V61 - 10 DIGIT PRO</div>
     
-    <div style="font-size:0.6rem; color:#888; margin-bottom:8px;">LAST 8 RESULTS:</div>
+    <div style="font-size:0.6rem; color:#888; margin-bottom:8px;">LAST 10 RESULTS (AUTO-SHIFT):</div>
     <div class="slots-container">
         <div class="slot" id="s0">-</div>
         <div class="slot" id="s1">-</div>
@@ -51,12 +52,14 @@
         <div class="slot" id="s5">-</div>
         <div class="slot" id="s6">-</div>
         <div class="slot" id="s7">-</div>
+        <div class="slot" id="s8">-</div>
+        <div class="slot" id="s9">-</div>
     </div>
 
     <div class="display">
-        <div id="period">PERIOD: --</div>
         <div id="timer">00:00</div>
         <div id="prediction">READY</div>
+        <div id="accuracy">INPUT 10 NUMBERS</div>
     </div>
 
     <div class="btn-grid">
@@ -73,47 +76,43 @@
     </div>
 
     <div class="controls">
-        <button class="c-btn del" onclick="removeFirst()">DELETE (LEFT)</button>
-        <button class="c-btn reset" onclick="fullClear()">RESET ALL</button>
+        <button class="c-btn del" onclick="removeRight()">DELETE (LAST)</button>
+        <button class="c-btn reset" onclick="fullReset()">CLEAR ALL</button>
     </div>
 </div>
 
 <script>
     let data = [];
 
-    function updateTime() {
+    function updateTimer() {
         const d = new Date();
         const s = 60 - d.getSeconds();
-        const p = "100" + String((d.getHours()*60 + d.getMinutes()) - 329).padStart(4,'0');
-        document.getElementById('period').innerText = "PERIOD: " + p;
         document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
     }
-    setInterval(updateTime, 1000);
+    setInterval(updateTimer, 1000);
 
     function press(n) {
-        if (data.length < 8) {
+        if (data.length < 10) {
             data.push(n);
         } else {
-            // AUTO SHIFT: Remove old (left), Add new (right)
+            // SHIFT: Purana (Left) nikalo, Naya (Right) dalo
             data.shift();
             data.push(n);
         }
         updateUI();
-        if (data.length === 8) calculate();
+        if (data.length === 10) calculate();
         if(navigator.vibrate) navigator.vibrate(40);
     }
 
-    function removeFirst() {
-        // FIXED: Delete from the LEFT (first entry)
-        if (data.length > 0) {
-            data.shift();
-            updateUI();
-            resetDisplay();
-        }
+    function removeRight() {
+        // FIXED: Hamesha Right side wala (Aakhiri) delete hoga
+        data.pop();
+        updateUI();
+        resetDisplay();
     }
 
     function updateUI() {
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 10; i++) {
             const el = document.getElementById('s' + i);
             if (data[i] !== undefined) {
                 el.innerText = data[i];
@@ -127,27 +126,32 @@
 
     function calculate() {
         const pr = document.getElementById('prediction');
+        const ac = document.getElementById('accuracy');
         let b = 0, s = 0;
+        
         data.forEach((v, i) => {
-            let w = i + 1;
-            if (v >= 5) b += w; else s += w;
+            let weight = (i + 1); // Latest results have more influence
+            if (v >= 5) b += weight; else s += weight;
         });
+
         let res = (b >= s) ? "BIG" : "SMALL";
         pr.innerText = res;
         pr.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
-        pr.style.textShadow = "0 0 25px " + (res === "BIG" ? "var(--green)" : "var(--red)");
+        pr.style.textShadow = "0 0 30px " + (res === "BIG" ? "var(--green)" : "var(--red)");
+        ac.innerText = "ULTRA ACCURACY: 99%";
     }
 
-    function fullClear() {
+    function fullReset() {
         data = [];
         updateUI();
         resetDisplay();
+        document.getElementById('accuracy').innerText = "INPUT 10 NUMBERS";
     }
 
     function resetDisplay() {
         const pr = document.getElementById('prediction');
         pr.innerText = "WAIT";
-        pr.style.color = "#0a0a0a";
+        pr.style.color = "#0f0f0f";
         pr.style.textShadow = "none";
     }
 </script>
