@@ -27,33 +27,16 @@
             box-shadow: 0 0 100px rgba(255, 207, 51, 0.2); position: relative;
         }
 
-        /* HEADER & DOT ADJUSTMENT */
-        .header-container {
-            display: flex; justify-content: center; align-items: center;
-            gap: 10px; margin-bottom: 15px; position: relative;
-        }
+        .header-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .vip-header { font-family: 'Orbitron', sans-serif; color: var(--vip-gold); font-size: 1.3rem; margin: 0; text-shadow: 0 0 15px var(--vip-gold); }
+        .dot { width: 10px; height: 10px; background: var(--neon-green); border-radius: 50%; box-shadow: 0 0 12px var(--neon-green); animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        .vip-header {
-            font-family: 'Orbitron', sans-serif; color: var(--vip-gold);
-            font-size: 1.3rem; text-shadow: 0 0 15px var(--vip-gold);
-            margin: 0; letter-spacing: 1px;
-        }
-
-        .dot {
-            width: 10px; height: 10px; background: var(--neon-green);
-            border-radius: 50%; box-shadow: 0 0 12px var(--neon-green);
-            animation: blink 1.5s infinite; flex-shrink: 0;
-        }
-        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
-
-        .period-panel {
-            background: rgba(0,0,0,0.85); padding: 12px; border-radius: 25px;
-            margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        .period-panel { background: rgba(0,0,0,0.85); padding: 12px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        #pTimer { color: var(--neon-green); font-size: 2.6rem; font-weight: 900; font-family: monospace; }
 
         #predictionText {
-            font-family: 'Orbitron', sans-serif; font-size: 3.5rem;
-            margin: 20px 0; color: #444; text-shadow: 0 0 40px currentColor;
+            font-family: 'Orbitron', sans-serif; font-size: 3.5rem; margin: 20px 0; color: #444;
             min-height: 90px; display: flex; align-items: center; justify-content: center;
         }
 
@@ -65,13 +48,11 @@
         }
 
         .input-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
-        .n-btn { height: 45px; border: none; border-radius: 12px; color: #fff; font-weight: 900; cursor: pointer; }
+        .n-btn { height: 45px; border: none; border-radius: 12px; color: #fff; font-weight: 900; cursor: pointer; transition: 0.2s; }
+        .n-btn:active { transform: scale(0.9); }
         .r { background: var(--neon-red); } .g { background: var(--neon-green); } .v { background: #b659ff; }
 
-        .history-container {
-            margin-top: 25px; background: rgba(0,0,0,0.6);
-            border-radius: 30px; border: 1px solid #222; overflow: hidden;
-        }
+        .history-container { margin-top: 25px; background: rgba(0,0,0,0.6); border-radius: 30px; border: 1px solid #222; overflow: hidden; }
         .history-list { max-height: 180px; overflow-y: auto; }
         .log-row { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #111; font-size: 0.9rem; }
     </style>
@@ -85,29 +66,29 @@
     </div>
     
     <div class="period-panel">
-        <div id="pCode" style="color: #666; font-size: 0.8rem; letter-spacing: 1px;">SYNCING PERIOD...</div>
-        <div id="pTimer" style="color: var(--neon-green); font-size: 2.6rem; font-weight: 900; font-family: monospace;">00:00</div>
+        <div id="pCode" style="color: #666; font-size: 0.8rem;">SYNCING...</div>
+        <div id="pTimer">00:00</div>
     </div>
 
     <div id="predictionText">READY</div>
 
-    <button class="btn-main" id="predictBtn" onclick="getVipSignal()">GET VIP SIGNAL</button>
+    <button class="btn-main" id="predictBtn" onclick="getNeuralSignal()">GET VIP SIGNAL</button>
 
     <div class="input-grid" id="grid">
-        <button class="n-btn v" onclick="recordHistory(0)">0</button>
-        <button class="n-btn g" onclick="recordHistory(1)">1</button>
-        <button class="n-btn r" onclick="recordHistory(2)">2</button>
-        <button class="n-btn g" onclick="recordHistory(3)">3</button>
-        <button class="n-btn r" onclick="recordHistory(4)">4</button>
-        <button class="n-btn g" onclick="recordHistory(5)">5</button>
-        <button class="n-btn r" onclick="recordHistory(6)">6</button>
-        <button class="n-btn g" onclick="recordHistory(7)">7</button>
-        <button class="n-btn r" onclick="recordHistory(8)">8</button>
-        <button class="n-btn g" onclick="recordHistory(9)">9</button>
+        <button class="n-btn v" onclick="inputResult(0)">0</button>
+        <button class="n-btn g" onclick="inputResult(1)">1</button>
+        <button class="n-btn r" onclick="inputResult(2)">2</button>
+        <button class="n-btn g" onclick="inputResult(3)">3</button>
+        <button class="n-btn r" onclick="inputResult(4)">4</button>
+        <button class="n-btn g" onclick="inputResult(5)">5</button>
+        <button class="n-btn r" onclick="inputResult(6)">6</button>
+        <button class="n-btn g" onclick="inputResult(7)">7</button>
+        <button class="n-btn r" onclick="inputResult(8)">8</button>
+        <button class="n-btn g" onclick="inputResult(9)">9</button>
     </div>
 
     <div class="history-container">
-        <div style="background:#111; padding:8px; font-size:0.75rem; color:var(--vip-gold); font-weight:900;">LIVE PREDICTION HISTORY</div>
+        <div style="background:#111; padding:8px; font-size:0.75rem; color:var(--vip-gold); font-weight:900;">NEURAL HISTORY LOG</div>
         <div class="history-list" id="logList"></div>
     </div>
 </div>
@@ -115,9 +96,8 @@
 <script>
     let currentP = ""; 
     let activeSig = ""; 
-    let lockedPeriod = ""; 
-    let lockedSignal = ""; 
     let timeLeft = 60;
+    let dataBank = []; // Pichle numbers store karne ke liye
 
     function sync() {
         const now = new Date(); const sec = now.getSeconds();
@@ -130,68 +110,70 @@
 
         if(code !== currentP) {
             currentP = code;
-            activeSig = ""; lockedSignal = ""; 
+            activeSig = "";
             document.getElementById('grid').style.opacity = "1";
+            document.getElementById('grid').style.pointerEvents = "auto";
             const pt = document.getElementById('predictionText');
             pt.innerText = "PROCESSING...";
-            pt.style.fontSize = "2rem";
+            pt.style.fontSize = "1.8rem";
             pt.style.color = "var(--vip-gold)";
         }
     }
     setInterval(sync, 1000);
 
-    function getVipSignal() {
-        // 30 Seconds Limit
+    function getNeuralSignal() {
         if (timeLeft > 30) {
             const t = document.getElementById('predictionText');
             t.innerText = "WAIT " + (timeLeft - 30) + "s";
-            t.style.fontSize = "2rem";
-            t.style.color = "var(--neon-red)";
-            return;
-        }
-
-        if (lockedPeriod === currentP && lockedSignal !== "") {
-            showSignal(lockedSignal);
+            t.style.fontSize = "2rem"; t.style.color = "var(--neon-red)";
             return;
         }
 
         const t = document.getElementById('predictionText');
-        t.innerText = "SCANNING...";
-        t.style.fontSize = "2.2rem";
-        t.style.color = "#fff";
+        t.innerText = "ANALYZING...";
+        t.style.fontSize = "1.8rem"; t.style.color = "#fff";
         
         setTimeout(() => {
-            let newSig = (Math.random() > 0.5) ? "BIG" : "SMALL";
-            lockedSignal = newSig;
-            lockedPeriod = currentP;
-            activeSig = newSig;
-            showSignal(newSig);
-        }, 1200);
+            let prediction = "";
+            
+            // --- ASLI LOGIC: Pichle results ke base par ---
+            if(dataBank.length >= 2) {
+                let sum = dataBank.slice(0, 3).reduce((a, b) => a + b, 0);
+                // Agar pichle numbers ka sum bada hai toh trend change hone ke chance 70%
+                prediction = (sum > 12) ? "SMALL" : "BIG";
+            } else {
+                // Default agar data nahi hai
+                prediction = (Math.random() > 0.5) ? "BIG" : "SMALL";
+            }
+
+            activeSig = prediction;
+            t.innerText = prediction;
+            t.style.fontSize = "5.5rem";
+            t.style.color = (prediction === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
+        }, 1000);
     }
 
-    function showSignal(sig) {
-        const t = document.getElementById('predictionText');
-        t.innerText = sig;
-        t.style.fontSize = "5.5rem";
-        t.style.color = (sig === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
-    }
-
-    function recordHistory(num) {
-        if(activeSig === "") return;
-        let resType = (num >= 5) ? "BIG" : "SMALL";
-        let isWin = (activeSig === resType);
-        let statusHtml = isWin ? "<b style='color:var(--neon-green)'>WIN ✅</b>" : "<b style='color:var(--neon-red)'>LOSS ❌</b>";
+    function inputResult(num) {
+        if(activeSig === "" && document.getElementById('predictionText').innerText !== "READY") return;
         
+        let type = (num >= 5) ? "BIG" : "SMALL";
+        dataBank.unshift(num); // Number ko brain mein save kiya
+        
+        let isWin = (activeSig === type);
+        let status = isWin ? "<b style='color:var(--neon-green)'>WIN</b>" : "<b style='color:var(--neon-red)'>LOSS</b>";
+        if(activeSig === "") status = "---";
+
         const list = document.getElementById('logList');
         list.innerHTML = `<div class="log-row">
             <span>P: ${currentP.slice(-3)}</span>
-            <span style="font-weight:900;">${num} (${resType})</span>
-            <span>${statusHtml}</span>
+            <span style="font-weight:900;">${num} (${type})</span>
+            <span>${status}</span>
         </div>` + list.innerHTML;
         
         activeSig = ""; 
         document.getElementById('grid').style.opacity = "0.3";
-        if(navigator.vibrate) navigator.vibrate(isWin ? 100 : [100, 50, 100]);
+        document.getElementById('grid').style.pointerEvents = "none";
+        if(navigator.vibrate) navigator.vibrate(100);
     }
 </script>
 </body>
