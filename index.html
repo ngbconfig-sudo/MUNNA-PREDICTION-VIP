@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP V58 FINAL</title>
+    <title>MUNNA VIP V57 SHIFT</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
         :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
@@ -12,31 +12,26 @@
         .vip-card { 
             width: 94%; max-width: 380px; background: linear-gradient(180deg, #111, #000);
             border: 2px solid var(--gold); border-radius: 30px; padding: 15px; text-align: center;
-            box-shadow: 0 0 30px rgba(255,207,51,0.2);
         }
 
-        .header { font-family: 'Orbitron'; color: var(--gold); font-size: 0.9rem; margin-bottom: 10px; }
+        .header { font-family: 'Orbitron'; color: var(--gold); font-size: 1rem; margin-bottom: 10px; }
         
-        .stats { display: flex; justify-content: space-around; margin-bottom: 10px; }
-        .s-box { background: #111; padding: 5px 15px; border-radius: 10px; border: 1px solid #333; }
-        .s-val { display: block; font-size: 1.2rem; font-weight: 900; color: var(--green); }
-        .s-lbl { font-size: 0.6rem; color: #777; }
-
-        .slots { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; }
-        .slot { width: 42px; height: 42px; border: 2px solid #333; border-radius: 12px; line-height: 40px; font-weight: 900; font-size: 1.4rem; color: #444; }
+        /* SHIFT SLOTS STYLE */
+        .slots { display: flex; justify-content: center; gap: 5px; margin-bottom: 15px; }
+        .slot { width: 42px; height: 42px; border: 2px solid #333; border-radius: 12px; line-height: 40px; font-weight: 900; font-size: 1.3rem; color: #444; transition: 0.3s; }
         .slot.active { border-color: var(--gold); color: var(--gold); background: rgba(255,207,51,0.1); }
+        .slot.new { border-color: var(--green); transform: scale(1.1); }
 
-        .display { background: #000; border: 1px solid #222; border-radius: 20px; padding: 15px; margin-bottom: 15px; }
-        #period { font-size: 0.7rem; color: #555; margin-bottom: 5px; }
-        #timer { font-size: 1.8rem; color: var(--green); font-family: monospace; }
-        #prediction { font-size: 4.5rem; font-weight: 900; line-height: 1; color: #111; margin: 5px 0; }
+        .display { background: #000; border: 1px solid #222; border-radius: 20px; padding: 20px; margin-bottom: 15px; }
+        #prediction { font-size: 5rem; font-weight: 900; line-height: 1; color: #1a1a1a; margin: 10px 0; transition: 0.4s; }
+        #status { font-size: 0.8rem; color: var(--gold); font-weight: bold; }
 
-        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 12px; }
+        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
         .n-btn { height: 42px; border: none; border-radius: 10px; color: #fff; font-weight: 900; font-size: 1.1rem; cursor: pointer; }
         .r { background: var(--red); } .g { background: var(--green); } .v { background: #b659ff; }
         
         .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .c-btn { padding: 12px; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .c-btn { padding: 10px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; }
         .reset { background: var(--gold); color: #000; }
         .del { background: #444; color: #fff; }
     </style>
@@ -44,13 +39,9 @@
 <body>
 
 <div class="vip-card">
-    <div class="header">MUNNA VIP V58 FINAL</div>
+    <div class="header">MUNNA VIP V57 SHIFT</div>
     
-    <div class="stats">
-        <div class="s-box"><span class="s-val" id="winCount">0</span><span class="s-lbl">WINS</span></div>
-        <div class="s-box"><span class="s-val" id="lossCount" style="color:var(--red)">0</span><span class="s-lbl">LOSS</span></div>
-    </div>
-
+    <div style="font-size:0.7rem; color:#888; margin-bottom:8px;">LAST 5 (AUTO-SHIFT MODE):</div>
     <div class="slots">
         <div class="slot" id="s0">-</div>
         <div class="slot" id="s1">-</div>
@@ -60,102 +51,105 @@
     </div>
 
     <div class="display">
-        <div id="period">PERIOD: --</div>
-        <div id="timer">00:00</div>
-        <div id="prediction">WAIT</div>
+        <div id="prediction">READY</div>
+        <div id="status">FIRST TIME: ENTER 5 NUMBERS</div>
     </div>
 
     <div class="btn-grid">
-        <button class="n-btn v" onclick="press(0)">0</button>
-        <button class="n-btn g" onclick="press(1)">1</button>
-        <button class="n-btn r" onclick="press(2)">2</button>
-        <button class="n-btn g" onclick="press(3)">3</button>
-        <button class="n-btn r" onclick="press(4)">4</button>
-        <button class="n-btn g" onclick="press(5)">5</button>
-        <button class="n-btn r" onclick="press(6)">6</button>
-        <button class="n-btn g" onclick="press(7)">7</button>
-        <button class="n-btn r" onclick="press(8)">8</button>
-        <button class="n-btn g" onclick="press(9)">9</button>
+        <button class="n-btn v" onclick="handleInput(0)">0</button>
+        <button class="n-btn g" onclick="handleInput(1)">1</button>
+        <button class="n-btn r" onclick="handleInput(2)">2</button>
+        <button class="n-btn g" onclick="handleInput(3)">3</button>
+        <button class="n-btn r" onclick="handleInput(4)">4</button>
+        <button class="n-btn g" onclick="handleInput(5)">5</button>
+        <button class="n-btn r" onclick="handleInput(6)">6</button>
+        <button class="n-btn g" onclick="handleInput(7)">7</button>
+        <button class="n-btn r" onclick="handleInput(8)">8</button>
+        <button class="n-btn g" onclick="handleInput(9)">9</button>
     </div>
 
     <div class="controls">
-        <button class="c-btn del" onclick="removeLast()">DELETE</button>
-        <button class="c-btn reset" onclick="fullClear()">CLEAR</button>
+        <button class="c-btn del" onclick="back()">DELETE</button>
+        <button class="c-btn reset" onclick="fullReset()">CLEAR ALL</button>
     </div>
 </div>
 
 <script>
     let data = [];
-    let wins = 0, losses = 0;
 
-    function clock() {
-        const d = new Date();
-        const s = 60 - d.getSeconds();
-        const p = "100" + String((d.getHours()*60 + d.getMinutes()) - 329).padStart(4,'0');
-        document.getElementById('period').innerText = "PERIOD: " + p;
-        document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
-        if(s === 59) { /* Optional: Auto clear on new period */ }
-    }
-    setInterval(clock, 1000);
-
-    function press(n) {
+    function handleInput(n) {
         if (data.length < 5) {
+            // Initial filling
             data.push(n);
         } else {
-            // SHIFT: Purana hatao, Naya aakhiri mein dalo
-            data.shift();
+            // SHIFT LOGIC: Remove first, add new at end
+            data.shift(); 
             data.push(n);
+            highlightNew();
         }
-        updateUI();
-        if (data.length === 5) calc();
+        
+        refreshUI();
+        if (data.length === 5) calculateResult();
         if(navigator.vibrate) navigator.vibrate(40);
     }
 
-    function removeLast() {
-        // Fix: Hamesha right side wala (aakhiri) delete hoga
-        data.pop();
-        updateUI();
-        resetDisplay();
-    }
-
-    function updateUI() {
+    function refreshUI() {
         for (let i = 0; i < 5; i++) {
-            const el = document.getElementById('s' + i);
+            const slot = document.getElementById('s' + i);
             if (data[i] !== undefined) {
-                el.innerText = data[i];
-                el.classList.add('active');
+                slot.innerText = data[i];
+                slot.classList.add('active');
             } else {
-                el.innerText = "-";
-                el.classList.remove('active');
+                slot.innerText = "-";
+                slot.classList.remove('active');
             }
         }
     }
 
-    function calc() {
-        const pr = document.getElementById('prediction');
-        let b = 0, s = 0;
-        data.forEach((v, i) => {
-            let w = i + 1;
-            if (v >= 5) b += w; else s += w;
+    function highlightNew() {
+        const lastSlot = document.getElementById('s4');
+        lastSlot.classList.add('new');
+        setTimeout(() => lastSlot.classList.remove('new'), 500);
+    }
+
+    function calculateResult() {
+        const pred = document.getElementById('prediction');
+        const stat = document.getElementById('status');
+        
+        let bigW = 0, smallW = 0;
+        data.forEach((val, i) => {
+            let weight = (i + 1); // Latest number has highest weight
+            if (val >= 5) bigW += weight;
+            else smallW += weight;
         });
-        let res = (b >= s) ? "BIG" : "SMALL";
-        pr.innerText = res;
-        pr.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
-        pr.style.textShadow = "0 0 20px " + (res === "BIG" ? "var(--green)" : "var(--red)");
+
+        let res = (bigW >= smallW) ? "BIG" : "SMALL";
+        pred.innerText = res;
+        pred.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
+        pred.style.textShadow = "0 0 30px " + (res === "BIG" ? "var(--green)" : "var(--red)");
+        stat.innerText = "SHIFT ANALYZED: 95% READY";
     }
 
-    function fullClear() {
+    function back() {
+        data.pop();
+        refreshUI();
+        resetPred();
+    }
+
+    function fullReset() {
         data = [];
-        updateUI();
-        resetDisplay();
+        refreshUI();
+        resetPred();
+        document.getElementById('status').innerText = "FIRST TIME: ENTER 5 NUMBERS";
     }
 
-    function resetDisplay() {
-        const pr = document.getElementById('prediction');
-        pr.innerText = "WAIT";
-        pr.style.color = "#111";
-        pr.style.textShadow = "none";
+    function resetPred() {
+        const pred = document.getElementById('prediction');
+        pred.innerText = "WAIT";
+        pred.style.color = "#1a1a1a";
+        pred.style.textShadow = "none";
     }
 </script>
 </body>
 </html>
+
