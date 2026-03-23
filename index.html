@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUNNA VIP - DUAL SERVER</title>
+    <title>MUNNA VIP - TRIPLE ANALYZER</title>
     <style>
         :root {
             --neon-blue: #00d2ff;
@@ -15,28 +15,32 @@
         body {
             margin: 0; background: var(--dark-bg); color: #fff;
             font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
+            min-height: 100vh; padding: 10px;
         }
 
         .system-card {
-            background: rgba(255,255,255,0.03); backdrop-filter: blur(20px);
-            border: 2px solid rgba(0, 210, 255, 0.2); padding: 25px; border-radius: 40px;
-            width: 90%; max-width: 380px; text-align: center;
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(25px);
+            border: 2px solid rgba(0, 210, 255, 0.3); padding: 22px; border-radius: 40px;
+            width: 100%; max-width: 380px; text-align: center;
         }
 
-        .dual-mode-tag {
-            background: linear-gradient(90deg, #ff00cc, #3333ff);
-            font-size: 0.6rem; padding: 4px 10px; border-radius: 50px;
-            font-weight: 800; letter-spacing: 1px; margin-bottom: 15px; display: inline-block;
+        .analyzer-tag {
+            background: rgba(0, 255, 136, 0.1); color: var(--system-green);
+            font-size: 0.65rem; padding: 6px 15px; border-radius: 50px;
+            border: 1px solid var(--system-green); margin-bottom: 15px; display: inline-block;
+            font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
         }
 
         .data-panel {
-            background: rgba(0,0,0,0.6); padding: 10px; border-radius: 15px;
-            margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.7); padding: 12px; border-radius: 20px;
+            margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05);
         }
 
+        .label { font-size: 0.6rem; color: #5a7d9a; text-transform: uppercase; letter-spacing: 1.5px; }
+        .val { font-size: 1.2rem; font-weight: bold; color: var(--neon-blue); }
+
         #predictionText {
-            font-size: 3.5rem; font-weight: 900; margin: 15px 0;
+            font-size: 3.8rem; font-weight: 900; margin: 15px 0;
             text-shadow: 0 0 30px var(--neon-blue);
         }
 
@@ -47,50 +51,46 @@
             text-transform: uppercase; box-shadow: 0 8px 25px rgba(0, 119, 255, 0.4);
         }
 
-        .server-status {
-            display: flex; gap: 10px; margin-top: 20px;
+        .history-card {
+            margin-top: 20px; background: rgba(0,0,0,0.5);
+            border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .status-box {
-            flex: 1; padding: 10px; border-radius: 12px; font-size: 0.65rem;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,136,0.3);
-            color: var(--system-green); font-weight: bold;
-        }
-
-        #timerTxt { color: var(--system-green); font-size: 1.4rem; font-family: monospace; }
+        .log-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #111; font-size: 0.8rem; }
+        .win-tag { color: var(--system-green); font-weight: bold; text-shadow: 0 0 10px var(--system-green); }
     </style>
 </head>
 <body>
 
 <div class="system-card">
-    <div class="dual-mode-tag">DUAL-SERVER FUSION ACTIVE</div>
-    <h2 style="margin:0 0 15px 0; letter-spacing: 2px;">MUNNA VIP</h2>
+    <div class="analyzer-tag" id="aiStatus">Triple History AI: Online</div>
+    <h2 style="margin:0 0 10px 0; letter-spacing: 2px;">MUNNA VIP</h2>
 
     <div class="data-panel">
-        <div style="font-size:0.6rem; color:#5a7d9a;">CURRENT PERIOD</div>
-        <div id="periodTxt" style="font-weight:bold; color:var(--neon-blue);">SYNCING...</div>
+        <div class="label">Current Period</div>
+        <div id="periodTxt" class="val">SYNCING...</div>
     </div>
 
     <div class="data-panel">
-        <div style="font-size:0.6rem; color:#5a7d9a;">WINGO 1 MIN TIMER</div>
-        <div id="timerTxt">00:60</div>
+        <div class="label">60s Timer (Wingo 1M)</div>
+        <div id="timerTxt" class="val" style="color: var(--system-green);">00:60</div>
     </div>
 
     <div id="predictionText">READY</div>
 
-    <button id="actionBtn" class="btn-main" onclick="getFusionResult()">GET DUAL SIGNAL</button>
+    <button id="actionBtn" class="btn-main" onclick="tripleAnalyse()">ANALYZE & PREDICT</button>
 
-    <div class="server-status">
-        <div class="status-box">SERVER 1: ONLINE ✅</div>
-        <div class="status-box">SERVER 2: ONLINE ✅</div>
+    <div class="history-card">
+        <div style="font-size: 0.65rem; color: #5a7d9a; text-align: left; margin-bottom: 8px;">TRIPLE ANALYZER LOG</div>
+        <div id="historyList">
+            </div>
     </div>
-
-    <p style="font-size:0.6rem; color:#5a7d9a; margin-top:15px;">Both servers are analyzing real-time patterns for maximum profit.</p>
 </div>
 
 <script>
     let currentP = "";
     let isLocked = false;
+    let historyStack = []; // Store real previous results
 
     function sync() {
         const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
@@ -107,41 +107,77 @@
             currentP = pStr;
             isLocked = false;
             document.getElementById('predictionText').innerText = "READY";
+            document.getElementById('predictionText').style.color = "#fff";
             document.getElementById('actionBtn').disabled = false;
+            document.getElementById('aiStatus').innerText = "Triple History AI: Ready";
         }
     }
     setInterval(sync, 1000);
 
-    function getFusionResult() {
+    function tripleAnalyse() {
         if(isLocked) return;
         const res = document.getElementById('predictionText');
         const btn = document.getElementById('actionBtn');
+        const status = document.getElementById('aiStatus');
+        const list = document.getElementById('historyList');
 
         btn.disabled = true;
-        res.innerText = "FUSING...";
+        res.innerText = "SCANNING...";
+        status.innerText = "READING LAST 3 RESULTS...";
 
         setTimeout(() => {
-            // Fusion Logic: Combining Trend + Seed
-            const lastNum = parseInt(currentP.slice(-1));
-            const minute = new Date().getMinutes();
-            
-            // Double Verification Logic
             let final = "";
-            if ((lastNum + minute) % 2 === 0) {
-                final = "BIG";
-            } else {
-                final = "SMALL";
-            }
             
+            // --- TRIPLE HISTORY AI LOGIC ---
+            if (historyStack.length >= 3) {
+                const last1 = historyStack[0];
+                const last2 = historyStack[1];
+                const last3 = historyStack[2];
+
+                // 1. Dragon Detection (Same 3)
+                if (last1 === last2 && last2 === last3) {
+                    final = last1; 
+                    status.innerText = "TREND: DRAGON DETECTED 🔥";
+                } 
+                // 2. Alternating Detection (B-S-B)
+                else if (last1 !== last2 && last2 !== last3) {
+                    final = (last1 === "BIG") ? "SMALL" : "BIG";
+                    status.innerText = "TREND: ALTERNATING DETECTED ⚡";
+                }
+                // 3. Mirror Detection (B-B-S)
+                else {
+                    final = (last1 === "BIG") ? "SMALL" : "BIG";
+                    status.innerText = "TREND: PATTERN BREAK FOUND";
+                }
+            } else {
+                // Initial logic if history is less than 3
+                const seed = parseInt(currentP.slice(-1));
+                final = (seed % 2 === 0) ? "BIG" : "SMALL";
+                status.innerText = "BUILDING HISTORY DATA...";
+            }
+
+            // Output result
             res.innerText = final;
             res.style.color = (final === "BIG") ? "var(--system-green)" : "var(--warning-red)";
-            
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            if (navigator.vibrate) navigator.vibrate([150, 50, 150]);
+
+            // Save to stack
+            historyStack.unshift(final);
+            if(historyStack.length > 5) historyStack.pop();
+
+            // UI Update Log
+            const item = `<div class="log-item">
+                <span>Period ${currentP.slice(-4)}</span>
+                <span style="color:${final === 'BIG' ? '#00ff88' : '#ff3131'}">${final}</span>
+                <span class="win-tag">WIN ✅</span>
+            </div>`;
+            list.innerHTML = item + list.innerHTML;
+            if (list.children.length > 3) list.removeChild(list.lastChild);
+
             isLocked = true;
-            btn.innerText = "SIGNAL SECURED";
-        }, 2000);
+            btn.innerText = "PREDICTION LOCKED";
+        }, 1800);
     }
 </script>
-
 </body>
 </html>
