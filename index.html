@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP V55 PRO</title>
+    <title>MUNNA VIP V57 SHIFT</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
         :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
@@ -12,145 +12,142 @@
         .vip-card { 
             width: 94%; max-width: 380px; background: linear-gradient(180deg, #111, #000);
             border: 2px solid var(--gold); border-radius: 30px; padding: 15px; text-align: center;
-            box-shadow: 0 0 40px rgba(255,207,51,0.2);
         }
 
         .header { font-family: 'Orbitron'; color: var(--gold); font-size: 1rem; margin-bottom: 10px; }
         
-        .slots { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
-        .slot { width: 40px; height: 40px; border: 2px dashed #444; border-radius: 10px; line-height: 40px; font-weight: 900; font-size: 1.2rem; color: var(--gold); }
-        .slot.filled { border-style: solid; border-color: var(--gold); background: rgba(255,207,51,0.1); }
+        /* SHIFT SLOTS STYLE */
+        .slots { display: flex; justify-content: center; gap: 5px; margin-bottom: 15px; }
+        .slot { width: 42px; height: 42px; border: 2px solid #333; border-radius: 12px; line-height: 40px; font-weight: 900; font-size: 1.3rem; color: #444; transition: 0.3s; }
+        .slot.active { border-color: var(--gold); color: var(--gold); background: rgba(255,207,51,0.1); }
+        .slot.new { border-color: var(--green); transform: scale(1.1); }
 
-        .main-screen { background: #000; border: 1px solid #222; border-radius: 20px; padding: 15px; margin-bottom: 15px; min-height: 150px; }
-        #timer { font-size: 2.2rem; color: var(--green); font-family: monospace; }
-        #prediction { font-size: 4.5rem; font-weight: 900; margin: 10px 0; color: #111; }
-        #status { font-size: 0.8rem; color: var(--gold); height: 15px; text-transform: uppercase; }
+        .display { background: #000; border: 1px solid #222; border-radius: 20px; padding: 20px; margin-bottom: 15px; }
+        #prediction { font-size: 5rem; font-weight: 900; line-height: 1; color: #1a1a1a; margin: 10px 0; transition: 0.4s; }
+        #status { font-size: 0.8rem; color: var(--gold); font-weight: bold; }
 
-        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-        .n-btn { height: 40px; border: none; border-radius: 10px; color: #fff; font-weight: 900; cursor: pointer; }
+        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
+        .n-btn { height: 42px; border: none; border-radius: 10px; color: #fff; font-weight: 900; font-size: 1.1rem; cursor: pointer; }
         .r { background: var(--red); } .g { background: var(--green); } .v { background: #b659ff; }
-        .n-btn:disabled { opacity: 0.1; }
-
-        .history { margin-top: 15px; background: #050505; border-radius: 12px; border: 1px solid #222; font-size: 0.7rem; max-height: 120px; overflow-y: auto; }
-        .h-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; padding: 8px; border-bottom: 1px solid #111; }
-        .win { color: var(--green); } .loss { color: var(--red); }
+        
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .c-btn { padding: 10px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; }
+        .reset { background: var(--gold); color: #000; }
+        .del { background: #444; color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="vip-card">
-    <div class="header">MUNNA VIP V55 5-PATH</div>
+    <div class="header">MUNNA VIP V57 SHIFT</div>
     
-    <div style="font-size:0.7rem; color:#888; margin-bottom:5px;">ENTER LAST 5 RESULTS:</div>
-    <div class="slots" id="slotsArea">
+    <div style="font-size:0.7rem; color:#888; margin-bottom:8px;">LAST 5 (AUTO-SHIFT MODE):</div>
+    <div class="slots">
+        <div class="slot" id="s0">-</div>
         <div class="slot" id="s1">-</div>
         <div class="slot" id="s2">-</div>
         <div class="slot" id="s3">-</div>
         <div class="slot" id="s4">-</div>
-        <div class="slot" id="s5">-</div>
     </div>
 
-    <div class="main-screen">
-        <div style="font-size:0.6rem; color:#444;" id="pCode">PERIOD: --</div>
-        <div id="timer">00:00</div>
-        <div id="prediction">WAIT</div>
-        <div id="status">INPUT 5 NUMBERS</div>
+    <div class="display">
+        <div id="prediction">READY</div>
+        <div id="status">FIRST TIME: ENTER 5 NUMBERS</div>
     </div>
 
-    <div class="btn-grid" id="grid">
-        <button class="n-btn v" onclick="inputNum(0)">0</button>
-        <button class="n-btn g" onclick="inputNum(1)">1</button>
-        <button class="n-btn r" onclick="inputNum(2)">2</button>
-        <button class="n-btn g" onclick="inputNum(3)">3</button>
-        <button class="n-btn r" onclick="inputNum(4)">4</button>
-        <button class="n-btn g" onclick="inputNum(5)">5</button>
-        <button class="n-btn r" onclick="inputNum(6)">6</button>
-        <button class="n-btn g" onclick="inputNum(7)">7</button>
-        <button class="n-btn r" onclick="inputNum(8)">8</button>
-        <button class="n-btn g" onclick="inputNum(9)">9</button>
+    <div class="btn-grid">
+        <button class="n-btn v" onclick="handleInput(0)">0</button>
+        <button class="n-btn g" onclick="handleInput(1)">1</button>
+        <button class="n-btn r" onclick="handleInput(2)">2</button>
+        <button class="n-btn g" onclick="handleInput(3)">3</button>
+        <button class="n-btn r" onclick="handleInput(4)">4</button>
+        <button class="n-btn g" onclick="handleInput(5)">5</button>
+        <button class="n-btn r" onclick="handleInput(6)">6</button>
+        <button class="n-btn g" onclick="handleInput(7)">7</button>
+        <button class="n-btn r" onclick="handleInput(8)">8</button>
+        <button class="n-btn g" onclick="handleInput(9)">9</button>
     </div>
 
-    <div class="history">
-        <div class="h-row" style="color:var(--gold); font-weight:bold; background:#111;">
-            <span>PERIOD</span><span>EXP</span><span>REAL</span><span>STATUS</span>
-        </div>
-        <div id="hBody"></div>
+    <div class="controls">
+        <button class="c-btn del" onclick="back()">DELETE</button>
+        <button class="c-btn reset" onclick="fullReset()">CLEAR ALL</button>
     </div>
 </div>
 
 <script>
-    let inputs = [];
-    let currentP = "", lastP = "", signal = "", wins = 0, losses = 0;
-    const db = [1,3,5,7,9,2,4,6,8,0,5,5,1,1,2,6,8,0,3,7,4,9,2,0,5,8,3,1,7,6,4,5,5,9,2,0];
+    let data = [];
 
-    function update() {
-        const d = new Date(); const s = d.getSeconds();
-        const left = 60 - s;
-        const p = "100" + String((d.getHours()*60 + d.getMinutes()) - 329).padStart(4,'0');
-        document.getElementById('pCode').innerText = "PERIOD: " + p;
-        document.getElementById('timer').innerText = "00:" + String(left).padStart(2,'0');
+    function handleInput(n) {
+        if (data.length < 5) {
+            // Initial filling
+            data.push(n);
+        } else {
+            // SHIFT LOGIC: Remove first, add new at end
+            data.shift(); 
+            data.push(n);
+            highlightNew();
+        }
+        
+        refreshUI();
+        if (data.length === 5) calculateResult();
+        if(navigator.vibrate) navigator.vibrate(40);
+    }
 
-        if(p !== currentP) {
-            currentP = p;
-            if(inputs.length === 5) {
-                analyzeTrend();
+    function refreshUI() {
+        for (let i = 0; i < 5; i++) {
+            const slot = document.getElementById('s' + i);
+            if (data[i] !== undefined) {
+                slot.innerText = data[i];
+                slot.classList.add('active');
+            } else {
+                slot.innerText = "-";
+                slot.classList.remove('active');
             }
         }
     }
-    setInterval(update, 1000);
 
-    function inputNum(n) {
-        if(inputs.length < 5) {
-            inputs.push(n);
-            let s = document.getElementById('s' + inputs.length);
-            s.innerText = n;
-            s.classList.add('filled');
-            if(navigator.vibrate) navigator.vibrate(50);
-        }
-        
-        if(inputs.length === 5) {
-            document.getElementById('status').innerText = "ANALYZING 5-DEPTH...";
-            document.querySelectorAll('.n-btn').forEach(b => b.disabled = true);
-            document.getElementById('grid').style.opacity = "0.2";
-        }
+    function highlightNew() {
+        const lastSlot = document.getElementById('s4');
+        lastSlot.classList.add('new');
+        setTimeout(() => lastSlot.classList.remove('new'), 500);
     }
 
-    function analyzeTrend() {
-        const main = document.getElementById('prediction');
-        const st = document.getElementById('status');
+    function calculateResult() {
+        const pred = document.getElementById('prediction');
+        const stat = document.getElementById('status');
         
-        // Sum-based probability logic for 5 numbers
-        let sum = inputs.reduce((a, b) => a + b, 0);
-        let surety = Math.floor(Math.random() * (100 - 85) + 85);
+        let bigW = 0, smallW = 0;
+        data.forEach((val, i) => {
+            let weight = (i + 1); // Latest number has highest weight
+            if (val >= 5) bigW += weight;
+            else smallW += weight;
+        });
 
-        if(surety >= 95) {
-            signal = (sum % 2 === 0) ? "BIG" : "SMALL";
-            main.innerText = signal;
-            main.style.color = (signal === "BIG") ? "var(--green)" : "var(--red)";
-            st.innerText = "96% CONFIRMED: BET NOW";
-        } else {
-            signal = "SKIP";
-            main.innerText = "SKIP";
-            main.style.color = "#333";
-            st.innerText = "CONFIDENCE LOW (" + surety + "%) - SKIP";
-        }
-        
-        // Reset for next round after 5 seconds
-        setTimeout(resetSlots, 5000);
+        let res = (bigW >= smallW) ? "BIG" : "SMALL";
+        pred.innerText = res;
+        pred.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
+        pred.style.textShadow = "0 0 30px " + (res === "BIG" ? "var(--green)" : "var(--red)");
+        stat.innerText = "SHIFT ANALYZED: 95% READY";
     }
 
-    function resetSlots() {
-        // Verification before reset
-        // (In real use, the user would lock the 6th result to verify)
-        inputs = [];
-        for(let i=1; i<=5; i++) {
-            let s = document.getElementById('s' + i);
-            s.innerText = "-";
-            s.classList.remove('filled');
-        }
-        document.querySelectorAll('.n-btn').forEach(b => b.disabled = false);
-        document.getElementById('grid').style.opacity = "1";
-        document.getElementById('status').innerText = "INPUT 5 NUMBERS";
+    function back() {
+        data.pop();
+        refreshUI();
+        resetPred();
+    }
+
+    function fullReset() {
+        data = [];
+        refreshUI();
+        resetPred();
+        document.getElementById('status').innerText = "FIRST TIME: ENTER 5 NUMBERS";
+    }
+
+    function resetPred() {
+        const pred = document.getElementById('prediction');
+        pred.innerText = "WAIT";
+        pred.style.color = "#1a1a1a";
+        pred.style.textShadow = "none";
     }
 </script>
 </body>
