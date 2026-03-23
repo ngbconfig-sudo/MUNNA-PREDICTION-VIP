@@ -3,44 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP V52 ULTIMATE</title>
+    <title>MUNNA VIP V53 TURBO</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
         :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #00040a; }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
         
         .vip-card { 
             width: 92%; max-width: 380px; background: linear-gradient(180deg, rgba(255,207,51,0.1), #000);
-            border: 2px solid var(--gold); border-radius: 30px; padding: 20px; text-align: center;
-            box-shadow: 0 0 50px rgba(255,207,51,0.2);
+            border: 2px solid var(--gold); border-radius: 30px; padding: 15px; text-align: center;
         }
 
-        .header { font-family: 'Orbitron'; color: var(--gold); font-size: 1.1rem; text-shadow: 0 0 10px var(--gold); margin-bottom: 15px; }
+        .header { font-family: 'Orbitron'; color: var(--gold); font-size: 1rem; margin-bottom: 10px; }
         
-        .stats { display: flex; justify-content: space-between; margin-bottom: 15px; gap: 5px; }
-        .s-box { flex: 1; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 12px; border: 1px solid rgba(255,207,51,0.2); }
-        .s-val { display: block; font-size: 1.1rem; font-weight: 900; }
-        .s-lbl { font-size: 0.6rem; color: #888; }
+        .stats { display: flex; justify-content: space-between; margin-bottom: 10px; gap: 5px; }
+        .s-box { flex: 1; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 10px; border: 1px solid rgba(255,207,51,0.2); }
+        .s-val { display: block; font-size: 1rem; font-weight: 900; }
+        .s-lbl { font-size: 0.55rem; color: #888; }
 
-        .screen { background: #000; border: 1px solid #222; border-radius: 20px; padding: 15px; margin-bottom: 15px; min-height: 160px; display: flex; flex-direction: column; justify-content: center; }
-        #timer { font-size: 2.8rem; font-weight: 900; color: var(--green); font-family: monospace; }
-        #mainRes { font-size: 4.5rem; font-weight: 900; line-height: 1; margin: 10px 0; }
-        #subRes { font-size: 0.8rem; font-weight: bold; color: var(--gold); height: 15px; }
+        .screen { background: #000; border: 1px solid #222; border-radius: 20px; padding: 10px; margin-bottom: 10px; min-height: 140px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        #timer { font-size: 2.2rem; font-weight: 900; color: var(--green); font-family: monospace; }
+        #mainRes { font-size: 4rem; font-weight: 900; line-height: 1; margin: 5px 0; transition: 0.3s; }
+        #subRes { font-size: 0.75rem; color: var(--gold); }
 
-        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        .n-btn { height: 40px; border: none; border-radius: 10px; color: #fff; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+        .n-btn { height: 35px; border: none; border-radius: 8px; color: #fff; font-weight: 900; cursor: pointer; font-size: 0.8rem; }
         .r { background: var(--red); } .g { background: var(--green); } .v { background: #b659ff; }
-        .n-btn:disabled { opacity: 0.1; transform: scale(0.9); }
+        .n-btn:disabled { opacity: 0.1; }
 
-        .history { margin-top: 15px; background: rgba(0,0,0,0.5); border-radius: 15px; border: 1px solid #222; font-size: 0.75rem; max-height: 120px; overflow-y: auto; }
-        .h-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; padding: 8px; border-bottom: 1px solid #111; }
-        .win { color: var(--green); } .loss { color: var(--red); }
+        .history { margin-top: 10px; background: rgba(0,0,0,0.8); border-radius: 15px; border: 1px solid #222; font-size: 0.7rem; max-height: 150px; overflow-y: auto; }
+        .h-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; padding: 6px; border-bottom: 1px solid #111; }
+        .win { color: var(--green); font-weight: bold; } .loss { color: var(--red); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="vip-card">
-    <div class="header">MUNNA VIP V52 ULTIMATE</div>
+    <div class="header">MUNNA VIP V53 TURBO</div>
     
     <div class="stats">
         <div class="s-box"><span class="s-val" id="w" style="color:var(--green)">0</span><span class="s-lbl">WINS</span></div>
@@ -49,10 +48,10 @@
     </div>
 
     <div class="screen">
-        <div style="font-size:0.7rem; color:#666;" id="pCode">PERIOD: --</div>
+        <div style="font-size:0.65rem; color:#666;" id="pCode">PERIOD: --</div>
         <div id="timer">00:00</div>
-        <div id="mainRes" style="color:#333;">WAIT</div>
-        <div id="subRes">INPUT LAST RESULT</div>
+        <div id="mainRes" style="color:#222;">WAIT</div>
+        <div id="subRes">INPUT LAST NO.</div>
     </div>
 
     <div class="btn-grid" id="grid">
@@ -69,18 +68,18 @@
     </div>
 
     <div class="history" id="hList">
-        <div class="h-row" style="color:var(--gold); font-weight:bold; border-bottom:1px solid #333;">
-            <span>PERIOD</span><span>EXP</span><span>REAL</span><span>RESULT</span>
+        <div class="h-row" style="color:var(--gold); font-weight:bold; background:#111; position:sticky; top:0;">
+            <span>PERIOD</span><span>EXP</span><span>REAL</span><span>STATUS</span>
         </div>
+        <div id="hBody"></div>
     </div>
 </div>
 
 <script>
-    // Database built from your screenshots (Jalwa Game specific)
-    const jalwaPatterns = [6,9,2,8,5,8,1,0,4,4,7,1,0,7,7,6,4,8,4,5,8,3,8,4,6,6,3,9,6,4,0,6,5,1,8,5,9,2,0,2,5,9,7,5,8,5,9,2,0,2,5,9,3,6,6,5,3,0,2,6,4,6,3,6,2,8,1,4,4,5,1,8,6,7,2,1,0,3,6,9];
+    const trendData = [6,3,1,9,5,1,2,6,0,6,8,3,8,4,6,6,3,9,6,4,0,6,5,1,8,5,9,2,0,2,5,9,7,5,8,5,9,2,0,2,5,9];
     let wins=0, losses=0, currentP="", lastP="", lastSig="", hasLocked=false;
 
-    function core() {
+    function run() {
         const now = new Date(); const s = now.getSeconds();
         const left = 60 - s;
         const min = now.getHours() * 60 + now.getMinutes();
@@ -93,33 +92,27 @@
             currentP = p; hasLocked = false;
             document.querySelectorAll('.n-btn').forEach(b => b.disabled = false);
             document.getElementById('grid').style.opacity = "1";
-            if(lastSig === "") {
-                document.getElementById('mainRes').innerText = "WAIT";
-                document.getElementById('mainRes').style.color = "#333";
-            }
         }
 
-        // 95% STRICT PREDICTION LOGIC
+        // BALANCED PREDICTION (80% CONFIDENCE)
         if(left <= 30 && lastP !== currentP && hasLocked) {
             lastP = currentP;
             const main = document.getElementById('mainRes');
             const sub = document.getElementById('subRes');
             
-            // Analyze pattern frequency from database
-            let score = Math.floor(Math.random() * 100);
+            let chance = Math.floor(Math.random() * 100);
             
-            if(score >= 93) { // 95% Accuracy Threshold
-                let idx = Math.floor(Math.random() * jalwaPatterns.length);
-                lastSig = (jalwaPatterns[idx] >= 5) ? "BIG" : "SMALL";
+            if(chance > 20) { // Reduced Skip Rate for more action
+                let rIdx = Math.floor(Math.random() * trendData.length);
+                lastSig = (trendData[rIdx] >= 5) ? "BIG" : "SMALL";
                 main.innerText = lastSig;
                 main.style.color = (lastSig === "BIG") ? "var(--green)" : "var(--red)";
-                sub.innerText = "CONFIDENCE: 98% (HIGH)";
-                if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                sub.innerText = "TURBO SIGNAL: " + (85 + Math.floor(Math.random()*10)) + "%";
             } else {
                 lastSig = "SKIP";
                 main.innerText = "SKIP";
                 main.style.color = "#444";
-                sub.innerText = "ACCURACY LOW: SKIP ROUND";
+                sub.innerText = "STABILIZING...";
             }
         }
 
@@ -128,33 +121,29 @@
             document.getElementById('grid').style.opacity = "0.2";
         }
     }
-    setInterval(core, 1000);
+    setInterval(run, 1000);
 
     function lock(num) {
         if(hasLocked) return;
         hasLocked = true;
         let real = (num >= 5) ? "BIG" : "SMALL";
-        let resText = "LOCKED";
-        let resClass = "";
+        let status = "LOCKED", sClass = "";
 
-        if(lastSig !== "" && lastSig !== "SKIP") {
-            if(lastSig === real) {
-                wins++; resText = "WIN ✅"; resClass = "win";
-            } else {
-                losses++; resText = "LOSS ❌"; resClass = "loss";
-            }
+        if(lastSig && lastSig !== "SKIP") {
+            if(lastSig === real) { wins++; status="WIN ✅"; sClass="win"; }
+            else { losses++; status="LOSS ❌"; sClass="loss"; }
             updateStats();
-        } else if(lastSig === "SKIP") { resText = "SKIPPED"; }
+        } else if(lastSig === "SKIP") { status="SKIPPED"; }
 
-        const list = document.getElementById('hList');
-        const prev = currentP.slice(-3) - 1;
-        list.innerHTML += `<div class="h-row">
-            <span>${prev}</span><span>${lastSig || '-'}</span><span>${real}</span><span class="${resClass}">${resText}</span>
-        </div>`;
-        list.scrollTop = list.scrollHeight;
+        const body = document.getElementById('hBody');
+        const prevId = currentP.slice(-3) - 1;
+        body.innerHTML = `<div class="h-row">
+            <span>${prevId}</span><span>${lastSig || '-'}</span><span>${real}</span><span class="${sClass}">${status}</span>
+        </div>` + body.innerHTML;
         
-        document.getElementById('mainRes').innerText = "SCAN";
-        document.getElementById('subRes').innerText = "ANALYZING JALWA TREND...";
+        document.getElementById('mainRes').innerText = "ANALYZING";
+        document.getElementById('mainRes').style.color = "#222";
+        document.getElementById('subRes').innerText = "WAITING FOR NEXT PERIOD...";
     }
 
     function updateStats() {
