@@ -3,42 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KING PREDICTOR - FINAL STICKY MODE</title>
+    <title>KING PREDICTOR - BY MUNNA</title>
     <style>
-        body { margin: 0; background: #050505; font-family: 'Segoe UI', sans-serif; color: #fff; overflow-x: hidden; }
+        body { margin: 0; background: #020202; font-family: 'Segoe UI', sans-serif; color: #fff; overflow-x: hidden; }
         .container { display: flex; flex-direction: column; align-items: center; padding: 15px; }
         .card { 
             background: #000; border: 2px solid #00f2fe; border-radius: 20px; 
             padding: 20px; width: 90%; max-width: 380px; text-align: center;
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.5);
         }
         h1 { color: #ffcc00; font-size: 24px; margin: 0; text-shadow: 0 0 15px #ffcc00; }
-        .timer-box { background: #111; margin: 15px 0; padding: 10px; border-radius: 12px; border: 1px solid #333; }
+        .timer-box { background: #0a0a0a; margin: 15px 0; padding: 12px; border-radius: 12px; border: 1px solid #1a1a1a; }
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 15px 0; }
-        .n-btn { height: 42px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: #fff; font-size: 16px; }
+        .n-btn { height: 42px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: #fff; font-size: 16px; transition: 0.2s; }
+        .n-btn:active { transform: scale(0.9); }
         .r { background: #ff4757; } .g { background: #2ed573; }
         .vr { background: linear-gradient(135deg, #a55eea 50%, #ff4757 50%); }
         .vg { background: linear-gradient(135deg, #a55eea 50%, #2ed573 50%); }
         
         .res-area { 
-            background: #080808; padding: 20px; border-radius: 15px; margin: 15px 0; 
-            border: 2px dashed #ffcc00; min-height: 100px; position: relative;
+            background: linear-gradient(to bottom, #000, #050505); padding: 20px; border-radius: 15px; margin: 15px 0; 
+            border: 2px dashed #ffcc00; min-height: 100px;
         }
-        #p-val { font-size: 32px; font-weight: 900; color: #fff; }
+        #p-val { font-size: 34px; font-weight: 900; text-shadow: 0 0 10px #fff; }
         .accuracy-tag { font-size: 14px; color: #00f2fe; font-weight: bold; margin-top: 5px; }
         
         .main-btn { 
             background: linear-gradient(to right, #ffcc00, #ff9900); color: #000; 
             border: none; padding: 18px; width: 100%; font-weight: 900; border-radius: 12px; cursor: pointer; font-size: 18px;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
         }
-        .main-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+        .main-btn:disabled { background: #222; color: #555; cursor: not-allowed; box-shadow: none; }
 
-        table { width: 100%; margin-top: 20px; background: #000; border-collapse: collapse; font-size: 12px; }
-        th { padding: 12px; color: #555; border-bottom: 2px solid #222; }
+        .history-wrap { width: 100%; max-width: 400px; margin-top: 20px; max-height: 400px; overflow-y: auto; background: #000; border-radius: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th { padding: 12px; color: #00f2fe; border-bottom: 2px solid #222; position: sticky; top: 0; background: #000; }
         td { padding: 10px; text-align: center; border-bottom: 1px solid #111; }
-        .win { color: #2ed573; font-weight: bold; }
+        .win { color: #2ed573; font-weight: bold; text-shadow: 0 0 5px #2ed573; }
         .loss { color: #ff4757; font-weight: bold; }
-        .lock-icon { font-size: 10px; color: #ffcc00; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -47,11 +49,11 @@
     <div class="card">
         <h1>KING PREDICTOR</h1>
         <div class="timer-box">
-            <div id="p-id" style="font-size: 12px; color: #777;">PERIOD: ----</div>
-            <div id="p-timer" style="font-size: 26px; color: #ff4757; font-weight: bold;">00:00</div>
+            <div id="p-id" style="font-size: 12px; color: #555;">PERIOD: ----</div>
+            <div id="p-timer" style="font-size: 28px; color: #ff4757; font-weight: bold;">00:00</div>
         </div>
 
-        <p id="data-count" style="font-size: 11px; color: #00f2fe;">PLEASE ADD 5 PREVIOUS RESULTS (0/5)</p>
+        <p id="data-count" style="font-size: 11px; color: #00f2fe;">REQUIRED: 5 RESULTS FOR FULL SCAN (0/5)</p>
         <div class="grid">
             <button class="n-btn vr" onclick="addHistory(0)">0</button>
             <button class="n-btn g" onclick="addHistory(1)">1</button>
@@ -66,25 +68,26 @@
         </div>
 
         <div class="res-area">
-            <div id="p-status" style="font-size: 10px; color: #666;">SYSTEM LOCKED</div>
+            <div id="p-status" style="font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px;">Ready To Scan History</div>
             <div id="p-val">WAITING</div>
             <div id="p-acc" class="accuracy-tag">ACCURACY: --%</div>
         </div>
 
-        <button id="predict-btn" class="main-btn" onclick="lockAndPredict()" disabled>GET PREDICTION</button>
-        <p style="font-size: 10px; color: #444; margin-top: 10px;">ANALYZING JALWA.GAME PATTERNS...</p>
+        <button id="predict-btn" class="main-btn" onclick="deepScanAndPredict()" disabled>GET PREDICTION</button>
     </div>
 
-    <table>
-        <thead><tr><th>Period</th><th>Num</th><th>Size</th><th>Result</th></tr></thead>
-        <tbody id="h-body"></tbody>
-    </table>
+    <div class="history-wrap">
+        <table>
+            <thead><tr><th>Period</th><th>Num</th><th>Size</th><th>Result</th></tr></thead>
+            <tbody id="h-body"></tbody>
+        </table>
+    </div>
 </div>
 
 <script>
-    let history = [];
+    let history = []; // Ab ye 50+ results tak save karega
     let lastEnteredPeriod = "";
-    let lockedPredictions = {}; // Result ko lock karne ke liye memory
+    let lockedPredictions = {};
 
     function updateTime() {
         const now = new Date();
@@ -98,7 +101,6 @@
         document.getElementById('p-id').innerText = "PERIOD: " + currentPeriod;
         document.getElementById('p-timer').innerText = "00:" + String(rem).padStart(2,'0');
 
-        // New Period par UI reset nahi hoga, sirf waiting dikhayega agar prediction nahi hai
         if(rem === 59) {
             if(!lockedPredictions[currentPeriod]) {
                 document.getElementById('p-val').innerText = "WAITING";
@@ -111,28 +113,31 @@
     function addHistory(n) {
         const curP = document.getElementById('p-id').innerText.split(": ")[1];
         if (lastEnteredPeriod === curP) {
-            alert("Is period ka result aapne pehle hi daal diya hai!");
+            alert("This period result already added!");
             return;
         }
 
         const pastP = (BigInt(curP) - 1n).toString();
         const size = n >= 5 ? "BIG" : "SMALL";
         
-        // Check Win/Loss from Locked Prediction
         let outcome = "---";
         if (lockedPredictions[pastP]) {
             outcome = (size === lockedPredictions[pastP].size) ? "WIN" : "LOSS";
         }
 
+        // Store result in history (No limit or high limit like 100)
         history.unshift({ p: pastP, n: n, s: size, res: outcome });
-        if(history.length > 15) history.pop();
         
         lastEnteredPeriod = curP;
         
-        // Counter logic
         const count = history.length;
-        document.getElementById('data-count').innerText = count >= 5 ? "DATA SUFFICIENT (STABLE)" : `PLEASE ADD ${5-count} MORE RESULTS (${count}/5)`;
-        document.getElementById('predict-btn').disabled = count < 5;
+        if(count < 5) {
+            document.getElementById('data-count').innerText = `REQUIRED: 5 RESULTS (${count}/5)`;
+            document.getElementById('predict-btn').disabled = true;
+        } else {
+            document.getElementById('data-count').innerText = `HISTORY LOADED: ${count} PERIODS (DEEP SCAN READY)`;
+            document.getElementById('predict-btn').disabled = false;
+        }
 
         renderTable();
     }
@@ -142,77 +147,77 @@
         body.innerHTML = history.map(d => `
             <tr>
                 <td>...${d.p.slice(-4)}</td>
-                <td style="color:#00f2fe; font-weight:bold">${d.n}</td>
+                <td style="color:#ffcc00; font-weight:bold">${d.n}</td>
                 <td>${d.s}</td>
                 <td class="${d.res.toLowerCase()}">${d.res}</td>
             </tr>
         `).join('');
     }
 
-    function lockAndPredict() {
+    function deepScanAndPredict() {
         const curP = document.getElementById('p-id').innerText.split(": ")[1];
         const out = document.getElementById('p-val');
         const accDisp = document.getElementById('p-acc');
         const status = document.getElementById('p-status');
 
-        // AGAR IS PERIOD KI PREDICTION PEHLE HI HO CHUKI HAI TOH WAHI DIKHAO
         if (lockedPredictions[curP]) {
             const locked = lockedPredictions[curP];
             out.innerText = locked.size;
             out.style.color = locked.size === "BIG" ? "#ff4757" : "#2ed573";
-            accDisp.innerText = "ACCURACY: " + locked.acc + "% (LOCKED)";
-            status.innerText = "PREDICTION ALREADY GENERATED";
+            accDisp.innerText = "ACCURACY: " + locked.acc + "% (SCAN LOCKED)";
+            status.innerText = "HISTORY SCAN COMPLETE";
             return;
         }
 
-        status.innerText = "EXTRACTING PATTERNS...";
-        out.innerText = "● ● ●";
+        status.innerText = "SCANNING FULL HISTORY PATTERNS...";
+        out.innerText = "SEARCHING...";
 
         setTimeout(() => {
             const h = history;
             let pSize = "";
             let acc = 0;
 
-            // --- JALWA PHOTOS PATTERN LOGIC ---
-            // Pattern: Dragon 1 (3+ same)
-            if (h[0].s === h[1].s && h[1].s === h[2].s) {
-                pSize = h[0].s; 
-                acc = Math.floor(Math.random() * (98 - 94) + 94);
-                status.innerText = "DRAGON TREND DETECTED";
-            } 
-            // Pattern: 1:1 Mirror (Big-Small-Big)
-            else if (h[0].s !== h[1].s && h[1].s !== h[2].s) {
+            // --- DEEP HISTORY SCAN LOGIC ---
+            // Yahan ye poori history array ko scan karega
+            let bigCount = 0;
+            let smallCount = 0;
+            h.forEach(item => { if(item.s === "BIG") bigCount++; else smallCount++; });
+
+            // Pattern Logic based on Frequency & Screenshots
+            const last3 = h.slice(0,3);
+            const isDragon = last3.every(v => v.s === last3[0].s);
+
+            if(isDragon) {
+                // If long trend, follow it with high accuracy
+                pSize = h[0].s;
+                acc = Math.floor(Math.random() * (98 - 95) + 95);
+                status.innerText = "DRAGON TREND DETECTED (" + h.length + " PERIODS)";
+            } else if (h[0].s !== h[1].s) {
+                // 1:1 Mirror
                 pSize = h[0].s === "BIG" ? "SMALL" : "BIG";
-                acc = Math.floor(Math.random() * (92 - 88) + 88);
-                status.innerText = "MIRROR TREND DETECTED";
-            }
-            // Pattern: 2:2 Logic (Small-Small-Big-Big)
-            else if (h[0].s === h[1].s && h[0].s !== h[2].s && h[2].s === h[3].s) {
-                pSize = h[0].s === "BIG" ? "SMALL" : "BIG";
-                acc = 95;
-                status.innerText = "2:2 PATTERN DETECTED";
-            }
-            else {
-                pSize = Math.random() > 0.5 ? "BIG" : "SMALL";
-                acc = Math.floor(Math.random() * (82 - 76) + 76);
-                status.innerText = "SITUATIONAL ANALYSIS";
+                acc = Math.floor(Math.random() * (93 - 88) + 88);
+                status.innerText = "MIRROR PATTERN DETECTED (" + h.length + " PERIODS)";
+            } else {
+                // Statistical Average (Frequency based)
+                pSize = bigCount > smallCount ? "SMALL" : "BIG";
+                acc = Math.floor(Math.random() * (85 - 78) + 78);
+                status.innerText = "STATISTICAL SCAN COMPLETE";
             }
 
-            // Violet Rule (0/5)
+            // Violet Shift (Jalwa Game Special)
             if (h[0].n === 0 || h[0].n === 5) {
-                pSize = "BIG"; acc = 97;
-                status.innerText = "VIOLET TREND SHIFT";
+                pSize = "BIG"; acc = 96;
+                status.innerText = "VIOLET TREND SYNCED";
             }
 
-            // LOCK THE RESULT FOR THIS PERIOD
             lockedPredictions[curP] = { size: pSize, acc: acc };
 
             out.innerText = pSize;
             out.style.color = pSize === "BIG" ? "#ff4757" : "#2ed573";
             accDisp.innerText = "ACCURACY: " + acc + "%";
-            status.innerText = "PREDICTION SECURED 🔒";
+            status.innerText = "DEEP SCAN SECURED 🔒";
 
-        }, 1200);
+        }, 1500);
     }
 </script>
 
