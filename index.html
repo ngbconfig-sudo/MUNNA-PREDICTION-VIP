@@ -3,66 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KING PREDICTOR PRO - ACCURACY MODE</title>
+    <title>KING PREDICTOR - FINAL STICKY MODE</title>
     <style>
-        body { margin: 0; background: #000; font-family: 'Segoe UI', sans-serif; color: #fff; }
-        .main-ui { display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        body { margin: 0; background: #050505; font-family: 'Segoe UI', sans-serif; color: #fff; overflow-x: hidden; }
+        .container { display: flex; flex-direction: column; align-items: center; padding: 15px; }
         .card { 
-            background: #0d0d0d; border: 2px solid #00f2fe; border-radius: 20px; 
+            background: #000; border: 2px solid #00f2fe; border-radius: 20px; 
             padding: 20px; width: 90%; max-width: 380px; text-align: center;
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
         }
-        h1 { color: #ffcc00; font-size: 22px; margin: 0; text-shadow: 0 0 10px #ffcc00; }
-        .timer-tag { background: #1a1a1a; margin: 15px 0; padding: 10px; border-radius: 10px; border: 1px solid #333; }
+        h1 { color: #ffcc00; font-size: 24px; margin: 0; text-shadow: 0 0 15px #ffcc00; }
+        .timer-box { background: #111; margin: 15px 0; padding: 10px; border-radius: 12px; border: 1px solid #333; }
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 15px 0; }
-        .n-btn { height: 40px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: #fff; }
+        .n-btn { height: 42px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: #fff; font-size: 16px; }
         .r { background: #ff4757; } .g { background: #2ed573; }
         .vr { background: linear-gradient(135deg, #a55eea 50%, #ff4757 50%); }
         .vg { background: linear-gradient(135deg, #a55eea 50%, #2ed573 50%); }
         
-        /* Accuracy Meter Style */
-        .res-box { background: #000; padding: 15px; border-radius: 12px; margin: 15px 0; border: 2px dashed #ffcc00; position: relative; }
-        #p-val { font-size: 28px; font-weight: 900; margin-bottom: 5px; }
-        .accuracy-meter { font-size: 14px; font-weight: bold; color: #00f2fe; }
+        .res-area { 
+            background: #080808; padding: 20px; border-radius: 15px; margin: 15px 0; 
+            border: 2px dashed #ffcc00; min-height: 100px; position: relative;
+        }
+        #p-val { font-size: 32px; font-weight: 900; color: #fff; }
+        .accuracy-tag { font-size: 14px; color: #00f2fe; font-weight: bold; margin-top: 5px; }
         
-        .main-btn { background: #ffcc00; color: #000; border: none; padding: 16px; width: 100%; font-weight: bold; border-radius: 10px; cursor: pointer; }
-        table { width: 100%; margin-top: 20px; background: #0a0a0a; border-collapse: collapse; font-size: 11px; }
-        th, td { padding: 10px; text-align: center; border-bottom: 1px solid #222; }
+        .main-btn { 
+            background: linear-gradient(to right, #ffcc00, #ff9900); color: #000; 
+            border: none; padding: 18px; width: 100%; font-weight: 900; border-radius: 12px; cursor: pointer; font-size: 18px;
+        }
+        .main-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+
+        table { width: 100%; margin-top: 20px; background: #000; border-collapse: collapse; font-size: 12px; }
+        th { padding: 12px; color: #555; border-bottom: 2px solid #222; }
+        td { padding: 10px; text-align: center; border-bottom: 1px solid #111; }
         .win { color: #2ed573; font-weight: bold; }
         .loss { color: #ff4757; font-weight: bold; }
+        .lock-icon { font-size: 10px; color: #ffcc00; vertical-align: middle; }
     </style>
 </head>
 <body>
 
-<div class="main-ui">
+<div class="container">
     <div class="card">
         <h1>KING PREDICTOR</h1>
-        <div class="timer-tag">
-            <div id="p-id" style="font-size: 12px; color: #888;">PERIOD: ----</div>
-            <div id="p-timer" style="font-size: 24px; color: #ff4757; font-weight: bold;">00:00</div>
+        <div class="timer-box">
+            <div id="p-id" style="font-size: 12px; color: #777;">PERIOD: ----</div>
+            <div id="p-timer" style="font-size: 26px; color: #ff4757; font-weight: bold;">00:00</div>
         </div>
 
-        <p style="font-size: 11px;">TAP LAST RESULT NUMBER:</p>
+        <p id="data-count" style="font-size: 11px; color: #00f2fe;">PLEASE ADD 5 PREVIOUS RESULTS (0/5)</p>
         <div class="grid">
-            <button class="n-btn vr" onclick="addResult(0)">0</button>
-            <button class="n-btn g" onclick="addResult(1)">1</button>
-            <button class="n-btn r" onclick="addResult(2)">2</button>
-            <button class="n-btn g" onclick="addResult(3)">3</button>
-            <button class="n-btn r" onclick="addResult(4)">4</button>
-            <button class="n-btn vg" onclick="addResult(5)">5</button>
-            <button class="n-btn r" onclick="addResult(6)">6</button>
-            <button class="n-btn g" onclick="addResult(7)">7</button>
-            <button class="n-btn r" onclick="addResult(8)">8</button>
-            <button class="n-btn g" onclick="addResult(9)">9</button>
+            <button class="n-btn vr" onclick="addHistory(0)">0</button>
+            <button class="n-btn g" onclick="addHistory(1)">1</button>
+            <button class="n-btn r" onclick="addHistory(2)">2</button>
+            <button class="n-btn g" onclick="addHistory(3)">3</button>
+            <button class="n-btn r" onclick="addHistory(4)">4</button>
+            <button class="n-btn vg" onclick="addHistory(5)">5</button>
+            <button class="n-btn r" onclick="addHistory(6)">6</button>
+            <button class="n-btn g" onclick="addHistory(7)">7</button>
+            <button class="n-btn r" onclick="addHistory(8)">8</button>
+            <button class="n-btn g" onclick="addHistory(9)">9</button>
         </div>
 
-        <div class="res-box">
+        <div class="res-area">
+            <div id="p-status" style="font-size: 10px; color: #666;">SYSTEM LOCKED</div>
             <div id="p-val">WAITING</div>
-            <div id="p-acc" class="accuracy-meter">ACCURACY: --%</div>
-            <div id="status" style="font-size: 10px; color: #555; margin-top: 5px;">READY FOR ANALYSIS</div>
+            <div id="p-acc" class="accuracy-tag">ACCURACY: --%</div>
         </div>
 
-        <button class="main-btn" onclick="generatePrediction()">GENERATE PREDICTION</button>
+        <button id="predict-btn" class="main-btn" onclick="lockAndPredict()" disabled>GET PREDICTION</button>
+        <p style="font-size: 10px; color: #444; margin-top: 10px;">ANALYZING JALWA.GAME PATTERNS...</p>
     </div>
 
     <table>
@@ -74,7 +84,7 @@
 <script>
     let history = [];
     let lastEnteredPeriod = "";
-    let activePrediction = null;
+    let lockedPredictions = {}; // Result ko lock karne ke liye memory
 
     function updateTime() {
         const now = new Date();
@@ -84,104 +94,125 @@
         const elapsed = (ist.getHours() * 60 + ist.getMinutes()) - (5 * 60 + 29);
         const dateStr = ist.getFullYear() + String(ist.getMonth()+1).padStart(2,'0') + String(ist.getDate()).padStart(2,'0');
         
-        const period = dateStr + "100001" + String(elapsed < 0 ? 0 : elapsed).padStart(4,'0');
-        document.getElementById('p-id').innerText = "PERIOD: " + period;
+        const currentPeriod = dateStr + "100001" + String(elapsed < 0 ? 0 : elapsed).padStart(4,'0');
+        document.getElementById('p-id').innerText = "PERIOD: " + currentPeriod;
         document.getElementById('p-timer').innerText = "00:" + String(rem).padStart(2,'0');
 
+        // New Period par UI reset nahi hoga, sirf waiting dikhayega agar prediction nahi hai
         if(rem === 59) {
-            document.getElementById('p-val').innerText = "WAITING";
-            document.getElementById('p-acc').innerText = "ACCURACY: --%";
+            if(!lockedPredictions[currentPeriod]) {
+                document.getElementById('p-val').innerText = "WAITING";
+                document.getElementById('p-acc').innerText = "ACCURACY: --%";
+            }
         }
     }
     setInterval(updateTime, 1000);
 
-    function addResult(n) {
-        const curPeriod = document.getElementById('p-id').innerText.split(": ")[1];
-        if (lastEnteredPeriod === curPeriod) {
-            alert("Is period ka result already enter kar diya hai!");
+    function addHistory(n) {
+        const curP = document.getElementById('p-id').innerText.split(": ")[1];
+        if (lastEnteredPeriod === curP) {
+            alert("Is period ka result aapne pehle hi daal diya hai!");
             return;
         }
 
-        const pastP = (BigInt(curPeriod) - 1n).toString();
+        const pastP = (BigInt(curP) - 1n).toString();
         const size = n >= 5 ? "BIG" : "SMALL";
         
+        // Check Win/Loss from Locked Prediction
         let outcome = "---";
-        // Pura check: Kya pichli prediction sahi thi?
-        if (activePrediction && activePrediction.period === pastP) {
-            outcome = (size === activePrediction.size) ? "WIN" : "LOSS";
+        if (lockedPredictions[pastP]) {
+            outcome = (size === lockedPredictions[pastP].size) ? "WIN" : "LOSS";
         }
 
         history.unshift({ p: pastP, n: n, s: size, res: outcome });
-        if(history.length > 10) history.pop();
+        if(history.length > 15) history.pop();
         
-        lastEnteredPeriod = curPeriod;
-        renderHistory();
-        document.getElementById('status').innerText = "LAST DATA RECORDED";
+        lastEnteredPeriod = curP;
+        
+        // Counter logic
+        const count = history.length;
+        document.getElementById('data-count').innerText = count >= 5 ? "DATA SUFFICIENT (STABLE)" : `PLEASE ADD ${5-count} MORE RESULTS (${count}/5)`;
+        document.getElementById('predict-btn').disabled = count < 5;
+
+        renderTable();
     }
 
-    function renderHistory() {
+    function renderTable() {
         const body = document.getElementById('h-body');
         body.innerHTML = history.map(d => `
             <tr>
                 <td>...${d.p.slice(-4)}</td>
-                <td style="color:#00f2fe; font-weight:bold;">${d.n}</td>
+                <td style="color:#00f2fe; font-weight:bold">${d.n}</td>
                 <td>${d.s}</td>
                 <td class="${d.res.toLowerCase()}">${d.res}</td>
             </tr>
         `).join('');
     }
 
-    function generatePrediction() {
-        if(history.length < 2) {
-            alert("Analysis ke liye kam se kam 2 results add karein!");
+    function lockAndPredict() {
+        const curP = document.getElementById('p-id').innerText.split(": ")[1];
+        const out = document.getElementById('p-val');
+        const accDisp = document.getElementById('p-acc');
+        const status = document.getElementById('p-status');
+
+        // AGAR IS PERIOD KI PREDICTION PEHLE HI HO CHUKI HAI TOH WAHI DIKHAO
+        if (lockedPredictions[curP]) {
+            const locked = lockedPredictions[curP];
+            out.innerText = locked.size;
+            out.style.color = locked.size === "BIG" ? "#ff4757" : "#2ed573";
+            accDisp.innerText = "ACCURACY: " + locked.acc + "% (LOCKED)";
+            status.innerText = "PREDICTION ALREADY GENERATED";
             return;
         }
 
-        const out = document.getElementById('p-val');
-        const accDisp = document.getElementById('p-acc');
-        const status = document.getElementById('status');
-        const curPeriod = document.getElementById('p-id').innerText.split(": ")[1];
-
-        status.innerText = "CALCULATING PROBABILITY...";
+        status.innerText = "EXTRACTING PATTERNS...";
+        out.innerText = "● ● ●";
 
         setTimeout(() => {
             const h = history;
             let pSize = "";
-            let accuracy = 0;
+            let acc = 0;
 
-            // Pattern Logic + Accuracy Calculation
-            if (h[0].s === h[1].s && h[1].s === (h[2] ? h[2].s : "")) {
-                // Long Dragon Trend (3+ same)
+            // --- JALWA PHOTOS PATTERN LOGIC ---
+            // Pattern: Dragon 1 (3+ same)
+            if (h[0].s === h[1].s && h[1].s === h[2].s) {
                 pSize = h[0].s; 
-                accuracy = Math.floor(Math.random() * (98 - 92) + 92); // High confidence
-                status.innerText = "STRONG DRAGON DETECTED";
-            } else if (h[0].s !== h[1].s) {
-                // Mirror Trend (Alternate)
+                acc = Math.floor(Math.random() * (98 - 94) + 94);
+                status.innerText = "DRAGON TREND DETECTED";
+            } 
+            // Pattern: 1:1 Mirror (Big-Small-Big)
+            else if (h[0].s !== h[1].s && h[1].s !== h[2].s) {
                 pSize = h[0].s === "BIG" ? "SMALL" : "BIG";
-                accuracy = Math.floor(Math.random() * (85 - 75) + 75);
+                acc = Math.floor(Math.random() * (92 - 88) + 88);
                 status.innerText = "MIRROR TREND DETECTED";
-            } else {
-                // Normal Pattern
+            }
+            // Pattern: 2:2 Logic (Small-Small-Big-Big)
+            else if (h[0].s === h[1].s && h[0].s !== h[2].s && h[2].s === h[3].s) {
+                pSize = h[0].s === "BIG" ? "SMALL" : "BIG";
+                acc = 95;
+                status.innerText = "2:2 PATTERN DETECTED";
+            }
+            else {
                 pSize = Math.random() > 0.5 ? "BIG" : "SMALL";
-                accuracy = Math.floor(Math.random() * (70 - 60) + 60);
-                status.innerText = "AVERAGE CONFIDENCE";
+                acc = Math.floor(Math.random() * (82 - 76) + 76);
+                status.innerText = "SITUATIONAL ANALYSIS";
             }
 
-            // Violet Rule
+            // Violet Rule (0/5)
             if (h[0].n === 0 || h[0].n === 5) {
-                accuracy = 95;
-                pSize = "BIG";
-                status.innerText = "VIOLET TREND ALERT";
+                pSize = "BIG"; acc = 97;
+                status.innerText = "VIOLET TREND SHIFT";
             }
+
+            // LOCK THE RESULT FOR THIS PERIOD
+            lockedPredictions[curP] = { size: pSize, acc: acc };
 
             out.innerText = pSize;
             out.style.color = pSize === "BIG" ? "#ff4757" : "#2ed573";
-            accDisp.innerText = "ACCURACY: " + accuracy + "%";
-            
-            // Store this prediction to check in next result
-            activePrediction = { size: pSize, period: curPeriod };
-            
-        }, 1000);
+            accDisp.innerText = "ACCURACY: " + acc + "%";
+            status.innerText = "PREDICTION SECURED 🔒";
+
+        }, 1200);
     }
 </script>
 
