@@ -3,44 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA PREDICTION VIP</title>
+    <title>MUNNA PREDICTION VIP - ANTI-LOSS</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@600;700&display=swap');
         :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
         .container { width: 96%; max-width: 385px; background: #0a0a0a; border: 2px solid var(--gold); border-radius: 20px; padding: 15px; box-shadow: 0 0 30px rgba(255,207,51,0.2); }
         .brand { font-family: 'Orbitron'; color: var(--gold); text-align: center; margin-bottom: 12px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* PREDICTION PANEL */
         .display { background: radial-gradient(circle, #1a1a1a, #000); border: 1px solid #333; border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 15px; position: relative; border-bottom: 4px solid #222; }
         #timer { position: absolute; top: 10px; right: 15px; color: var(--green); font-family: monospace; font-size: 0.9rem; }
-        #result { font-size: 5.5rem; font-weight: 900; line-height: 1; color: #151515; margin: 10px 0; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: 0.3s; }
-        #chance { font-size: 1rem; font-weight: 900; color: var(--gold); }
-
-        /* VISUAL SLOTS - Added to see the shift */
+        #result { font-size: 5.5rem; font-weight: 900; line-height: 1; color: #151515; margin: 10px 0; transition: 0.3s ease; }
+        
         .slots-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
-        .slot { background: #111; border: 1px solid #333; height: 35px; line-height: 35px; border-radius: 5px; text-align: center; color: var(--gold); font-weight: bold; }
+        .slot { background: #111; border: 1px solid #333; height: 35px; line-height: 35px; border-radius: 6px; text-align: center; color: var(--gold); font-weight: bold; font-size: 1.2rem; }
+        
+        .bet-advice { background: #111; border: 1px solid #222; padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 15px; font-weight: 900; color: var(--gold); font-size: 0.9rem; }
 
-        /* VALIDATION */
-        .validate-row { display: flex; align-items: center; justify-content: space-between; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #222; }
-        .v-label { font-size: 0.7rem; color: #888; text-align: left; line-height: 1.2; }
-        #vIn { width: 55px; height: 35px; background: #000; border: 1px solid var(--gold); border-radius: 6px; color: var(--gold); text-align: center; font-size: 1.2rem; font-weight: 900; outline: none; }
-
-        /* STATS BAR */
         .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
         .s-box { background: #050505; border: 1px solid #1a1a1a; padding: 6px; border-radius: 8px; text-align: center; }
         .s-lab { font-size: 0.55rem; color: #555; display: block; }
         .s-val { font-size: 1rem; font-weight: 900; }
 
-        /* KEYS */
         .numpad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 10px; }
-        .k { height: 46px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1.2rem; cursor: pointer; transition: 0.1s; }
+        .k { height: 46px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1.2rem; cursor: pointer; }
         .v { background: #9c27b0; } .g { background: var(--green); color: #000; } .r { background: var(--red); }
         .k:active { transform: scale(0.9); }
 
         .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .f-btn { padding: 12px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .f-btn { padding: 12px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
         .undo { background: #222; color: #fff; }
         .reset { background: var(--gold); color: #000; }
     </style>
@@ -53,8 +44,7 @@
     <div class="display">
         <div id="timer">00:00</div>
         <div id="result">SCAN</div>
-        <div id="chance">ENTER 5 DIGITS</div>
-        <div id="vStatus" style="font-size: 0.8rem; margin-top: 10px; font-weight: bold;"></div>
+        <div id="vStatus" style="font-size: 0.8rem; margin-top: 10px; font-weight: bold; color: var(--gold);">ENTER 5 DIGITS</div>
     </div>
 
     <div class="slots-row">
@@ -65,15 +55,12 @@
         <div id="s4" class="slot">-</div>
     </div>
 
-    <div class="validate-row">
-        <div class="v-label">ENTER LAST RESULT<br>(FOR WIN/LOSS STATS)</div>
-        <input type="number" id="vIn" placeholder="?" oninput="checkResult(this.value)">
-    </div>
+    <div class="bet-advice" id="advice">WAITING FOR TREND...</div>
 
     <div class="stats">
         <div class="s-box"><span class="s-lab">WINS</span><span class="s-val" id="w" style="color:var(--green)">0</span></div>
         <div class="s-box"><span class="s-lab">LOSS</span><span class="s-val" id="l" style="color:var(--red)">0</span></div>
-        <div class="s-box"><span class="s-lab">RATE</span><span class="s-val" id="rate">0%</span></div>
+        <div class="s-box"><span class="s-lab">WIN RATE</span><span class="s-val" id="rate">0%</span></div>
     </div>
 
     <div class="numpad">
@@ -93,23 +80,18 @@
         <button class="f-btn undo" onclick="undo()">UNDO</button>
         <button class="f-btn reset" onclick="fullReset()">RESET</button>
     </div>
+    
+    <div style="margin-top:15px;">
+        <input type="number" id="vIn" placeholder="Enter Actual No. to Verify" oninput="checkWin(this.value)" 
+        style="width:100%; height:35px; background:#111; border:1px solid var(--gold); border-radius:8px; color:var(--gold); text-align:center; outline:none;">
+    </div>
 </div>
 
 <script>
     let raw = [];
-    let lastPred = "";
     let wins = 0, losses = 0;
-    const a = new (window.AudioContext || window.webkitAudioContext)();
-
-    function beep(f) {
-        const o = a.createOscillator();
-        const g = a.createGain();
-        o.connect(g); g.connect(a.destination);
-        o.frequency.value = f;
-        g.gain.setValueAtTime(0.1, a.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + 0.3);
-        o.start(); o.stop(a.currentTime + 0.3);
-    }
+    let currentPred = "";
+    let consecutiveLoss = 0;
 
     setInterval(() => {
         const s = 60 - new Date().getSeconds();
@@ -117,68 +99,78 @@
     }, 1000);
 
     function addNum(n) {
-        if (a.state === 'suspended') a.resume();
-        
-        // RIGHT SHIFT LOGIC: Purana hatana, naya unshift karna
-        if (raw.length >= 5) {
-            raw.pop(); // Sabse purana (Right side wala) gayab
-        }
-        raw.unshift(n); // Naya number sabse aage (Left side) add
-        
-        updateSlots();
-        if (raw.length === 5) predict();
+        if (raw.length >= 5) { raw.pop(); }
+        raw.unshift(n);
+        updateUI();
+        if (raw.length === 5) calculate();
         if(navigator.vibrate) navigator.vibrate(40);
     }
 
-    function updateSlots() {
+    function updateUI() {
         for(let i=0; i<5; i++) {
             document.getElementById('s'+i).innerText = raw[i] !== undefined ? raw[i] : "-";
         }
     }
 
-    function predict() {
+    function calculate() {
         const rEl = document.getElementById('result');
-        const cEl = document.getElementById('chance');
+        const aEl = document.getElementById('advice');
         
-        // Optimized Pattern Recognition
         let sum = raw.reduce((a, b) => a + b, 0);
-        let res = (sum % 2 === 0) ? "SMALL" : "BIG";
+        let trend = (raw[0] + raw[1] + raw[2]);
         
-        lastPred = res;
+        // Anti-Loss Logic: Pattern shifts based on consecutive losses
+        let res = "";
+        if (consecutiveLoss >= 2) {
+            res = (sum % 2 !== 0) ? "BIG" : "SMALL"; // Invert logic to catch new trend
+        } else {
+            res = (sum % 2 === 0) ? "BIG" : "SMALL";
+        }
+        
+        currentPred = res;
         rEl.innerText = res;
         rEl.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
         rEl.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--green)" : "var(--red)");
-        cEl.innerText = "ACCURACY: 80%+";
-        beep(800);
+        
+        // Investment Advice
+        if (consecutiveLoss === 0) aEl.innerText = "SAFE BET: 1X (START)";
+        else if (consecutiveLoss === 1) aEl.innerText = "MARTINGALE: 3X (RECOVER)";
+        else aEl.innerText = "HIGH RISK: 9X (BOOST MODE)";
     }
 
-    function checkResult(val) {
-        if(val === "" || lastPred === "") return;
+    function checkWin(val) {
+        if(val === "" || currentPred === "") return;
         const actual = (parseInt(val) >= 5) ? "BIG" : "SMALL";
-        const vStatus = document.getElementById('vStatus');
         
-        if(actual === lastPred) {
-            vStatus.innerText = "WIN ✅"; wins++; beep(1200);
+        if(actual === currentPred) {
+            wins++; consecutiveLoss = 0;
+            document.getElementById('vStatus').innerText = "WINNER! ✅";
         } else {
-            vStatus.innerText = "LOSS ❌"; losses++; beep(400);
+            losses++; consecutiveLoss++;
+            document.getElementById('vStatus').innerText = "NEXT ROUND RECOVERY ❌";
         }
         
-        document.getElementById('w').innerText = wins;
-        document.getElementById('l').innerText = losses;
-        document.getElementById('rate').innerText = Math.floor((wins/(wins+losses))*100) + "%";
-        setTimeout(() => { document.getElementById('vIn').value = ""; vStatus.innerText = ""; }, 2000);
+        updateStats();
+        setTimeout(() => { document.getElementById('vIn').value = ""; document.getElementById('vStatus').innerText = "ENTER 5 DIGITS"; }, 2000);
     }
 
-    function undo() { raw.shift(); updateSlots(); rEl.innerText="SCAN"; }
-    function fullReset() { 
-        raw = []; wins=0; losses=0; lastPred="";
-        updateSlots();
+    function updateStats() {
+        document.getElementById('w').innerText = wins;
+        document.getElementById('l').innerText = losses;
+        let total = wins + losses;
+        document.getElementById('rate').innerText = Math.floor((wins/total)*100) + "%";
+    }
+
+    function fullReset() {
+        raw = []; wins=0; losses=0; consecutiveLoss=0;
+        updateUI();
         document.getElementById('result').innerText = "SCAN";
         document.getElementById('result').style.color = "#151515";
-        document.getElementById('w').innerText = "0";
-        document.getElementById('l').innerText = "0";
-        document.getElementById('rate').innerText = "0%";
+        document.getElementById('advice').innerText = "WAITING FOR TREND...";
+        updateStats();
     }
+
+    function undo() { raw.shift(); updateUI(); document.getElementById('result').innerText = "SCAN"; }
 </script>
 </body>
 </html>
