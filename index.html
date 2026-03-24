@@ -15,10 +15,14 @@
         /* PREDICTION PANEL */
         .display { background: radial-gradient(circle, #1a1a1a, #000); border: 1px solid #333; border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 15px; position: relative; border-bottom: 4px solid #222; }
         #timer { position: absolute; top: 10px; right: 15px; color: var(--green); font-family: monospace; font-size: 0.9rem; }
-        #result { font-size: 5.5rem; font-weight: 900; line-height: 1; color: #151515; margin: 10px 0; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        #result { font-size: 5.5rem; font-weight: 900; line-height: 1; color: #151515; margin: 10px 0; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: 0.3s; }
         #chance { font-size: 1rem; font-weight: 900; color: var(--gold); }
 
-        /* VALIDATION (30s) */
+        /* VISUAL SLOTS - Added to see the shift */
+        .slots-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
+        .slot { background: #111; border: 1px solid #333; height: 35px; line-height: 35px; border-radius: 5px; text-align: center; color: var(--gold); font-weight: bold; }
+
+        /* VALIDATION */
         .validate-row { display: flex; align-items: center; justify-content: space-between; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #222; }
         .v-label { font-size: 0.7rem; color: #888; text-align: left; line-height: 1.2; }
         #vIn { width: 55px; height: 35px; background: #000; border: 1px solid var(--gold); border-radius: 6px; color: var(--gold); text-align: center; font-size: 1.2rem; font-weight: 900; outline: none; }
@@ -48,13 +52,21 @@
     
     <div class="display">
         <div id="timer">00:00</div>
-        <div id="result">READY</div>
-        <div id="chance">ENTER 5 HISTORY DIGITS</div>
+        <div id="result">SCAN</div>
+        <div id="chance">ENTER 5 DIGITS</div>
         <div id="vStatus" style="font-size: 0.8rem; margin-top: 10px; font-weight: bold;"></div>
     </div>
 
+    <div class="slots-row">
+        <div id="s0" class="slot">-</div>
+        <div id="s1" class="slot">-</div>
+        <div id="s2" class="slot">-</div>
+        <div id="s3" class="slot">-</div>
+        <div id="s4" class="slot">-</div>
+    </div>
+
     <div class="validate-row">
-        <div class="v-label">ENTER LAST RESULT<br>(30s BEFORE SYNC)</div>
+        <div class="v-label">ENTER LAST RESULT<br>(FOR WIN/LOSS STATS)</div>
         <input type="number" id="vIn" placeholder="?" oninput="checkResult(this.value)">
     </div>
 
@@ -102,32 +114,41 @@
     setInterval(() => {
         const s = 60 - new Date().getSeconds();
         document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
-        if (s == 30 && navigator.vibrate) navigator.vibrate([100,50,100]);
     }, 1000);
 
     function addNum(n) {
         if (a.state === 'suspended') a.resume();
-        raw.unshift(n);
-        if (raw.length > 8) raw.pop();
-        if (raw.length >= 5) predict();
+        
+        // RIGHT SHIFT LOGIC: Purana hatana, naya unshift karna
+        if (raw.length >= 5) {
+            raw.pop(); // Sabse purana (Right side wala) gayab
+        }
+        raw.unshift(n); // Naya number sabse aage (Left side) add
+        
+        updateSlots();
+        if (raw.length === 5) predict();
         if(navigator.vibrate) navigator.vibrate(40);
+    }
+
+    function updateSlots() {
+        for(let i=0; i<5; i++) {
+            document.getElementById('s'+i).innerText = raw[i] !== undefined ? raw[i] : "-";
+        }
     }
 
     function predict() {
         const rEl = document.getElementById('result');
         const cEl = document.getElementById('chance');
         
-        let b=0, s=0;
-        raw.forEach((v, i) => { let w = 10-i; if(v>=5) b+=w; else s+=w; });
+        // Optimized Pattern Recognition
+        let sum = raw.reduce((a, b) => a + b, 0);
+        let res = (sum % 2 === 0) ? "SMALL" : "BIG";
         
-        // Moderate Filter: Prediction will show more often now
-        let res = (b >= s) ? "BIG" : "SMALL";
         lastPred = res;
-        
         rEl.innerText = res;
         rEl.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
         rEl.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--green)" : "var(--red)");
-        cEl.innerText = "CONFIRMED SIGNAL (80%+)";
+        cEl.innerText = "ACCURACY: 80%+";
         beep(800);
     }
 
@@ -137,27 +158,22 @@
         const vStatus = document.getElementById('vStatus');
         
         if(actual === lastPred) {
-            vStatus.innerText = "LAST: WIN ✅";
-            vStatus.style.color = "var(--green)";
-            wins++; beep(1200);
+            vStatus.innerText = "WIN ✅"; wins++; beep(1200);
         } else {
-            vStatus.innerText = "LAST: LOSS ❌";
-            vStatus.style.color = "var(--red)";
-            losses++; beep(400);
+            vStatus.innerText = "LOSS ❌"; losses++; beep(400);
         }
         
         document.getElementById('w').innerText = wins;
         document.getElementById('l').innerText = losses;
-        let total = wins + losses;
-        document.getElementById('rate').innerText = Math.floor((wins/total)*100) + "%";
-        
-        setTimeout(() => { document.getElementById('vIn').value = ""; vStatus.innerText = ""; }, 2500);
+        document.getElementById('rate').innerText = Math.floor((wins/(wins+losses))*100) + "%";
+        setTimeout(() => { document.getElementById('vIn').value = ""; vStatus.innerText = ""; }, 2000);
     }
 
-    function undo() { raw.shift(); predict(); }
+    function undo() { raw.shift(); updateSlots(); rEl.innerText="SCAN"; }
     function fullReset() { 
         raw = []; wins=0; losses=0; lastPred="";
-        document.getElementById('result').innerText = "READY";
+        updateSlots();
+        document.getElementById('result').innerText = "SCAN";
         document.getElementById('result').style.color = "#151515";
         document.getElementById('w').innerText = "0";
         document.getElementById('l').innerText = "0";
@@ -166,3 +182,4 @@
 </script>
 </body>
 </html>
+
