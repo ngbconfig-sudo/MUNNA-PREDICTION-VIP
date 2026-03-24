@@ -3,170 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP - STUCK FIX</title>
+    <title>KING GAMES PRO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Orbitron:wght@800&family=Rajdhani:wght@700&display=swap');
-        :root { --neon: #00ff88; --fire: #ff3131; --gold: #ffcf33; --jalwa-blue: #3d85c6; }
-        body { margin: 0; background: #010a1a; color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        .container { width: 94%; max-width: 380px; background: #051125; border: 2px solid var(--jalwa-blue); border-radius: 30px; padding: 15px; box-shadow: 0 0 40px #000; }
-        .brand { font-family: 'Orbitron'; text-align: center; color: #fff; font-size: 1.3rem; margin-bottom: 15px; text-shadow: 0 0 10px var(--jalwa-blue); }
-        .screen { background: radial-gradient(circle, #111, #000); border: 1px solid #1a2a44; border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 15px; position: relative; }
-        #timer { position: absolute; top: 10px; right: 15px; color: var(--neon); font-family: monospace; font-size: 1.1rem; }
-        #periodDisplay { position: absolute; top: 10px; left: 15px; color: #777; font-size: 0.8rem; font-weight: bold; }
-        #mainResult { font-family: 'Permanent Marker', cursive; font-size: 5.5rem; margin: 15px 0; color: #1a1a1a; line-height: 1; transition: 0.4s; }
-        #statusMsg { font-size: 0.8rem; color: var(--gold); font-weight: bold; text-transform: uppercase; min-height: 20px; }
-        .history-list { background: #020814; border-radius: 15px; padding: 10px; border: 1px solid #111; margin-bottom: 15px; height: 160px; overflow-y: auto; }
-        .row { display: grid; grid-template-columns: 2fr 1fr 1fr; padding: 6px 0; border-bottom: 1px solid #0d1a30; font-size: 0.75rem; text-align: center; }
-        .row-h { color: #5b7192; font-weight: bold; border-bottom: 2px solid #1a2a44; }
-        .numpad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        .k { height: 48px; border: none; border-radius: 10px; color: #fff; font-weight: 900; font-size: 1.3rem; cursor: pointer; transition: 0.1s; }
-        .v { background: #9c27b0; } .g { background: #28a745; } .r { background: #dc3545; }
-        .k:disabled { opacity: 0.1; filter: grayscale(1); }
-        .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .f-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
-        .undo { background: #1a2a44; color: #fff; }
-        .reset { background: #222; color: #555; }
+        :root {
+            --bg-deep: #020a1a; --card-bg: #051125; --cyan: #00e5ff;
+            --green: #28a745; --red: #dc3545; --violet: #9c27b0;
+            --orange: #ff9900; --text-dim: #5b7192;
+        }
+        body { margin: 0; background: var(--bg-deep); color: white; font-family: sans-serif; overflow-x: hidden; }
+        .screen { display: none; padding: 15px; padding-bottom: 80px; }
+        .screen.active { display: block; }
+        
+        /* WALLET & TIMER STYLE */
+        .wallet-card { background: linear-gradient(135deg, #051125, #0a1f3d); border-radius: 20px; padding: 20px; border: 1px solid #1a2a44; margin-bottom: 15px; text-align: center;}
+        .wingo-timer-card { background: linear-gradient(to right, #40ffaa33, #00e5ff33); border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--cyan); margin-bottom: 15px; }
+        .timer-box { background: #000; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-size: 1.2rem; border: 1px solid #333; color: var(--cyan); }
+
+        /* BUTTONS */
+        .bet-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .btn-big { background: var(--orange); height: 50px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
+        .btn-small { background: var(--cyan); height: 50px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
+        
+        /* LIVE LIST */
+        .live-list { background: var(--card-bg); border-radius: 15px; padding: 10px; height: 150px; overflow: hidden; border: 1px solid #111; }
+        .log-row { display: flex; justify-content: space-between; font-size: 0.75rem; padding: 5px 0; border-bottom: 1px solid #0d1a30; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* NAV */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--card-bg); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #1a2a44; }
+        .nav-item { text-align: center; color: var(--text-dim); font-size: 0.6rem; }
+        .nav-item.active { color: var(--cyan); }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="brand">MUNNA VIP JALWA</div>
-    <div class="screen">
-        <div id="periodDisplay">ID: LOADING...</div>
-        <div id="timer">00:00</div>
-        <div id="mainResult">WAIT</div>
-        <div id="statusMsg">PLEASE COMPLETE 10 PERIODS</div>
+    <div id="home" class="screen active">
+        <div class="wallet-card">
+            <div style="color:var(--text-dim)">Available Balance</div>
+            <div id="balanceDisplay" style="font-size: 2rem; font-weight: bold; margin: 10px 0;">₹500.00</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <button style="background:var(--green); border:none; padding:10px; border-radius:20px; color:white; font-weight:bold;">Deposit</button>
+                <button style="background:var(--red); border:none; padding:10px; border-radius:20px; color:white; font-weight:bold;">Withdraw</button>
+            </div>
+        </div>
+
+        <div class="wingo-timer-card">
+            <div><div style="font-size:0.7rem">WinGo 1 Min</div><div id="periodID" style="font-weight:bold">202603241000...</div></div>
+            <div class="timer-box" id="timer">00:60</div>
+        </div>
+
+        <div class="bet-btns">
+            <button class="btn-big" onclick="placeBet('BIG')">BIG</button>
+            <button class="btn-small" onclick="placeBet('SMALL')">SMALL</button>
+        </div>
+
+        <div style="font-size:0.8rem; margin-bottom:10px; color:var(--cyan)">Live Betting Information</div>
+        <div class="live-list" id="betLogs"></div>
     </div>
-    <div class="history-list">
-        <div class="row row-h"><span>PERIOD ID</span><span>RES</span><span>STATUS</span></div>
-        <div id="listData"></div>
+
+    <div class="bottom-nav">
+        <div class="nav-item"><i class="fa-solid fa-house"></i><br>Home</div>
+        <div class="nav-item active"><i class="fa-solid fa-gamepad"></i><br>WinGo</div>
+        <div class="nav-item"><i class="fa-solid fa-user"></i><br>Account</div>
     </div>
-    <div class="numpad">
-        <button class="k v" onclick="press(0)">0</button>
-        <button class="k g" onclick="press(1)">1</button>
-        <button class="k r" onclick="press(2)">2</button>
-        <button class="k g" onclick="press(3)">3</button>
-        <button class="k r" onclick="press(4)">4</button>
-        <button class="k g" onclick="press(5)">5</button>
-        <button class="k r" onclick="press(6)">6</button>
-        <button class="k g" onclick="press(7)">7</button>
-        <button class="k r" onclick="press(8)">8</button>
-        <button class="k g" onclick="press(9)">9</button>
-    </div>
-    <div class="footer">
-        <button class="f-btn undo" onclick="undo()">UNDO</button>
-        <button class="f-btn reset" onclick="fullReset()">RESET SYSTEM</button>
-    </div>
-</div>
 
 <script>
-    let history = [];
-    let currentPred = "";
-    let lastEnteredID = "";
+    let balance = 500.00;
+    let pool = { BIG: 0, SMALL: 0 };
+    let userBet = { side: "", amount: 0 };
 
-    function getExactJalwaID() {
-        let now = new Date();
-        let ymd = now.getFullYear().toString() + (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0');
-        
-        // Screenshot logic: 12:25 PM = 10416. 
-        // Total minutes at 12:25 = 745.
-        // Formula to match 10416: Minutes + 9671. 
-        let currentMins = (now.getHours() * 60) + now.getMinutes();
-        let jalwaSerial = 9671 + currentMins;
-        
-        return ymd + "1000" + jalwaSerial;
-    }
-
-    setInterval(() => {
-        let now = new Date();
-        let sec = now.getSeconds();
-        let fullID = getExactJalwaID();
-        
-        document.getElementById('periodDisplay').innerText = "RUNNING ID: " + fullID;
-        document.getElementById('timer').innerText = "00:" + String(60 - sec).padStart(2, '0');
-
-        // Logic: First 35 seconds entry allowed for PREVIOUS result
-        if (sec < 35) {
-            if (fullID === lastEnteredID) {
-                disable(true);
-                document.getElementById('statusMsg').innerText = "WAIT FOR NEXT PERIOD";
-            } else {
-                disable(false);
-                if(history.length < 10) document.getElementById('statusMsg').innerText = `NEED ${10 - history.length} MORE DATA`;
-                else document.getElementById('statusMsg').innerText = "ENTER LAST RESULT";
+    // 1. TIMER & SYNC
+    function startTimer() {
+        let sec = 60;
+        setInterval(() => {
+            sec--;
+            if (sec < 0) { 
+                calculateWinner(); // Round Over
+                sec = 60; 
             }
-        } else {
-            // Last 25 seconds: Lock and predict
-            disable(true);
-            if (history.length >= 10 && currentPred === "") analyze();
-            else if (history.length >= 10) document.getElementById('statusMsg').innerText = "ANALYZING NEXT...";
+            document.getElementById('timer').innerText = "00:" + (sec < 10 ? "0" + sec : sec);
+            if (sec % 3 === 0) addFakeBet(); // Fake betting feeling
+        }, 1000);
+    }
+
+    // 2. BETTING LOGIC
+    function placeBet(side) {
+        let amt = prompt("Enter Bet Amount (Min ₹10):", "10");
+        amt = parseInt(amt);
+        if (amt >= 10 && balance >= amt) {
+            balance -= amt;
+            userBet = { side: side, amount: amt };
+            pool[side] += amt; // Add to logic
+            updateUI();
+            alert(`Bet Placed on ${side}!`);
+        } else { alert("Check balance or amount!"); }
+    }
+
+    // 3. PROFIT MANAGEMENT LOGIC (LOW MONEY WINS)
+    function calculateWinner() {
+        let winner = "";
+        // Jidhar kam paisa laga hai, wahi BIG/SMALL aayega
+        if (pool.BIG < pool.SMALL) { winner = "BIG"; } 
+        else if (pool.SMALL < pool.BIG) { winner = "SMALL"; } 
+        else { winner = Math.random() > 0.5 ? "BIG" : "SMALL"; }
+
+        if (userBet.side === winner) {
+            let winAmt = userBet.amount * 1.98;
+            balance += winAmt;
+            alert(`RESULT: ${winner}\nCONGRATS! You won ₹${winAmt.toFixed(2)}`);
+        } else if (userBet.side !== "") {
+            alert(`RESULT: ${winner}\nBetter luck next time!`);
         }
-    }, 1000);
 
-    function disable(s) { document.querySelectorAll('.k').forEach(b => b.disabled = s); }
-
-    function press(n) {
-        let curID = getExactJalwaID();
-        if (curID === lastEnteredID) return;
-        lastEnteredID = curID;
-
-        // PREVIOUS LOGIC: Input is for the result that just came out (Running - 1)
-        let prevID = (BigInt(curID) - 1n).toString();
-        let res = (n >= 5) ? "BIG" : "SMALL";
-        let status = "---";
-
-        if (currentPred !== "" && currentPred !== "SKIP") {
-            status = (res === currentPred) ? "WIN ✅" : "LOSS ❌";
-        }
-
-        history.unshift({ p: prevID.slice(-5), r: res, s: status });
-        if (history.length > 20) history.pop();
-        
-        currentPred = ""; 
-        render();
-        disable(true);
-        if(navigator.vibrate) navigator.vibrate(60);
+        // Reset for next round
+        pool = { BIG: Math.floor(Math.random() * 500), SMALL: Math.floor(Math.random() * 500) }; 
+        userBet = { side: "", amount: 0 };
+        updateUI();
     }
 
-    function analyze() {
-        if (history.length < 10) return;
-        
-        let bigs = history.slice(0, 10).filter(x => x.r === "BIG").length;
-        let smalls = 10 - bigs;
-        const el = document.getElementById('mainResult');
-
-        // Balanced 95% logic: If trend exists, predict. Otherwise skip.
-        if (Math.abs(bigs - smalls) >= 1) { 
-            let p = (bigs > smalls) ? "BIG" : "SMALL";
-            currentPred = p;
-            el.innerText = p;
-            el.style.color = (p === "BIG") ? "#e69138" : "#3d85c6";
-            el.style.textShadow = "0 0 40px " + (p === "BIG" ? "#e69138" : "#3d85c6");
-            document.getElementById('statusMsg').innerText = "PREDICTION ACTIVE";
-        } else {
-            currentPred = "SKIP";
-            el.innerText = "SKIP";
-            el.style.color = "var(--gold)";
-            document.getElementById('statusMsg').innerText = "UNSTABLE TREND - WAIT";
-        }
+    // 4. FAKE DATA LIST
+    function addFakeBet() {
+        const names = ["Mem***DTU", "Mem***HXL", "Mem***TFJ", "Mem***CJS"];
+        const sides = ["Big", "Small"];
+        const logs = document.getElementById('betLogs');
+        let row = `<div class="log-row">
+            <span>${names[Math.floor(Math.random()*4)]}</span>
+            <span style="color:var(--cyan)">${sides[Math.floor(Math.random()*2)]}</span>
+            <span style="color:var(--green)">+₹${(Math.random()*500).toFixed(2)}</span>
+        </div>`;
+        logs.innerHTML = row + logs.innerHTML;
     }
 
-    function render() {
-        let html = "";
-        history.forEach(i => {
-            let c = i.s.includes("WIN") ? "var(--neon)" : (i.s.includes("LOSS") ? "var(--fire)" : "#5b7192");
-            html += `<div class="row"><span>${i.p}</span><span>${i.r}</span><span style="color:${c}">${i.s}</span></div>`;
-        });
-        document.getElementById('listData').innerHTML = html;
+    function updateUI() {
+        document.getElementById('balanceDisplay').innerText = "₹" + balance.toFixed(2);
     }
 
-    function fullReset() { 
-        history = []; lastEnteredID = ""; currentPred = ""; render(); 
-        document.getElementById('mainResult').innerText = "WAIT"; 
-        document.getElementById('mainResult').style.color = "#1a1a1a";
-    }
-    function undo() { history.shift(); lastEnteredID = ""; render(); }
+    window.onload = () => { startTimer(); updateUI(); };
 </script>
 </body>
 </html>
