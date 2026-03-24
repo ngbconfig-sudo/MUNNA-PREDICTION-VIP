@@ -3,130 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KING PREDICTOR - JALWA SPECIAL</title>
+    <title>KING PREDICTOR</title>
     <style>
-        body, html { margin: 0; padding: 0; background: #060c21; font-family: 'Segoe UI', sans-serif; color: #fff; overflow-x: hidden; }
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.4; }
-        
-        .main-container { display: flex; flex-direction: column; align-items: center; padding: 15px; }
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 255, 0, 0.3);
-            border-radius: 25px;
-            padding: 20px;
-            width: 100%;
-            max-width: 380px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-
-        h1 { color: #00f2fe; font-size: 22px; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        .period-box { margin: 15px 0; background: #000; padding: 10px; border-radius: 12px; border: 1px solid #00f2fe; }
-        
-        /* Number Buttons - Jalwa Style */
-        .grid-nums { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
-        .n-btn { 
-            height: 45px; border: none; border-radius: 8px; font-weight: bold; font-size: 18px; cursor: pointer; color: #fff;
-            transition: 0.3s;
-        }
-        .red { background: #ff4757; }
-        .green { background: #2ed573; }
-        .violet-red { background: linear-gradient(135deg, #a55eea 50%, #ff4757 50%); }
-        .violet-green { background: linear-gradient(135deg, #a55eea 50%, #2ed573 50%); }
-
-        /* Prediction Result */
-        .result-area {
-            background: rgba(0,0,0,0.4);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            border: 2px solid #ffcc00;
-        }
-        #p-text { font-size: 32px; font-weight: 800; text-shadow: 0 0 15px #00f2fe; }
-
-        .action-btn {
-            background: linear-gradient(90deg, #00f2fe, #4facfe);
-            color: #000; border: none; padding: 15px; width: 100%; font-size: 18px;
-            font-weight: bold; border-radius: 12px; cursor: pointer; box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
-        }
-
-        /* History Table */
-        .history-table { width: 100%; max-width: 380px; margin-top: 20px; background: #0a1128; border-radius: 15px; overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th { background: #16213e; padding: 10px; color: #00f2fe; }
-        td { padding: 10px; text-align: center; border-bottom: 1px solid #16213e; }
-        
-        .tg-footer { margin-top: 20px; text-decoration: none; color: #4facfe; font-size: 14px; font-weight: bold; }
+        body, html { margin: 0; padding: 0; height: 100%; background: #050a1e; font-family: sans-serif; color: #fff; overflow-x: hidden; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
+        .container { display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .card { background: rgba(0, 0, 0, 0.8); border: 1px solid #00f2fe; border-radius: 20px; padding: 20px; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 0 20px #00f2fe; }
+        h1 { color: #ffcc00; font-size: 22px; margin: 0; text-shadow: 0 0 10px #ffcc00; }
+        .timer-box { margin: 15px 0; background: #111; padding: 10px; border-radius: 10px; border: 1px solid #333; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 15px 0; }
+        .n-btn { height: 40px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: #fff; }
+        .r { background: #ff4757; } .g { background: #2ed573; }
+        .vr { background: linear-gradient(45deg, #a55eea 50%, #ff4757 50%); }
+        .vg { background: linear-gradient(45deg, #a55eea 50%, #2ed573 50%); }
+        .res-box { background: #000; padding: 15px; border-radius: 10px; margin: 15px 0; border: 2px dashed #ffcc00; }
+        #p-val { font-size: 28px; font-weight: 900; }
+        .main-btn { background: #ffcc00; color: #000; border: none; padding: 15px; width: 100%; font-weight: bold; border-radius: 10px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 20px; background: #000; border-radius: 10px; }
+        th, td { padding: 8px; text-align: center; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
-
 <canvas id="matrix"></canvas>
-
-<div class="main-container">
-    <div class="glass-card">
+<div class="container">
+    <div class="card">
         <h1>KING PREDICTOR</h1>
-        <p style="font-size: 10px; color: #4facfe;">JALWA.GAME ANALYSIS ENGINE</p>
-        
-        <div class="period-box">
-            <div id="p-number" style="color: #888; font-size: 12px;">PERIOD: ----</div>
-            <div id="p-timer" style="font-size: 24px; color: #ff4757; font-weight: bold;">00:00</div>
+        <div class="timer-box">
+            <div id="p-id" style="font-size: 12px; color: #888;">PERIOD: ----</div>
+            <div id="p-timer" style="font-size: 22px; color: #ff4757; font-weight: bold;">00:00</div>
         </div>
-
-        <p style="font-size: 11px; color: #aaa;">TAP LAST RESULT NUMBER:</p>
-        <div class="grid-nums">
-            <button class="n-btn violet-red" onclick="addRes(0)">0</button>
-            <button class="n-btn green" onclick="addRes(1)">1</button>
-            <button class="n-btn red" onclick="addRes(2)">2</button>
-            <button class="n-btn green" onclick="addRes(3)">3</button>
-            <button class="n-btn red" onclick="addRes(4)">4</button>
-            <button class="n-btn violet-green" onclick="addRes(5)">5</button>
-            <button class="n-btn red" onclick="addRes(6)">6</button>
-            <button class="n-btn green" onclick="addRes(7)">7</button>
-            <button class="n-btn red" onclick="addRes(8)">8</button>
-            <button class="n-btn green" onclick="addRes(9)">9</button>
+        <p style="font-size: 11px;">TAP LAST RESULT (PAST PERIOD):</p>
+        <div class="grid">
+            <button class="n-btn vr" onclick="addHistory(0)">0</button>
+            <button class="n-btn g" onclick="addHistory(1)">1</button>
+            <button class="n-btn r" onclick="addHistory(2)">2</button>
+            <button class="n-btn g" onclick="addHistory(3)">3</button>
+            <button class="n-btn r" onclick="addHistory(4)">4</button>
+            <button class="n-btn vg" onclick="addHistory(5)">5</button>
+            <button class="n-btn r" onclick="addHistory(6)">6</button>
+            <button class="n-btn g" onclick="addHistory(7)">7</button>
+            <button class="n-btn r" onclick="addHistory(8)">8</button>
+            <button class="n-btn g" onclick="addHistory(9)">9</button>
         </div>
-
-        <div class="result-area">
-            <div id="p-status" style="font-size: 12px; margin-bottom: 10px;">SYSTEM READY</div>
-            <div id="p-text">WAIT</div>
+        <div class="res-box">
+            <div id="p-status" style="font-size: 11px; color: #666;">ANALYSIS SYSTEM</div>
+            <div id="p-val">WAIT</div>
         </div>
-
-        <button class="action-btn" onclick="analyze()">ANALYZE PATTERN</button>
-        
-        <br>
-        <a href="https://t.me/+4V3ro6h6AcY3Y2Y1" class="tg-footer">JOIN OFFICIAL TELEGRAM</a>
+        <button class="main-btn" onclick="getPrediction()">GET PREDICTION</button>
+        <a href="https://t.me/+4V3ro6h6AcY3Y2Y1" style="display:block; margin-top:15px; color:#00f2fe; text-decoration:none; font-size:12px;">TELEGRAM @PREDICTOR_GOD</a>
     </div>
-
-    <div class="history-table">
-        <table>
-            <thead><tr><th>Period</th><th>Num</th><th>Size</th><th>Color</th></tr></thead>
-            <tbody id="h-body"></tbody>
-        </table>
-    </div>
+    <table>
+        <thead><tr><th>Past Period</th><th>Number</th><th>Size</th></tr></thead>
+        <tbody id="h-body"></tbody>
+    </table>
 </div>
 
 <script>
-    // Matrix Background Animation
+    // Matrix Background
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     const drops = Array(Math.floor(canvas.width/18)).fill(1);
     function draw() {
-        ctx.fillStyle = "rgba(6, 12, 33, 0.1)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "#00f2fe"; ctx.font = "15px monospace";
+        ctx.fillStyle = "rgba(5, 10, 30, 0.1)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "#0ff"; ctx.font = "15px monospace";
         drops.forEach((y, i) => {
-            const char = Math.floor(Math.random()*10);
-            ctx.fillText(char, i*18, y*18);
+            ctx.fillText(Math.floor(Math.random()*10), i*18, y*18);
             if(y*18 > canvas.height && Math.random() > 0.98) drops[i] = 0;
             drops[i]++;
         });
     }
     setInterval(draw, 50);
 
-    // Period Timer Logic
+    let currentPeriod = "";
+    let lastEnteredPeriod = ""; // Ek period ek entry lock
+    let history = [];
+
     function updateTime() {
         const now = new Date();
         const ist = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
@@ -135,76 +87,52 @@
         const elapsed = (ist.getHours() * 60 + ist.getMinutes()) - (5 * 60 + 29);
         const dateStr = ist.getFullYear() + String(ist.getMonth()+1).padStart(2,'0') + String(ist.getDate()).padStart(2,'0');
         
-        document.getElementById('p-number').innerText = "PERIOD: " + dateStr + "100001" + String(elapsed < 0 ? 0 : elapsed).padStart(4,'0');
+        currentPeriod = dateStr + "100001" + String(elapsed < 0 ? 0 : elapsed).padStart(4,'0');
+        document.getElementById('p-id').innerText = "PERIOD: " + currentPeriod;
         document.getElementById('p-timer').innerText = "00:" + String(rem).padStart(2,'0');
         
-        if(rem === 59) document.getElementById('p-text').innerText = "WAIT";
+        // Reset when new period starts
+        if(rem === 59) {
+            document.getElementById('p-val').innerText = "WAIT";
+            document.getElementById('p-status').innerText = "NEW ROUND STARTED";
+        }
     }
     setInterval(updateTime, 1000);
 
-    // Jalwa Pattern Logic
-    let history = [];
-    function addRes(n) {
-        const size = n >= 5 ? "BIG" : "SMALL";
-        const color = (n===0 || n===5) ? "VIOLET" : (n%2===0 ? "RED" : "GREEN");
-        const p = document.getElementById('p-number').innerText.split(": ")[1];
-        
-        history.unshift({ p, n, s: size, c: color });
-        if(history.length > 8) history.pop();
-
-        const body = document.getElementById('h-body');
-        body.innerHTML = history.map(d => `
-            <tr>
-                <td>...${d.p.slice(-4)}</td>
-                <td style="font-weight:bold; color:#00f2fe">${d.n}</td>
-                <td>${d.s}</td>
-                <td style="color:${d.c==='RED'?'#ff4757':'#2ed573'}">${d.c}</td>
-            </tr>
-        `).join('');
-    }
-
-    function analyze() {
-        if(history.length < 3) {
-            alert("Please enter at least 3 last results from Jalwa Game history!");
+    function addHistory(n) {
+        // Validation: Sirf pichle period ka number add hoga
+        if (lastEnteredPeriod === currentPeriod) {
+            alert("Aapne is period ka result pehle hi add kar diya hai! Agle period ka wait karein.");
             return;
         }
 
-        const out = document.getElementById('p-text');
-        const status = document.getElementById('p-status');
-        status.innerText = "SCANNING JALWA HISTORY...";
+        const pastPeriodInt = parseInt(currentPeriod) - 1;
+        const pastPeriod = pastPeriodInt.toString();
+        const size = n >= 5 ? "BIG" : "SMALL";
+        
+        history.unshift({ p: pastPeriod, n: n, s: size });
+        if(history.length > 5) history.pop();
+        
+        lastEnteredPeriod = currentPeriod; // Lock for current minute
+
+        const body = document.getElementById('h-body');
+        body.innerHTML = history.map(d => `<tr><td>...${d.p.slice(-4)}</td><td>${d.n}</td><td>${d.s}</td></tr>`).join('');
+        document.getElementById('p-status').innerText = "PAST DATA RECORDED";
+    }
+
+    function getPrediction() {
+        if(history.length < 1) { alert("Pehle pichla number add karein!"); return; }
+        const out = document.getElementById('p-val');
         out.innerText = "● ● ●";
-
         setTimeout(() => {
-            let predColor = "GREEN";
-            let predSize = "BIG";
-            
-            // Photo Analysis Logic: Detect Dragon or Mirror
             const last = history[0];
-            const prev = history[1];
-            
-            if(last.s === prev.s) {
-                // Dragon pattern - same follow karega
-                predSize = last.s;
-                predColor = last.c === "VIOLET" ? (Math.random() > 0.5 ? "RED" : "GREEN") : last.c;
-            } else {
-                // Mirror pattern - alternate karega
-                predSize = last.s === "BIG" ? "SMALL" : "BIG";
-                predColor = last.c === "RED" ? "GREEN" : "RED";
-            }
-
-            // Special handling for 0 and 5 (Violet)
-            if(last.n === 0 || last.n === 5) {
-                predSize = "BIG"; // After violet usually trend goes Big in your photos
-                predColor = "RED";
-            }
-
-            out.innerText = predSize + " (" + predColor + ")";
-            out.style.color = predColor === "RED" ? "#ff4757" : "#2ed573";
-            status.innerText = "PATTERN MATCHED!";
-        }, 1200);
+            let pColor = (Math.random() > 0.5) ? "RED" : "GREEN";
+            let pSize = (last.n > 4) ? "SMALL" : "BIG"; // Counter trend logic
+            out.innerText = pSize + " (" + pColor + ")";
+            out.style.color = (pColor === "RED") ? "#ff4757" : "#2ed573";
+        }, 1000);
     }
 </script>
-
 </body>
 </html>
 
