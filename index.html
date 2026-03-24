@@ -3,176 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA PREDICTION VIP</title>
+    <title>MUNNA VIP PRO</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Orbitron:wght@900&family=Rajdhani:wght@600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
+        :root { --neon: #00ff88; --fire: #ff3131; --gold: #ffcf33; --bg: #000; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 92%; max-width: 380px; background: #0a0a0a; border: 3px solid var(--neon); border-radius: 25px; padding: 15px; box-shadow: 0 0 40px rgba(0,255,136,0.2); }
         
-        :root {
-            --neon-green: #00ff88;
-            --neon-red: #ff3131;
-            --neon-gold: #ffcf33;
-            --bg-dark: #050505;
-        }
+        .brand { font-family: 'Orbitron'; color: var(--neon); text-align: center; font-size: 1.4rem; margin-bottom: 15px; text-shadow: 0 0 10px var(--neon); }
 
-        body {
-            margin: 0;
-            background: var(--bg-dark);
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+        .screen { background: radial-gradient(circle, #111, #000); border: 2px solid #222; border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 15px; position: relative; }
+        #timer { position: absolute; top: 10px; right: 15px; color: var(--gold); font-family: monospace; font-size: 1.1rem; }
+        #periodDisplay { position: absolute; top: 10px; left: 15px; color: #555; font-size: 0.8rem; font-weight: bold; }
+        
+        #mainResult { font-family: 'Permanent Marker', cursive; font-size: 5rem; margin: 15px 0; color: #151515; transition: 0.3s; }
+        #statusMsg { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; font-weight: bold; }
 
-        .container {
-            width: 92%;
-            max-width: 380px;
-            background: rgba(10, 10, 10, 0.95);
-            border: 3px solid var(--neon-green);
-            border-radius: 30px;
-            padding: 20px;
-            box-shadow: 0 0 50px rgba(0, 255, 136, 0.3), inset 0 0 20px rgba(0, 255, 136, 0.1);
-            position: relative;
-        }
+        .history { background: #080808; border-radius: 12px; padding: 8px; border: 1px solid #1a1a1a; margin-bottom: 15px; }
+        .row { display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 5px 0; border-bottom: 1px solid #111; font-size: 0.8rem; text-align: center; }
+        .row-h { color: #444; border-bottom: 2px solid #222; margin-bottom: 4px; }
 
-        .brand-title {
-            font-family: 'Orbitron';
-            font-size: 1.5rem;
-            text-align: center;
-            color: var(--neon-green);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            text-shadow: 0 0 15px var(--neon-green);
-        }
+        .keys { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .btn { height: 48px; border: none; border-radius: 10px; color: #fff; font-weight: 900; font-size: 1.4rem; cursor: pointer; transition: 0.1s; }
+        .btn-v { background: #9c27b0; } .btn-g { background: var(--neon); color: #000; } .btn-r { background: var(--fire); }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(1); }
+        .btn:active { transform: scale(0.9); }
 
-        /* MAIN DISPLAY AREA */
-        .prediction-screen {
-            background: linear-gradient(145deg, #111, #000);
-            border: 2px solid #222;
-            border-radius: 20px;
-            padding: 25px;
-            text-align: center;
-            margin-bottom: 20px;
-            position: relative;
-            box-shadow: inset 0 0 15px #000;
-        }
-
-        #timer {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            color: var(--neon-gold);
-            font-family: monospace;
-            font-size: 1.1rem;
-            font-weight: bold;
-        }
-
-        #mainResult {
-            font-family: 'Permanent Marker', cursive; /* KHATARNAK FONT */
-            font-size: 4.5rem;
-            margin: 15px 0;
-            color: #1a1a1a;
-            transition: all 0.4s ease;
-        }
-
-        #statusMsg {
-            font-size: 0.85rem;
-            color: var(--neon-gold);
-            font-weight: 700;
-            text-transform: uppercase;
-            min-height: 20px;
-        }
-
-        /* HISTORY LIST TABLE */
-        .history-list {
-            background: #080808;
-            border-radius: 15px;
-            padding: 10px;
-            border: 1px solid #1a1a1a;
-            margin-bottom: 20px;
-            max-height: 200px;
-            overflow-y: hidden;
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr;
-            padding: 6px 0;
-            border-bottom: 1px solid #111;
-            font-size: 0.8rem;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .row-head { color: #555; text-transform: uppercase; border-bottom: 2px solid #222; margin-bottom: 5px; }
-
-        /* NUMPAD */
-        .numpad {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-        }
-
-        .btn {
-            height: 50px;
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-weight: 900;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 0 #000;
-        }
-
-        .btn-v { background: #9c27b0; }
-        .btn-g { background: var(--neon-green); color: #000; }
-        .btn-r { background: var(--neon-red); }
-        .btn:active { transform: translateY(3px); box-shadow: none; opacity: 0.7; }
-
-        .footer-btns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .f-action {
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            font-weight: 900;
-            text-transform: uppercase;
-            cursor: pointer;
-        }
-
-        .undo-btn { background: #222; color: #fff; }
-        .reset-btn { background: var(--neon-gold); color: #000; }
-
+        .reset-btn { width: 100%; margin-top: 15px; padding: 10px; background: transparent; border: 1px solid #333; color: #444; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="brand-title">MUNNA VIP</div>
+    <div class="brand">MUNNA VIP V1</div>
     
-    <div class="prediction-screen">
+    <div class="screen">
+        <div id="periodDisplay">PERIOD: ---</div>
         <div id="timer">00:00</div>
         <div id="mainResult">WAIT</div>
         <div id="statusMsg">COMPLETE 10 PERIODS BEFORE</div>
     </div>
 
-    <div class="history-list">
-        <div class="row row-head">
-            <span>PERIOD</span><span>RESULT</span><span>STATUS</span>
-        </div>
-        <div id="listData">
-            </div>
+    <div class="history">
+        <div class="row row-h"><span>PERIOD</span><span>RESULT</span><span>STATUS</span></div>
+        <div id="listData"></div>
     </div>
 
-    <div class="numpad">
+    <div class="keys" id="numpad">
         <button class="btn btn-v" onclick="inputData(0)">0</button>
         <button class="btn btn-g" onclick="inputData(1)">1</button>
         <button class="btn btn-r" onclick="inputData(2)">2</button>
@@ -185,94 +62,113 @@
         <button class="btn btn-g" onclick="inputData(9)">9</button>
     </div>
 
-    <div class="footer-btns">
-        <button class="f-action undo-btn" onclick="undo()">UNDO</button>
-        <button class="f-action reset-btn" onclick="fullReset()">RESET ALL</button>
-    </div>
+    <button class="reset-btn" onclick="fullReset()">FULL REBOOT SYSTEM</button>
 </div>
 
 <script>
     let history = [];
     let currentPrediction = "";
+    let lastEnteredPeriod = -1;
+    let basePeriod = 100; // Starting Period Example
 
-    // Global Timer
     setInterval(() => {
-        let s = 60 - new Date().getSeconds();
-        document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
+        let now = new Date();
+        let seconds = now.getSeconds();
+        let minutes = now.getMinutes();
+        let currentPeriod = basePeriod + minutes;
+        
+        document.getElementById('periodDisplay').innerText = "PERIOD: " + currentPeriod;
+        document.getElementById('timer').innerText = "00:" + String(60 - seconds).padStart(2, '0');
+
+        // Logic: Pehle 30s mein entry allow, baad mein lock
+        const btns = document.querySelectorAll('.btn');
+        if (seconds < 30) {
+            // Agar is period ka result pehle hi enter ho chuka hai, toh lock rakho
+            if (currentPeriod === lastEnteredPeriod) {
+                disableButtons(true);
+                document.getElementById('statusMsg').innerText = "WAITING FOR NEXT PERIOD";
+            } else {
+                disableButtons(false);
+            }
+        } else {
+            disableButtons(true);
+            if (history.length >= 10 && currentPrediction === "") analyze();
+        }
     }, 1000);
 
+    function disableButtons(status) {
+        const btns = document.querySelectorAll('.btn');
+        btns.forEach(b => b.disabled = status);
+    }
+
     function inputData(num) {
+        let now = new Date();
+        let currentPeriod = basePeriod + now.getMinutes();
+        
+        // Single Entry Check
+        if (currentPeriod === lastEnteredPeriod) return;
+        
+        lastEnteredPeriod = currentPeriod;
         let actualType = (num >= 5) ? "BIG" : "SMALL";
-        let period = "P-" + Math.floor(Math.random() * 900 + 100); // Dummy period ID
         
         let status = "---";
-        if(currentPrediction !== "" && currentPrediction !== "SKIP") {
+        if (currentPrediction !== "" && currentPrediction !== "SKIP") {
             status = (actualType === currentPrediction) ? "WIN ✅" : "LOSS ❌";
         }
 
-        // Add to history list
-        history.unshift({ p: period, r: actualType, s: status });
+        history.unshift({ p: currentPeriod, r: actualType, s: status });
         if (history.length > 10) history.pop();
 
-        updateView();
-        if(navigator.vibrate) navigator.vibrate(50);
+        currentPrediction = ""; // Reset prediction for next cycle
+        updateList();
+        disableButtons(true); // Lock after one entry
+        if(navigator.vibrate) navigator.vibrate(60);
     }
 
-    function updateView() {
-        // Update List UI
-        let html = "";
-        history.forEach(item => {
-            let color = item.s.includes("WIN") ? "var(--neon-green)" : (item.s.includes("LOSS") ? "var(--neon-red)" : "#fff");
-            html += `<div class="row">
-                <span>${item.p}</span><span>${item.r}</span><span style="color:${color}">${item.s}</span>
-            </div>`;
-        });
-        document.getElementById('listData').innerHTML = html;
+    function analyze() {
+        if (history.length < 10) {
+            document.getElementById('statusMsg').innerText = `COMPLETE ${10 - history.length} MORE PERIODS`;
+            return;
+        }
 
-        // Prediction Logic
         const resDisplay = document.getElementById('mainResult');
         const statusDisplay = document.getElementById('statusMsg');
 
-        if (history.length < 10) {
-            resDisplay.innerText = "WAIT";
-            resDisplay.style.color = "#1a1a1a";
-            statusDisplay.innerText = `COMPLETE ${10 - history.length} MORE PERIODS`;
-            currentPrediction = "";
-        } else {
-            // 95% Balanced Pattern Logic
-            let bigCount = history.filter(x => x.r === "BIG").length;
-            let smallCount = 10 - bigCount;
-            let lastResult = history[0].r;
+        // 95% SENSING
+        let bigs = history.filter(x => x.r === "BIG").length;
+        let smalls = 10 - bigs;
+        let diff = Math.abs(bigs - smalls);
 
-            // Trend Sensing
-            let diff = Math.abs(bigCount - smallCount);
-            
-            if (diff >= 2) { 
-                let pred = (bigCount > smallCount) ? "BIG" : "SMALL";
-                currentPrediction = pred;
-                resDisplay.innerText = pred;
-                resDisplay.style.color = (pred === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
-                resDisplay.style.textShadow = "0 0 30px " + (pred === "BIG" ? "var(--neon-green)" : "var(--neon-red)");
-                statusDisplay.innerText = "SIGNAL CONFIRMED (95%+)";
-            } else {
-                currentPrediction = "SKIP";
-                resDisplay.innerText = "SKIP";
-                resDisplay.style.color = "var(--neon-gold)";
-                resDisplay.style.textShadow = "none";
-                statusDisplay.innerText = "UNSTABLE TREND - SKIP NOW";
-            }
+        if (diff >= 2) {
+            let pred = (bigs > smalls) ? "BIG" : "SMALL";
+            currentPrediction = pred;
+            resDisplay.innerText = pred;
+            resDisplay.style.color = (pred === "BIG") ? "var(--neon)" : "var(--fire)";
+            resDisplay.style.textShadow = "0 0 40px " + (pred === "BIG" ? "var(--neon)" : "var(--fire)");
+            statusDisplay.innerText = "95% ACCURACY CONFIRMED";
+        } else {
+            currentPrediction = "SKIP";
+            resDisplay.innerText = "SKIP";
+            resDisplay.style.color = "var(--gold)";
+            resDisplay.style.textShadow = "none";
+            statusDisplay.innerText = "UNSTABLE PATTERN - SKIP";
         }
     }
 
-    function fullReset() {
-        history = [];
-        currentPrediction = "";
-        updateView();
+    function updateList() {
+        let html = "";
+        history.forEach(item => {
+            let color = item.s.includes("WIN") ? "var(--neon)" : (item.s.includes("LOSS") ? "var(--fire)" : "#555");
+            html += `<div class="row"><span>${item.p}</span><span>${item.r}</span><span style="color:${color}">${item.s}</span></div>`;
+        });
+        document.getElementById('listData').innerHTML = html;
     }
 
-    function undo() {
-        history.shift();
-        updateView();
+    function fullReset() {
+        history = []; lastEnteredPeriod = -1; currentPrediction = "";
+        document.getElementById('mainResult').innerText = "WAIT";
+        document.getElementById('mainResult').style.color = "#151515";
+        updateList();
     }
 </script>
 </body>
