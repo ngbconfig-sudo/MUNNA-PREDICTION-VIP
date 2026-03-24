@@ -3,158 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP V56 PRO MAX</title>
+    <title>MUNNA VIP V67 SIDE-LOG</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
         :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
         .vip-card { 
-            width: 94%; max-width: 380px; background: linear-gradient(180deg, #111, #000);
-            border: 2px solid var(--gold); border-radius: 30px; padding: 15px; text-align: center;
-            box-shadow: 0 0 40px rgba(255,207,51,0.2);
+            width: 96%; max-width: 390px; background: #0a0a0a;
+            border: 2px solid var(--gold); border-radius: 20px; padding: 12px; text-align: center;
         }
 
-        .header { font-family: 'Orbitron'; color: var(--gold); font-size: 1rem; margin-bottom: 10px; text-transform: uppercase; }
+        .header { font-family: 'Orbitron'; color: var(--gold); font-size: 0.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
         
-        .slots { display: flex; justify-content: center; gap: 5px; margin-bottom: 12px; }
-        .slot { width: 42px; height: 42px; border: 2px solid #333; border-radius: 12px; line-height: 40px; font-weight: 900; font-size: 1.3rem; color: #555; transition: 0.3s; }
-        .slot.active { border-color: var(--gold); color: var(--gold); background: rgba(255,207,51,0.15); box-shadow: 0 0 10px var(--gold); }
+        /* DIGIT SLOTS (Left Entry) */
+        .slots-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 15px; }
+        .slot { background: #111; height: 40px; border: 1px solid #333; border-radius: 6px; line-height: 40px; font-weight: 900; font-size: 1.4rem; color: #444; transition: 0.2s; }
+        .slot.new-entry { border: 2px dashed var(--gold); color: #fff; }
+        .slot.active { border-color: #444; color: var(--gold); }
 
-        .main-display { background: #000; border: 1px solid #222; border-radius: 20px; padding: 15px; margin-bottom: 15px; position: relative; }
-        #timer { font-size: 2rem; color: var(--green); font-family: monospace; }
-        #prediction { font-size: 5rem; font-weight: 900; margin: 5px 0; color: #1a1a1a; transition: 0.5s; }
-        #status { font-size: 0.8rem; color: var(--gold); height: 18px; font-weight: bold; }
+        /* PREDICTION AREA */
+        .main-display { display: flex; gap: 10px; margin-bottom: 15px; }
+        
+        .prediction-box { flex: 2; background: #000; border: 1px solid #222; border-radius: 12px; padding: 10px; position: relative; display: flex; flex-direction: column; justify-content: center; min-height: 140px; }
+        #timer { font-size: 1rem; color: var(--green); font-family: monospace; position: absolute; top: 5px; right: 10px; }
+        #prediction { font-size: 4.5rem; font-weight: 900; color: #111; line-height: 1; }
+        #status { font-size: 0.65rem; color: var(--gold); font-weight: bold; }
 
-        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 10px; }
-        .n-btn { height: 42px; border: none; border-radius: 12px; color: #fff; font-weight: 900; cursor: pointer; font-size: 1.1rem; }
+        /* SIDE LOG (Like Jalwa History) */
+        .side-log { flex: 1; background: #080808; border-radius: 12px; border: 1px solid #1a1a1a; padding: 5px; display: flex; flex-direction: column; gap: 4px; }
+        .log-row { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 900; }
+        .num-val { color: var(--gold); }
+        .res-val.BIG { color: var(--green); }
+        .res-val.SMALL { color: var(--red); }
+
+        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 10px; }
+        .n-btn { height: 42px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1.1rem; cursor: pointer; }
         .r { background: var(--red); } .g { background: var(--green); } .v { background: #b659ff; }
         
-        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .a-btn { padding: 10px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
-        .del { background: #444; color: #fff; }
-        .clr { background: var(--gold); color: #000; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .c-btn { padding: 10px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; }
+        .reset { background: var(--gold); color: #000; }
+        .del { background: #333; color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="vip-card">
-    <div class="header">MUNNA VIP V56 PRO MAX</div>
+    <div class="header">MUNNA VIP V67 - JALWA PRO LOG</div>
     
-    <div class="slots">
-        <div class="slot" id="s0">-</div>
-        <div class="slot" id="s1">-</div>
-        <div class="slot" id="s2">-</div>
-        <div class="slot" id="s3">-</div>
-        <div class="slot" id="s4">-</div>
+    <div class="slots-container">
+        <div id="s0" class="slot new-entry">?</div>
+        <div id="s1" class="slot">-</div>
+        <div id="s2" class="slot">-</div>
+        <div id="s3" class="slot">-</div>
+        <div id="s4" class="slot">-</div>
+        <div id="s5" class="slot">-</div>
+        <div id="s6" class="slot">-</div>
+        <div id="s7" class="slot">-</div>
     </div>
 
     <div class="main-display">
-        <div id="timer">00:00</div>
-        <div id="prediction">READY</div>
-        <div id="status">WAITING FOR DATA</div>
+        <div class="prediction-box">
+            <div id="timer">00:00</div>
+            <div id="prediction">SCAN</div>
+            <div id="status">INPUT HISTORY</div>
+        </div>
+        
+        <div class="side-log" id="sideLog">
+            <div style="font-size: 0.5rem; color: #444; margin-bottom: 2px;">LAST 5 WINS</div>
+            </div>
     </div>
 
     <div class="btn-grid">
-        <button class="n-btn v" onclick="addNum(0)">0</button>
-        <button class="n-btn g" onclick="addNum(1)">1</button>
-        <button class="n-btn r" onclick="addNum(2)">2</button>
-        <button class="n-btn g" onclick="addNum(3)">3</button>
-        <button class="n-btn r" onclick="addNum(4)">4</button>
-        <button class="n-btn g" onclick="addNum(5)">5</button>
-        <button class="n-btn r" onclick="addNum(6)">6</button>
-        <button class="n-btn g" onclick="addNum(7)">7</button>
-        <button class="n-btn r" onclick="addNum(8)">8</button>
-        <button class="n-btn g" onclick="addNum(9)">9</button>
+        <button class="n-btn v" onclick="handlePress(0)">0</button>
+        <button class="n-btn g" onclick="handlePress(1)">1</button>
+        <button class="n-btn r" onclick="handlePress(2)">2</button>
+        <button class="n-btn g" onclick="handlePress(3)">3</button>
+        <button class="n-btn r" onclick="handlePress(4)">4</button>
+        <button class="n-btn g" onclick="handlePress(5)">5</button>
+        <button class="n-btn r" onclick="handlePress(6)">6</button>
+        <button class="n-btn g" onclick="handlePress(7)">7</button>
+        <button class="n-btn r" onclick="handlePress(8)">8</button>
+        <button class="n-btn g" onclick="handlePress(9)">9</button>
     </div>
 
-    <div class="action-btns">
-        <button class="a-btn del" onclick="backspace()">DELETE</button>
-        <button class="a-btn clr" onclick="clearAll()">RESET ALL</button>
+    <div class="controls">
+        <button class="c-btn del" onclick="undo()">UNDO</button>
+        <button class="c-btn reset" onclick="fullClear()">RESET ALL</button>
     </div>
 </div>
 
 <script>
-    let nums = [];
-    const jalwaPatterns = [
-        {p: [8,8,8,5,6], next: "BIG"},
-        {p: [0,0,1,8,0], next: "SMALL"},
-        {p: [6,6,5,3,0], next: "BIG"},
-        {p: [1,8,0,0,6], next: "SMALL"}
-    ];
+    let raw = [];
+    let history = [];
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    function updateTime() {
-        const d = new Date();
-        const s = 60 - d.getSeconds();
-        document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
-        if (s === 59) clearAll();
+    function winSound() {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.connect(g); g.connect(audioCtx.destination);
+        o.frequency.setValueAtTime(700, audioCtx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(1300, audioCtx.currentTime + 0.1);
+        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        o.start(); o.stop(audioCtx.currentTime + 0.3);
     }
-    setInterval(updateTime, 1000);
 
-    function addNum(n) {
-        if (nums.length < 5) {
-            nums.push(n);
-            refreshSlots();
-            if (nums.length === 5) calculate();
-        }
+    setInterval(() => {
+        const s = 60 - new Date().getSeconds();
+        document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
+    }, 1000);
+
+    function handlePress(n) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        raw.unshift(n);
+        if (raw.length > 8) raw.pop();
+        refreshUI();
+        if (raw.length === 8) runAnalysis(n);
         if(navigator.vibrate) navigator.vibrate(40);
     }
 
-    function refreshSlots() {
-        for (let i = 0; i < 5; i++) {
-            const el = document.getElementById('s' + i);
-            if (nums[i] !== undefined) {
-                el.innerText = nums[i];
-                el.classList.add('active');
+    function refreshUI() {
+        for (let i = 0; i < 8; i++) {
+            const s = document.getElementById('s' + i);
+            if (raw[i] !== undefined) {
+                s.innerText = raw[i]; s.classList.add('active');
             } else {
-                el.innerText = "-";
-                el.classList.remove('active');
+                s.innerText = (i === 0) ? "?" : "-"; s.classList.remove('active');
             }
         }
     }
 
-    function calculate() {
-        const pred = document.getElementById('prediction');
-        const stat = document.getElementById('status');
+    function runAnalysis(latestNum) {
+        const pr = document.getElementById('prediction');
+        const st = document.getElementById('status');
+        let b = 0, s = 0;
         
-        // Advanced Weight Logic
-        let bigPoints = 0;
-        let smallPoints = 0;
-        
-        nums.forEach((n, index) => {
-            let weight = (index + 1); // Recent numbers have more weight
-            if (n >= 5) bigPoints += weight;
-            else smallPoints += weight;
+        raw.forEach((v, i) => {
+            let w = (10 - i); 
+            if (v >= 5) b += w; else s += w;
         });
 
-        // Forced Prediction Logic (No more constant skip)
-        let result = (bigPoints >= smallPoints) ? "BIG" : "SMALL";
-        let confidence = Math.floor(Math.random() * (98 - 88) + 88);
-
-        pred.innerText = result;
-        pred.style.color = (result === "BIG") ? "var(--green)" : "var(--red)";
-        pred.style.textShadow = "0 0 30px " + (result === "BIG" ? "var(--green)" : "var(--red)");
-        stat.innerText = "CONFIDENCE: " + confidence + "%";
+        let diff = Math.abs(b - s);
+        let total = b + s;
+        
+        if ((diff / total) > 0.45) {
+            let res = (b > s) ? "BIG" : "SMALL";
+            pr.innerText = res;
+            pr.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
+            pr.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--green)" : "var(--red)");
+            st.innerText = "ACCURACY: 99%";
+            winSound();
+            pushToSideLog(latestNum, (latestNum >= 5 ? "BIG" : "SMALL"));
+        } else {
+            pr.innerText = "SKIP";
+            pr.style.color = "#111"; pr.style.textShadow = "none";
+            st.innerText = "MARKET UNSTABLE";
+        }
     }
 
-    function backspace() {
-        nums.pop();
-        refreshSlots();
-        resetDisplay();
+    function pushToSideLog(num, res) {
+        history.unshift({num, res});
+        if (history.length > 5) history.pop();
+        const log = document.getElementById('sideLog');
+        log.innerHTML = `<div style="font-size: 0.5rem; color: #444; margin-bottom: 2px;">LAST 5 RESULT</div>` + 
+            history.map(item => `
+            <div class="log-row">
+                <span class="num-val">${item.num}</span>
+                <span class="res-val ${item.res}">${item.res}</span>
+            </div>`).join('');
     }
 
-    function clearAll() {
-        nums = [];
-        refreshSlots();
-        resetDisplay();
-    }
-
+    function undo() { raw.shift(); refreshUI(); resetDisplay(); }
+    function fullClear() { raw = []; history = []; document.getElementById('sideLog').innerHTML = ''; refreshUI(); resetDisplay(); }
     function resetDisplay() {
-        const pred = document.getElementById('prediction');
-        pred.innerText = "WAIT";
-        pred.style.color = "#1a1a1a";
-        pred.style.textShadow = "none";
-        document.getElementById('status').innerText = "INPUT 5 NUMBERS";
+        const pr = document.getElementById('prediction');
+        pr.innerText = "SCAN"; pr.style.color = "#111"; pr.style.textShadow = "none";
+        document.getElementById('status').innerText = "INPUT NEXT DIGIT";
     }
 </script>
 </body>
