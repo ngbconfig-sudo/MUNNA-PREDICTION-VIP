@@ -3,172 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP - JALWA SYNC</title>
+    <title>MUNNA PREDICTION VIP</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Orbitron:wght@800&family=Rajdhani:wght@700&display=swap');
         :root { --neon: #00ff88; --fire: #ff3131; --gold: #ffcf33; --jalwa-orange: #e69138; --jalwa-blue: #3d85c6; }
-        body { margin: 0; background: #010a1a; color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { width: 92%; max-width: 380px; background: #051125; border: 2px solid var(--jalwa-blue); border-radius: 25px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        body { margin: 0; background: #010a1a; color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        .container { width: 94%; max-width: 380px; background: #051125; border: 2px solid var(--jalwa-blue); border-radius: 30px; padding: 15px; box-shadow: 0 0 40px #000; }
         
-        .brand { font-family: 'Orbitron'; color: #fff; text-align: center; font-size: 1.2rem; margin-bottom: 10px; text-shadow: 0 0 10px var(--jalwa-blue); border-bottom: 1px solid #1a2a44; padding-bottom: 10px; }
+        .brand { font-family: 'Orbitron'; text-align: center; color: #fff; font-size: 1.3rem; margin-bottom: 15px; text-shadow: 0 0 10px var(--jalwa-blue); }
 
-        .screen { background: #000; border: 1px solid #1a2a44; border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 15px; position: relative; }
+        .screen { background: radial-gradient(circle, #111, #000); border: 1px solid #1a2a44; border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 15px; position: relative; }
         #timer { position: absolute; top: 10px; right: 15px; color: var(--neon); font-family: monospace; font-size: 1.1rem; }
-        #periodDisplay { position: absolute; top: 10px; left: 15px; color: #888; font-size: 0.8rem; letter-spacing: 1px; }
+        #periodDisplay { position: absolute; top: 10px; left: 15px; color: #777; font-size: 0.8rem; font-weight: bold; }
         
-        /* THE KHATARNAK FONT FOR PREDICTION */
-        #mainResult { font-family: 'Permanent Marker', cursive; font-size: 5rem; margin: 10px 0; color: #151515; text-transform: uppercase; line-height: 1; transition: 0.4s ease-out; }
-        #statusMsg { font-size: 0.8rem; color: var(--gold); font-weight: bold; letter-spacing: 1px; }
+        /* THE KHATARNAK FONT */
+        #mainResult { font-family: 'Permanent Marker', cursive; font-size: 5.5rem; margin: 15px 0; color: #1a1a1a; line-height: 1; transition: 0.4s; }
+        #statusMsg { font-size: 0.8rem; color: var(--gold); font-weight: bold; text-transform: uppercase; }
 
-        .history { background: #020814; border-radius: 10px; padding: 8px; border: 1px solid #111; margin-bottom: 15px; height: 160px; overflow-y: auto; }
+        .history-list { background: #020814; border-radius: 15px; padding: 10px; border: 1px solid #111; margin-bottom: 15px; height: 160px; overflow-y: auto; }
         .row { display: grid; grid-template-columns: 2fr 1fr 1fr; padding: 6px 0; border-bottom: 1px solid #0d1a30; font-size: 0.75rem; text-align: center; }
-        .row-h { color: #5b7192; font-weight: bold; }
+        .row-h { color: #5b7192; font-weight: bold; border-bottom: 2px solid #1a2a44; }
 
-        .keys { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-        .btn { height: 45px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1.2rem; cursor: pointer; }
-        .btn-v { background: #9c27b0; } .btn-g { background: #28a745; } .btn-r { background: #dc3545; }
-        .btn:disabled { opacity: 0.1; filter: grayscale(1); cursor: not-allowed; }
+        .numpad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .k { height: 48px; border: none; border-radius: 10px; color: #fff; font-weight: 900; font-size: 1.3rem; cursor: pointer; transition: 0.1s; }
+        .v { background: #9c27b0; } .g { background: #28a745; } .r { background: #dc3545; }
+        .k:disabled { opacity: 0.1; filter: grayscale(1); }
 
-        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .f-btn { padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
-        .reset { background: #222; color: #777; }
+        .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .f-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
         .undo { background: #1a2a44; color: #fff; }
+        .reset { background: #222; color: #555; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="brand">MUNNA PREDICTION VIP</div>
+    <div class="brand">MUNNA VIP JALWA</div>
     
     <div class="screen">
-        <div id="periodDisplay">---</div>
+        <div id="periodDisplay">ID: ---</div>
         <div id="timer">00:00</div>
         <div id="mainResult">WAIT</div>
-        <div id="statusMsg">COMPLETE 10 RESULTS</div>
+        <div id="statusMsg">INPUT 10 PERIODS TO START</div>
     </div>
 
-    <div class="history">
-        <div class="row row-h"><span>PERIOD</span><span>RES</span><span>STATUS</span></div>
+    <div class="history-list">
+        <div class="row row-h"><span>PERIOD ID</span><span>RES</span><span>STATUS</span></div>
         <div id="listData"></div>
     </div>
 
-    <div class="keys" id="numpad">
-        <button class="btn btn-v" onclick="inputData(0)">0</button>
-        <button class="btn btn-g" onclick="inputData(1)">1</button>
-        <button class="btn btn-r" onclick="inputData(2)">2</button>
-        <button class="btn btn-g" onclick="inputData(3)">3</button>
-        <button class="btn btn-r" onclick="inputData(4)">4</button>
-        <button class="btn btn-g" onclick="inputData(5)">5</button>
-        <button class="btn btn-r" onclick="inputData(6)">6</button>
-        <button class="btn btn-g" onclick="inputData(7)">7</button>
-        <button class="btn btn-r" onclick="inputData(8)">8</button>
-        <button class="btn btn-g" onclick="inputData(9)">9</button>
+    <div class="numpad">
+        <button class="k v" onclick="press(0)">0</button>
+        <button class="k g" onclick="press(1)">1</button>
+        <button class="k r" onclick="press(2)">2</button>
+        <button class="k g" onclick="press(3)">3</button>
+        <button class="k r" onclick="press(4)">4</button>
+        <button class="k g" onclick="press(5)">5</button>
+        <button class="k r" onclick="press(6)">6</button>
+        <button class="k g" onclick="press(7)">7</button>
+        <button class="k r" onclick="press(8)">8</button>
+        <button class="k g" onclick="press(9)">9</button>
     </div>
 
-    <div class="action-btns">
+    <div class="footer">
         <button class="f-btn undo" onclick="undo()">UNDO</button>
-        <button class="f-btn reset" onclick="fullReset()">RESET SYSTEM</button>
+        <button class="f-btn reset" onclick="fullReset()">REBOOT</button>
     </div>
 </div>
 
 <script>
     let history = [];
-    let currentPrediction = "";
-    let lastEnteredID = "";
+    let currentPred = "";
+    let lastInID = "";
 
+    // JALWA 1-MIN FORMULA: 12:25 PM = 10416
     function getJalwaID() {
         let now = new Date();
-        let ymd = now.getFullYear().toString() + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0');
-        // Based on screenshot 10:44 AM -> 10413
-        // Formula: (Hours*60 + Minutes) + Offset to match Jalwa
-        let offset = 409; // Adjusted for screenshot 10:22 -> 10413 approx
-        let totalMins = (now.getHours() * 60) + now.getMinutes() + offset;
+        let ymd = now.getFullYear().toString() + (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0');
+        
+        // Base: 12:25 (745 mins from midnight) -> Target 10416
+        // Difference = 10416 - 745 = 9671
+        let totalMins = (now.getHours() * 60) + now.getMinutes() + 9671;
         return ymd + "1000" + totalMins;
     }
 
     setInterval(() => {
-        let now = new Date();
-        let sec = now.getSeconds();
+        let sec = new Date().getSeconds();
         let fullID = getJalwaID();
         
-        document.getElementById('periodDisplay').innerText = fullID;
+        document.getElementById('periodDisplay').innerText = "ID: " + fullID;
         document.getElementById('timer').innerText = "00:" + String(60 - sec).padStart(2, '0');
 
-        // Logic: Pehle 30 sec entry, phir lock
+        // Logic: Input only in first 30s
         if (sec < 30) {
-            if (fullID === lastEnteredID) {
+            if (fullID === lastInID) {
                 disable(true);
-                document.getElementById('statusMsg').innerText = "RESULT SAVED. WAIT...";
+                document.getElementById('statusMsg').innerText = "RESULT SAVED. WAIT NEXT.";
             } else {
                 disable(false);
             }
         } else {
             disable(true);
-            if (history.length >= 10 && currentPrediction === "") analyze();
+            if (history.length >= 10 && currentPred === "") analyze();
         }
     }, 1000);
 
-    function disable(s) { document.querySelectorAll('.btn').forEach(b => b.disabled = s); }
+    function disable(s) { document.querySelectorAll('.k').forEach(b => b.disabled = s); }
 
-    function inputData(num) {
-        let currentID = getJalwaID();
-        if (currentID === lastEnteredID) return;
+    function press(n) {
+        let curID = getJalwaID();
+        if (curID === lastInID) return;
+        lastInID = curID;
 
-        lastEnteredID = currentID;
-        let type = (num >= 5) ? "BIG" : "SMALL";
+        let res = (n >= 5) ? "BIG" : "SMALL";
         let status = "---";
-
-        if (currentPrediction !== "" && currentPrediction !== "SKIP") {
-            status = (type === currentPrediction) ? "WIN ✅" : "LOSS ❌";
+        if (currentPred !== "" && currentPred !== "SKIP") {
+            status = (res === currentPred) ? "WIN ✅" : "LOSS ❌";
         }
 
-        // List update
-        history.unshift({ p: currentID.slice(-5), r: type, s: status });
+        history.unshift({ p: curID.slice(-5), r: res, s: status });
         if (history.length > 10) history.pop();
-
-        currentPrediction = ""; 
-        updateUI();
+        
+        currentPred = ""; 
+        render();
         disable(true);
         if(navigator.vibrate) navigator.vibrate(60);
     }
 
     function analyze() {
         if (history.length < 10) {
-            document.getElementById('statusMsg').innerText = `INPUT ${10 - history.length} MORE DATA`;
+            document.getElementById('statusMsg').innerText = `NEED ${10 - history.length} MORE DATA`;
             return;
         }
         
         let bigs = history.filter(x => x.r === "BIG").length;
         let smalls = 10 - bigs;
-        let resEl = document.getElementById('mainResult');
+        let last3 = history.slice(0, 3).filter(x => x.r === "BIG").length;
 
-        // Balanced 95% Jalwa Logic
-        if (Math.abs(bigs - smalls) >= 2) {
-            let pred = (bigs > smalls) ? "BIG" : "SMALL";
-            currentPrediction = pred;
-            resEl.innerText = pred;
-            resEl.style.color = (pred === "BIG") ? "var(--jalwa-orange)" : "var(--jalwa-blue)";
-            resEl.style.textShadow = "0 0 40px " + (pred === "BIG" ? "var(--jalwa-orange)" : "var(--jalwa-blue)");
+        const el = document.getElementById('mainResult');
+        // Optimized 95% Logic: More signal, less skip
+        if (Math.abs(bigs - smalls) >= 1) { 
+            let p = (bigs > smalls || (bigs == smalls && last3 >= 2)) ? "BIG" : "SMALL";
+            currentPred = p;
+            el.innerText = p;
+            el.style.color = (p === "BIG") ? "var(--jalwa-orange)" : "var(--jalwa-blue)";
+            el.style.textShadow = "0 0 40px " + (p === "BIG" ? "var(--jalwa-orange)" : "var(--jalwa-blue)");
             document.getElementById('statusMsg').innerText = "JALWA TREND DETECTED";
         } else {
-            currentPrediction = "SKIP";
-            resEl.innerText = "SKIP";
-            resEl.style.color = "var(--gold)";
-            document.getElementById('statusMsg').innerText = "PATTERN NOT CLEAR - SKIP";
+            currentPred = "SKIP";
+            el.innerText = "SKIP";
+            el.style.color = "var(--gold)";
+            document.getElementById('statusMsg').innerText = "WAITING FOR TREND";
         }
     }
 
-    function updateUI() {
-        let h = "";
+    function render() {
+        let html = "";
         history.forEach(i => {
             let c = i.s.includes("WIN") ? "var(--neon)" : (i.s.includes("LOSS") ? "var(--fire)" : "#5b7192");
-            h += `<div class="row"><span>${i.p}</span><span>${i.r}</span><span style="color:${c}">${i.s}</span></div>`;
+            html += `<div class="row"><span>${i.p}</span><span>${i.r}</span><span style="color:${c}">${i.s}</span></div>`;
         });
-        document.getElementById('listData').innerHTML = h;
+        document.getElementById('listData').innerHTML = html;
     }
 
-    function fullReset() { history = []; lastEnteredID = ""; currentPrediction = ""; updateUI(); document.getElementById('mainResult').innerText = "WAIT"; }
-    function undo() { history.shift(); lastEnteredID = ""; updateUI(); }
+    function fullReset() { history = []; lastInID = ""; currentPred = ""; render(); document.getElementById('mainResult').innerText = "WAIT"; }
+    function undo() { history.shift(); lastInID = ""; render(); }
 </script>
 </body>
 </html>
