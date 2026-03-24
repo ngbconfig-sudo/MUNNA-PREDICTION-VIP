@@ -1,143 +1,207 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Empire Mods - Audio Predictor</title>
+    <title>KING PREDICTOR - JALWA SPECIAL</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
-        body { background: #02050a; color: #00ff41; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        body, html { margin: 0; padding: 0; background: #060c21; font-family: 'Segoe UI', sans-serif; color: #fff; overflow-x: hidden; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.4; }
         
-        .main-card { width: 95%; max-width: 380px; background: rgba(10, 20, 35, 0.95); border-radius: 20px; padding: 25px; border: 1px solid #00ff41; box-shadow: 0 0 20px #00ff4133; position: relative; }
+        .main-container { display: flex; flex-direction: column; align-items: center; padding: 15px; }
         
-        .scanner { width: 100%; height: 2px; background: #00ff41; position: absolute; top: 0; left: 0; box-shadow: 0 0 15px #00ff41; animation: scan 4s linear infinite; display: none; z-index: 10; }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 25px;
+            padding: 20px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
 
-        .header h2 { text-align: center; color: #fff; text-shadow: 0 0 10px #00ff41; letter-spacing: 3px; }
+        h1 { color: #00f2fe; font-size: 22px; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        .period-box { margin: 15px 0; background: #000; padding: 10px; border-radius: 12px; border: 1px solid #00f2fe; }
         
-        .timer-box { display: flex; justify-content: space-between; padding: 15px; background: #000; border: 1px solid #333; margin: 15px 0; border-radius: 10px; }
-        #timer { font-size: 24px; color: #ff3e3e; font-weight: bold; }
+        /* Number Buttons - Jalwa Style */
+        .grid-nums { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
+        .n-btn { 
+            height: 45px; border: none; border-radius: 8px; font-weight: bold; font-size: 18px; cursor: pointer; color: #fff;
+            transition: 0.3s;
+        }
+        .red { background: #ff4757; }
+        .green { background: #2ed573; }
+        .violet-red { background: linear-gradient(135deg, #a55eea 50%, #ff4757 50%); }
+        .violet-green { background: linear-gradient(135deg, #a55eea 50%, #2ed573 50%); }
 
-        .display { background: #000; height: 160px; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px inset #00ff41; margin-bottom: 20px; position: relative; }
-        .res-val { font-size: 50px; font-weight: bold; text-shadow: 0 0 20px currentColor; }
+        /* Prediction Result */
+        .result-area {
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #ffcc00;
+        }
+        #p-text { font-size: 32px; font-weight: 800; text-shadow: 0 0 15px #00f2fe; }
+
+        .action-btn {
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            color: #000; border: none; padding: 15px; width: 100%; font-size: 18px;
+            font-weight: bold; border-radius: 12px; cursor: pointer; box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+        }
+
+        /* History Table */
+        .history-table { width: 100%; max-width: 380px; margin-top: 20px; background: #0a1128; border-radius: 15px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th { background: #16213e; padding: 10px; color: #00f2fe; }
+        td { padding: 10px; text-align: center; border-bottom: 1px solid #16213e; }
         
-        .btn-row { display: flex; gap: 10px; }
-        .btn { flex: 1; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
-        .btn-b { background: #ffcc00; color: #000; }
-        .btn-s { background: #00ff41; color: #000; }
-        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-        #startBtn { width: 100%; padding: 10px; background: #555; color: white; border: none; margin-bottom: 10px; border-radius: 5px; cursor: pointer; }
-        .hidden { display: none !important; }
+        .tg-footer { margin-top: 20px; text-decoration: none; color: #4facfe; font-size: 14px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="main-card">
-    <button id="startBtn" onclick="initAudio()">TAP TO ACTIVATE AUDIO SYSTEM</button>
-    <div id="scanLine" class="scanner"></div>
-    
-    <div class="header">
-        <h2>EMPIRE AI</h2>
-        <p style="text-align:center; font-size:10px; color:#00ff41;">VIRTUAL HACK ACTIVE</p>
-    </div>
+<canvas id="matrix"></canvas>
 
-    <div class="timer-box">
-        <div>PERIOD: <span id="pNum">...001</span></div>
-        <div id="timer">00:60</div>
-    </div>
-
-    <div class="display">
-        <div id="status" style="font-size: 10px; margin-bottom: 5px;">SYSTEM READY</div>
-        <div id="res" class="res-val">---</div>
-    </div>
-
-    <div id="inputGroup">
-        <div class="btn-row">
-            <button class="btn btn-b" onclick="submitData('BIG')">BIG</button>
-            <button class="btn btn-s" onclick="submitData('SMALL')">SMALL</button>
+<div class="main-container">
+    <div class="glass-card">
+        <h1>KING PREDICTOR</h1>
+        <p style="font-size: 10px; color: #4facfe;">JALWA.GAME ANALYSIS ENGINE</p>
+        
+        <div class="period-box">
+            <div id="p-number" style="color: #888; font-size: 12px;">PERIOD: ----</div>
+            <div id="p-timer" style="font-size: 24px; color: #ff4757; font-weight: bold;">00:00</div>
         </div>
+
+        <p style="font-size: 11px; color: #aaa;">TAP LAST RESULT NUMBER:</p>
+        <div class="grid-nums">
+            <button class="n-btn violet-red" onclick="addRes(0)">0</button>
+            <button class="n-btn green" onclick="addRes(1)">1</button>
+            <button class="n-btn red" onclick="addRes(2)">2</button>
+            <button class="n-btn green" onclick="addRes(3)">3</button>
+            <button class="n-btn red" onclick="addRes(4)">4</button>
+            <button class="n-btn violet-green" onclick="addRes(5)">5</button>
+            <button class="n-btn red" onclick="addRes(6)">6</button>
+            <button class="n-btn green" onclick="addRes(7)">7</button>
+            <button class="n-btn red" onclick="addRes(8)">8</button>
+            <button class="n-btn green" onclick="addRes(9)">9</button>
+        </div>
+
+        <div class="result-area">
+            <div id="p-status" style="font-size: 12px; margin-bottom: 10px;">SYSTEM READY</div>
+            <div id="p-text">WAIT</div>
+        </div>
+
+        <button class="action-btn" onclick="analyze()">ANALYZE PATTERN</button>
+        
+        <br>
+        <a href="https://t.me/+4V3ro6h6AcY3Y2Y1" class="tg-footer">JOIN OFFICIAL TELEGRAM</a>
+    </div>
+
+    <div class="history-table">
+        <table>
+            <thead><tr><th>Period</th><th>Num</th><th>Size</th><th>Color</th></tr></thead>
+            <tbody id="h-body"></tbody>
+        </table>
     </div>
 </div>
 
 <script>
-    let timeLeft = 60;
+    // Matrix Background Animation
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const drops = Array(Math.floor(canvas.width/18)).fill(1);
+    function draw() {
+        ctx.fillStyle = "rgba(6, 12, 33, 0.1)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "#00f2fe"; ctx.font = "15px monospace";
+        drops.forEach((y, i) => {
+            const char = Math.floor(Math.random()*10);
+            ctx.fillText(char, i*18, y*18);
+            if(y*18 > canvas.height && Math.random() > 0.98) drops[i] = 0;
+            drops[i]++;
+        });
+    }
+    setInterval(draw, 50);
+
+    // Period Timer Logic
+    function updateTime() {
+        const now = new Date();
+        const ist = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+        const sec = ist.getSeconds();
+        const rem = 60 - sec;
+        const elapsed = (ist.getHours() * 60 + ist.getMinutes()) - (5 * 60 + 29);
+        const dateStr = ist.getFullYear() + String(ist.getMonth()+1).padStart(2,'0') + String(ist.getDate()).padStart(2,'0');
+        
+        document.getElementById('p-number').innerText = "PERIOD: " + dateStr + "100001" + String(elapsed < 0 ? 0 : elapsed).padStart(4,'0');
+        document.getElementById('p-timer').innerText = "00:" + String(rem).padStart(2,'0');
+        
+        if(rem === 59) document.getElementById('p-text').innerText = "WAIT";
+    }
+    setInterval(updateTime, 1000);
+
+    // Jalwa Pattern Logic
     let history = [];
-    let audioCtx = null;
+    function addRes(n) {
+        const size = n >= 5 ? "BIG" : "SMALL";
+        const color = (n===0 || n===5) ? "VIOLET" : (n%2===0 ? "RED" : "GREEN");
+        const p = document.getElementById('p-number').innerText.split(": ")[1];
+        
+        history.unshift({ p, n, s: size, c: color });
+        if(history.length > 8) history.pop();
 
-    // Audio functions
-    function initAudio() {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        document.getElementById('startBtn').classList.add('hidden');
-        playTone(440, 0.1); // Start beep
+        const body = document.getElementById('h-body');
+        body.innerHTML = history.map(d => `
+            <tr>
+                <td>...${d.p.slice(-4)}</td>
+                <td style="font-weight:bold; color:#00f2fe">${d.n}</td>
+                <td>${d.s}</td>
+                <td style="color:${d.c==='RED'?'#ff4757':'#2ed573'}">${d.c}</td>
+            </tr>
+        `).join('');
     }
 
-    function playTone(freq, duration, type = 'sine') {
-        if (!audioCtx) return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-    }
-
-    // Prediction Logic
-    setInterval(() => {
-        if(timeLeft > 0) {
-            timeLeft--;
-        } else {
-            timeLeft = 60;
-            resetUI();
+    function analyze() {
+        if(history.length < 3) {
+            alert("Please enter at least 3 last results from Jalwa Game history!");
+            return;
         }
 
-        document.getElementById('timer').innerText = `00:${timeLeft < 10 ? '0' + timeLeft : timeLeft}`;
+        const out = document.getElementById('p-text');
+        const status = document.getElementById('p-status');
+        status.innerText = "SCANNING JALWA HISTORY...";
+        out.innerText = "● ● ●";
 
-        // Sound on critical time
-        if(timeLeft === 30) playTone(880, 0.5, 'square'); 
-        
-        if(timeLeft <= 30) {
-            document.getElementById('inputGroup').classList.add('hidden');
-            if(history.length > 0 && timeLeft === 29) runAnalysis();
-        } else {
-            document.getElementById('inputGroup').classList.remove('hidden');
-        }
-    }, 1000);
+        setTimeout(() => {
+            let predColor = "GREEN";
+            let predSize = "BIG";
+            
+            // Photo Analysis Logic: Detect Dragon or Mirror
+            const last = history[0];
+            const prev = history[1];
+            
+            if(last.s === prev.s) {
+                // Dragon pattern - same follow karega
+                predSize = last.s;
+                predColor = last.c === "VIOLET" ? (Math.random() > 0.5 ? "RED" : "GREEN") : last.c;
+            } else {
+                // Mirror pattern - alternate karega
+                predSize = last.s === "BIG" ? "SMALL" : "BIG";
+                predColor = last.c === "RED" ? "GREEN" : "RED";
+            }
 
-    function submitData(val) {
-        history.push(val);
-        playTone(660, 0.1); 
-        document.getElementById('status').innerText = "DATA INJECTED...";
-        document.getElementById('inputGroup').classList.add('hidden');
-        document.getElementById('scanLine').style.display = 'block';
-    }
+            // Special handling for 0 and 5 (Violet)
+            if(last.n === 0 || last.n === 5) {
+                predSize = "BIG"; // After violet usually trend goes Big in your photos
+                predColor = "RED";
+            }
 
-    function runAnalysis() {
-        playTone(1200, 0.2, 'sawtooth');
-        setTimeout(() => playTone(1500, 0.3, 'sawtooth'), 200);
-
-        const resDiv = document.getElementById('res');
-        const status = document.getElementById('status');
-        
-        status.innerText = "PATTERN DECRYPTED";
-        let last = history[history.length - 1];
-        
-        // Random bias with history logic
-        let prediction = (Math.random() > 0.5) ? 'BIG' : 'SMALL';
-        
-        resDiv.innerText = prediction;
-        resDiv.style.color = (prediction === 'BIG' ? '#ffcc00' : '#00ff41');
-    }
-
-    function resetUI() {
-        document.getElementById('res').innerText = "---";
-        document.getElementById('status').innerText = "SYSTEM READY";
-        document.getElementById('scanLine').style.display = 'none';
-        playTone(200, 0.2);
+            out.innerText = predSize + " (" + predColor + ")";
+            out.style.color = predColor === "RED" ? "#ff4757" : "#2ed573";
+            status.innerText = "PATTERN MATCHED!";
+        }, 1200);
     }
 </script>
 
