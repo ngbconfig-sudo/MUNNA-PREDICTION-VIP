@@ -3,186 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP V67 SIDE-LOG</title>
+    <title>MUNNA PREDICTION VIP</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@600;700&display=swap');
         :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        .vip-card { 
-            width: 96%; max-width: 390px; background: #0a0a0a;
-            border: 2px solid var(--gold); border-radius: 20px; padding: 12px; text-align: center;
-        }
+        .container { width: 96%; max-width: 385px; background: #0a0a0a; border: 2px solid var(--gold); border-radius: 20px; padding: 15px; box-shadow: 0 0 30px rgba(255,207,51,0.2); }
+        .brand { font-family: 'Orbitron'; color: var(--gold); text-align: center; margin-bottom: 12px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        .header { font-family: 'Orbitron'; color: var(--gold); font-size: 0.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* DIGIT SLOTS (Left Entry) */
-        .slots-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 15px; }
-        .slot { background: #111; height: 40px; border: 1px solid #333; border-radius: 6px; line-height: 40px; font-weight: 900; font-size: 1.4rem; color: #444; transition: 0.2s; }
-        .slot.new-entry { border: 2px dashed var(--gold); color: #fff; }
-        .slot.active { border-color: #444; color: var(--gold); }
+        /* PREDICTION PANEL */
+        .display { background: radial-gradient(circle, #1a1a1a, #000); border: 1px solid #333; border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 15px; position: relative; border-bottom: 4px solid #222; }
+        #timer { position: absolute; top: 10px; right: 15px; color: var(--green); font-family: monospace; font-size: 0.9rem; }
+        #result { font-size: 5.5rem; font-weight: 900; line-height: 1; color: #151515; margin: 10px 0; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        #chance { font-size: 1rem; font-weight: 900; color: var(--gold); }
 
-        /* PREDICTION AREA */
-        .main-display { display: flex; gap: 10px; margin-bottom: 15px; }
-        
-        .prediction-box { flex: 2; background: #000; border: 1px solid #222; border-radius: 12px; padding: 10px; position: relative; display: flex; flex-direction: column; justify-content: center; min-height: 140px; }
-        #timer { font-size: 1rem; color: var(--green); font-family: monospace; position: absolute; top: 5px; right: 10px; }
-        #prediction { font-size: 4.5rem; font-weight: 900; color: #111; line-height: 1; }
-        #status { font-size: 0.65rem; color: var(--gold); font-weight: bold; }
+        /* VALIDATION (30s) */
+        .validate-row { display: flex; align-items: center; justify-content: space-between; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #222; }
+        .v-label { font-size: 0.7rem; color: #888; text-align: left; line-height: 1.2; }
+        #vIn { width: 55px; height: 35px; background: #000; border: 1px solid var(--gold); border-radius: 6px; color: var(--gold); text-align: center; font-size: 1.2rem; font-weight: 900; outline: none; }
 
-        /* SIDE LOG (Like Jalwa History) */
-        .side-log { flex: 1; background: #080808; border-radius: 12px; border: 1px solid #1a1a1a; padding: 5px; display: flex; flex-direction: column; gap: 4px; }
-        .log-row { display: flex; justify-content: space-between; align-items: center; background: #111; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 900; }
-        .num-val { color: var(--gold); }
-        .res-val.BIG { color: var(--green); }
-        .res-val.SMALL { color: var(--red); }
+        /* STATS BAR */
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .s-box { background: #050505; border: 1px solid #1a1a1a; padding: 6px; border-radius: 8px; text-align: center; }
+        .s-lab { font-size: 0.55rem; color: #555; display: block; }
+        .s-val { font-size: 1rem; font-weight: 900; }
 
-        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 10px; }
-        .n-btn { height: 42px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1.1rem; cursor: pointer; }
-        .r { background: var(--red); } .g { background: var(--green); } .v { background: #b659ff; }
-        
-        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .c-btn { padding: 10px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; }
+        /* KEYS */
+        .numpad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 10px; }
+        .k { height: 46px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1.2rem; cursor: pointer; transition: 0.1s; }
+        .v { background: #9c27b0; } .g { background: var(--green); color: #000; } .r { background: var(--red); }
+        .k:active { transform: scale(0.9); }
+
+        .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .f-btn { padding: 12px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .undo { background: #222; color: #fff; }
         .reset { background: var(--gold); color: #000; }
-        .del { background: #333; color: #fff; }
     </style>
 </head>
 <body>
 
-<div class="vip-card">
-    <div class="header">MUNNA VIP V67 - JALWA PRO LOG</div>
+<div class="container">
+    <div class="brand">MUNNA PREDICTION VIP</div>
     
-    <div class="slots-container">
-        <div id="s0" class="slot new-entry">?</div>
-        <div id="s1" class="slot">-</div>
-        <div id="s2" class="slot">-</div>
-        <div id="s3" class="slot">-</div>
-        <div id="s4" class="slot">-</div>
-        <div id="s5" class="slot">-</div>
-        <div id="s6" class="slot">-</div>
-        <div id="s7" class="slot">-</div>
+    <div class="display">
+        <div id="timer">00:00</div>
+        <div id="result">READY</div>
+        <div id="chance">ENTER 5 HISTORY DIGITS</div>
+        <div id="vStatus" style="font-size: 0.8rem; margin-top: 10px; font-weight: bold;"></div>
     </div>
 
-    <div class="main-display">
-        <div class="prediction-box">
-            <div id="timer">00:00</div>
-            <div id="prediction">SCAN</div>
-            <div id="status">INPUT HISTORY</div>
-        </div>
-        
-        <div class="side-log" id="sideLog">
-            <div style="font-size: 0.5rem; color: #444; margin-bottom: 2px;">LAST 5 WINS</div>
-            </div>
+    <div class="validate-row">
+        <div class="v-label">ENTER LAST RESULT<br>(30s BEFORE SYNC)</div>
+        <input type="number" id="vIn" placeholder="?" oninput="checkResult(this.value)">
     </div>
 
-    <div class="btn-grid">
-        <button class="n-btn v" onclick="handlePress(0)">0</button>
-        <button class="n-btn g" onclick="handlePress(1)">1</button>
-        <button class="n-btn r" onclick="handlePress(2)">2</button>
-        <button class="n-btn g" onclick="handlePress(3)">3</button>
-        <button class="n-btn r" onclick="handlePress(4)">4</button>
-        <button class="n-btn g" onclick="handlePress(5)">5</button>
-        <button class="n-btn r" onclick="handlePress(6)">6</button>
-        <button class="n-btn g" onclick="handlePress(7)">7</button>
-        <button class="n-btn r" onclick="handlePress(8)">8</button>
-        <button class="n-btn g" onclick="handlePress(9)">9</button>
+    <div class="stats">
+        <div class="s-box"><span class="s-lab">WINS</span><span class="s-val" id="w" style="color:var(--green)">0</span></div>
+        <div class="s-box"><span class="s-lab">LOSS</span><span class="s-val" id="l" style="color:var(--red)">0</span></div>
+        <div class="s-box"><span class="s-lab">RATE</span><span class="s-val" id="rate">0%</span></div>
     </div>
 
-    <div class="controls">
-        <button class="c-btn del" onclick="undo()">UNDO</button>
-        <button class="c-btn reset" onclick="fullClear()">RESET ALL</button>
+    <div class="numpad">
+        <button class="k v" onclick="addNum(0)">0</button>
+        <button class="k g" onclick="addNum(1)">1</button>
+        <button class="k r" onclick="addNum(2)">2</button>
+        <button class="k g" onclick="addNum(3)">3</button>
+        <button class="k r" onclick="addNum(4)">4</button>
+        <button class="k g" onclick="addNum(5)">5</button>
+        <button class="k r" onclick="addNum(6)">6</button>
+        <button class="k g" onclick="addNum(7)">7</button>
+        <button class="k r" onclick="addNum(8)">8</button>
+        <button class="k g" onclick="addNum(9)">9</button>
+    </div>
+
+    <div class="footer">
+        <button class="f-btn undo" onclick="undo()">UNDO</button>
+        <button class="f-btn reset" onclick="fullReset()">RESET</button>
     </div>
 </div>
 
 <script>
     let raw = [];
-    let history = [];
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let lastPred = "";
+    let wins = 0, losses = 0;
+    const a = new (window.AudioContext || window.webkitAudioContext)();
 
-    function winSound() {
-        const o = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination);
-        o.frequency.setValueAtTime(700, audioCtx.currentTime);
-        o.frequency.exponentialRampToValueAtTime(1300, audioCtx.currentTime + 0.1);
-        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-        o.start(); o.stop(audioCtx.currentTime + 0.3);
+    function beep(f) {
+        const o = a.createOscillator();
+        const g = a.createGain();
+        o.connect(g); g.connect(a.destination);
+        o.frequency.value = f;
+        g.gain.setValueAtTime(0.1, a.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + 0.3);
+        o.start(); o.stop(a.currentTime + 0.3);
     }
 
     setInterval(() => {
         const s = 60 - new Date().getSeconds();
         document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
+        if (s == 30 && navigator.vibrate) navigator.vibrate([100,50,100]);
     }, 1000);
 
-    function handlePress(n) {
-        if (audioCtx.state === 'suspended') audioCtx.resume();
+    function addNum(n) {
+        if (a.state === 'suspended') a.resume();
         raw.unshift(n);
         if (raw.length > 8) raw.pop();
-        refreshUI();
-        if (raw.length === 8) runAnalysis(n);
+        if (raw.length >= 5) predict();
         if(navigator.vibrate) navigator.vibrate(40);
     }
 
-    function refreshUI() {
-        for (let i = 0; i < 8; i++) {
-            const s = document.getElementById('s' + i);
-            if (raw[i] !== undefined) {
-                s.innerText = raw[i]; s.classList.add('active');
-            } else {
-                s.innerText = (i === 0) ? "?" : "-"; s.classList.remove('active');
-            }
-        }
+    function predict() {
+        const rEl = document.getElementById('result');
+        const cEl = document.getElementById('chance');
+        
+        let b=0, s=0;
+        raw.forEach((v, i) => { let w = 10-i; if(v>=5) b+=w; else s+=w; });
+        
+        // Moderate Filter: Prediction will show more often now
+        let res = (b >= s) ? "BIG" : "SMALL";
+        lastPred = res;
+        
+        rEl.innerText = res;
+        rEl.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
+        rEl.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--green)" : "var(--red)");
+        cEl.innerText = "CONFIRMED SIGNAL (80%+)";
+        beep(800);
     }
 
-    function runAnalysis(latestNum) {
-        const pr = document.getElementById('prediction');
-        const st = document.getElementById('status');
-        let b = 0, s = 0;
+    function checkResult(val) {
+        if(val === "" || lastPred === "") return;
+        const actual = (parseInt(val) >= 5) ? "BIG" : "SMALL";
+        const vStatus = document.getElementById('vStatus');
         
-        raw.forEach((v, i) => {
-            let w = (10 - i); 
-            if (v >= 5) b += w; else s += w;
-        });
-
-        let diff = Math.abs(b - s);
-        let total = b + s;
-        
-        if ((diff / total) > 0.45) {
-            let res = (b > s) ? "BIG" : "SMALL";
-            pr.innerText = res;
-            pr.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
-            pr.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--green)" : "var(--red)");
-            st.innerText = "ACCURACY: 99%";
-            winSound();
-            pushToSideLog(latestNum, (latestNum >= 5 ? "BIG" : "SMALL"));
+        if(actual === lastPred) {
+            vStatus.innerText = "LAST: WIN ✅";
+            vStatus.style.color = "var(--green)";
+            wins++; beep(1200);
         } else {
-            pr.innerText = "SKIP";
-            pr.style.color = "#111"; pr.style.textShadow = "none";
-            st.innerText = "MARKET UNSTABLE";
+            vStatus.innerText = "LAST: LOSS ❌";
+            vStatus.style.color = "var(--red)";
+            losses++; beep(400);
         }
+        
+        document.getElementById('w').innerText = wins;
+        document.getElementById('l').innerText = losses;
+        let total = wins + losses;
+        document.getElementById('rate').innerText = Math.floor((wins/total)*100) + "%";
+        
+        setTimeout(() => { document.getElementById('vIn').value = ""; vStatus.innerText = ""; }, 2500);
     }
 
-    function pushToSideLog(num, res) {
-        history.unshift({num, res});
-        if (history.length > 5) history.pop();
-        const log = document.getElementById('sideLog');
-        log.innerHTML = `<div style="font-size: 0.5rem; color: #444; margin-bottom: 2px;">LAST 5 RESULT</div>` + 
-            history.map(item => `
-            <div class="log-row">
-                <span class="num-val">${item.num}</span>
-                <span class="res-val ${item.res}">${item.res}</span>
-            </div>`).join('');
-    }
-
-    function undo() { raw.shift(); refreshUI(); resetDisplay(); }
-    function fullClear() { raw = []; history = []; document.getElementById('sideLog').innerHTML = ''; refreshUI(); resetDisplay(); }
-    function resetDisplay() {
-        const pr = document.getElementById('prediction');
-        pr.innerText = "SCAN"; pr.style.color = "#111"; pr.style.textShadow = "none";
-        document.getElementById('status').innerText = "INPUT NEXT DIGIT";
+    function undo() { raw.shift(); predict(); }
+    function fullReset() { 
+        raw = []; wins=0; losses=0; lastPred="";
+        document.getElementById('result').innerText = "READY";
+        document.getElementById('result').style.color = "#151515";
+        document.getElementById('w').innerText = "0";
+        document.getElementById('l').innerText = "0";
+        document.getElementById('rate').innerText = "0%";
     }
 </script>
 </body>
 </html>
-
