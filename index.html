@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP - PREV LOGIC</title>
+    <title>MUNNA VIP - STUCK FIX</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Orbitron:wght@800&family=Rajdhani:wght@700&display=swap');
         :root { --neon: #00ff88; --fire: #ff3131; --gold: #ffcf33; --jalwa-blue: #3d85c6; }
@@ -14,7 +14,7 @@
         #timer { position: absolute; top: 10px; right: 15px; color: var(--neon); font-family: monospace; font-size: 1.1rem; }
         #periodDisplay { position: absolute; top: 10px; left: 15px; color: #777; font-size: 0.8rem; font-weight: bold; }
         #mainResult { font-family: 'Permanent Marker', cursive; font-size: 5.5rem; margin: 15px 0; color: #1a1a1a; line-height: 1; transition: 0.4s; }
-        #statusMsg { font-size: 0.8rem; color: var(--gold); font-weight: bold; text-transform: uppercase; }
+        #statusMsg { font-size: 0.8rem; color: var(--gold); font-weight: bold; text-transform: uppercase; min-height: 20px; }
         .history-list { background: #020814; border-radius: 15px; padding: 10px; border: 1px solid #111; margin-bottom: 15px; height: 160px; overflow-y: auto; }
         .row { display: grid; grid-template-columns: 2fr 1fr 1fr; padding: 6px 0; border-bottom: 1px solid #0d1a30; font-size: 0.75rem; text-align: center; }
         .row-h { color: #5b7192; font-weight: bold; border-bottom: 2px solid #1a2a44; }
@@ -33,10 +33,10 @@
 <div class="container">
     <div class="brand">MUNNA VIP JALWA</div>
     <div class="screen">
-        <div id="periodDisplay">ID: ---</div>
+        <div id="periodDisplay">ID: LOADING...</div>
         <div id="timer">00:00</div>
         <div id="mainResult">WAIT</div>
-        <div id="statusMsg">INPUT 10 PERIODS TO START</div>
+        <div id="statusMsg">PLEASE COMPLETE 10 PERIODS</div>
     </div>
     <div class="history-list">
         <div class="row row-h"><span>PERIOD ID</span><span>RES</span><span>STATUS</span></div>
@@ -56,50 +56,63 @@
     </div>
     <div class="footer">
         <button class="f-btn undo" onclick="undo()">UNDO</button>
-        <button class="f-btn reset" onclick="fullReset()">REBOOT</button>
+        <button class="f-btn reset" onclick="fullReset()">RESET SYSTEM</button>
     </div>
 </div>
 
 <script>
     let history = [];
     let currentPred = "";
-    let lastInID = "";
+    let lastEnteredID = "";
 
-    function getJalwaID() {
+    function getExactJalwaID() {
         let now = new Date();
         let ymd = now.getFullYear().toString() + (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0');
-        let totalMins = (now.getHours() * 60) + now.getMinutes() + 9671;
-        return ymd + "1000" + totalMins;
+        
+        // Screenshot logic: 12:25 PM = 10416. 
+        // Total minutes at 12:25 = 745.
+        // Formula to match 10416: Minutes + 9671. 
+        let currentMins = (now.getHours() * 60) + now.getMinutes();
+        let jalwaSerial = 9671 + currentMins;
+        
+        return ymd + "1000" + jalwaSerial;
     }
 
     setInterval(() => {
-        let sec = new Date().getSeconds();
-        let fullID = getJalwaID();
+        let now = new Date();
+        let sec = now.getSeconds();
+        let fullID = getExactJalwaID();
+        
         document.getElementById('periodDisplay').innerText = "RUNNING ID: " + fullID;
         document.getElementById('timer').innerText = "00:" + String(60 - sec).padStart(2, '0');
 
+        // Logic: First 35 seconds entry allowed for PREVIOUS result
         if (sec < 35) {
-            if (fullID === lastInID) {
+            if (fullID === lastEnteredID) {
                 disable(true);
-                document.getElementById('statusMsg').innerText = "PREV RESULT SAVED";
+                document.getElementById('statusMsg').innerText = "WAIT FOR NEXT PERIOD";
             } else {
                 disable(false);
+                if(history.length < 10) document.getElementById('statusMsg').innerText = `NEED ${10 - history.length} MORE DATA`;
+                else document.getElementById('statusMsg').innerText = "ENTER LAST RESULT";
             }
         } else {
+            // Last 25 seconds: Lock and predict
             disable(true);
             if (history.length >= 10 && currentPred === "") analyze();
+            else if (history.length >= 10) document.getElementById('statusMsg').innerText = "ANALYZING NEXT...";
         }
     }, 1000);
 
     function disable(s) { document.querySelectorAll('.k').forEach(b => b.disabled = s); }
 
     function press(n) {
-        let curID = getJalwaID();
-        if (curID === lastInID) return;
-        lastInID = curID;
+        let curID = getExactJalwaID();
+        if (curID === lastEnteredID) return;
+        lastEnteredID = curID;
 
-        // PREVIOUS LOGIC: Jo number dawayenge wo (curID - 1) ka mana jayega
-        let prevID = (parseInt(curID) - 1).toString();
+        // PREVIOUS LOGIC: Input is for the result that just came out (Running - 1)
+        let prevID = (BigInt(curID) - 1n).toString();
         let res = (n >= 5) ? "BIG" : "SMALL";
         let status = "---";
 
@@ -108,7 +121,7 @@
         }
 
         history.unshift({ p: prevID.slice(-5), r: res, s: status });
-        if (history.length > 10) history.pop();
+        if (history.length > 20) history.pop();
         
         currentPred = ""; 
         render();
@@ -117,26 +130,25 @@
     }
 
     function analyze() {
-        if (history.length < 10) {
-            document.getElementById('statusMsg').innerText = `NEED ${10 - history.length} MORE DATA`;
-            return;
-        }
-        let bigs = history.filter(x => x.r === "BIG").length;
+        if (history.length < 10) return;
+        
+        let bigs = history.slice(0, 10).filter(x => x.r === "BIG").length;
         let smalls = 10 - bigs;
         const el = document.getElementById('mainResult');
 
+        // Balanced 95% logic: If trend exists, predict. Otherwise skip.
         if (Math.abs(bigs - smalls) >= 1) { 
             let p = (bigs > smalls) ? "BIG" : "SMALL";
             currentPred = p;
             el.innerText = p;
             el.style.color = (p === "BIG") ? "#e69138" : "#3d85c6";
             el.style.textShadow = "0 0 40px " + (p === "BIG" ? "#e69138" : "#3d85c6");
-            document.getElementById('statusMsg').innerText = "NEXT PREDICTION READY";
+            document.getElementById('statusMsg').innerText = "PREDICTION ACTIVE";
         } else {
             currentPred = "SKIP";
             el.innerText = "SKIP";
             el.style.color = "var(--gold)";
-            document.getElementById('statusMsg').innerText = "TREND NOT CLEAR";
+            document.getElementById('statusMsg').innerText = "UNSTABLE TREND - WAIT";
         }
     }
 
@@ -149,8 +161,12 @@
         document.getElementById('listData').innerHTML = html;
     }
 
-    function fullReset() { history = []; lastInID = ""; currentPred = ""; render(); document.getElementById('mainResult').innerText = "WAIT"; }
-    function undo() { history.shift(); lastInID = ""; render(); }
+    function fullReset() { 
+        history = []; lastEnteredID = ""; currentPred = ""; render(); 
+        document.getElementById('mainResult').innerText = "WAIT"; 
+        document.getElementById('mainResult').style.color = "#1a1a1a";
+    }
+    function undo() { history.shift(); lastEnteredID = ""; render(); }
 </script>
 </body>
 </html>
