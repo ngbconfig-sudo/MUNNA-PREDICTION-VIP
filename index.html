@@ -3,32 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA PREDICTION VIP</title>
+    <title>MUNNA VIP - PREV LOGIC</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Orbitron:wght@800&family=Rajdhani:wght@700&display=swap');
-        :root { --neon: #00ff88; --fire: #ff3131; --gold: #ffcf33; --jalwa-orange: #e69138; --jalwa-blue: #3d85c6; }
+        :root { --neon: #00ff88; --fire: #ff3131; --gold: #ffcf33; --jalwa-blue: #3d85c6; }
         body { margin: 0; background: #010a1a; color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
         .container { width: 94%; max-width: 380px; background: #051125; border: 2px solid var(--jalwa-blue); border-radius: 30px; padding: 15px; box-shadow: 0 0 40px #000; }
-        
         .brand { font-family: 'Orbitron'; text-align: center; color: #fff; font-size: 1.3rem; margin-bottom: 15px; text-shadow: 0 0 10px var(--jalwa-blue); }
-
         .screen { background: radial-gradient(circle, #111, #000); border: 1px solid #1a2a44; border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 15px; position: relative; }
         #timer { position: absolute; top: 10px; right: 15px; color: var(--neon); font-family: monospace; font-size: 1.1rem; }
         #periodDisplay { position: absolute; top: 10px; left: 15px; color: #777; font-size: 0.8rem; font-weight: bold; }
-        
-        /* THE KHATARNAK FONT */
         #mainResult { font-family: 'Permanent Marker', cursive; font-size: 5.5rem; margin: 15px 0; color: #1a1a1a; line-height: 1; transition: 0.4s; }
         #statusMsg { font-size: 0.8rem; color: var(--gold); font-weight: bold; text-transform: uppercase; }
-
         .history-list { background: #020814; border-radius: 15px; padding: 10px; border: 1px solid #111; margin-bottom: 15px; height: 160px; overflow-y: auto; }
         .row { display: grid; grid-template-columns: 2fr 1fr 1fr; padding: 6px 0; border-bottom: 1px solid #0d1a30; font-size: 0.75rem; text-align: center; }
         .row-h { color: #5b7192; font-weight: bold; border-bottom: 2px solid #1a2a44; }
-
         .numpad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
         .k { height: 48px; border: none; border-radius: 10px; color: #fff; font-weight: 900; font-size: 1.3rem; cursor: pointer; transition: 0.1s; }
         .v { background: #9c27b0; } .g { background: #28a745; } .r { background: #dc3545; }
         .k:disabled { opacity: 0.1; filter: grayscale(1); }
-
         .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .f-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
         .undo { background: #1a2a44; color: #fff; }
@@ -39,19 +32,16 @@
 
 <div class="container">
     <div class="brand">MUNNA VIP JALWA</div>
-    
     <div class="screen">
         <div id="periodDisplay">ID: ---</div>
         <div id="timer">00:00</div>
         <div id="mainResult">WAIT</div>
         <div id="statusMsg">INPUT 10 PERIODS TO START</div>
     </div>
-
     <div class="history-list">
         <div class="row row-h"><span>PERIOD ID</span><span>RES</span><span>STATUS</span></div>
         <div id="listData"></div>
     </div>
-
     <div class="numpad">
         <button class="k v" onclick="press(0)">0</button>
         <button class="k g" onclick="press(1)">1</button>
@@ -64,7 +54,6 @@
         <button class="k r" onclick="press(8)">8</button>
         <button class="k g" onclick="press(9)">9</button>
     </div>
-
     <div class="footer">
         <button class="f-btn undo" onclick="undo()">UNDO</button>
         <button class="f-btn reset" onclick="fullReset()">REBOOT</button>
@@ -76,13 +65,9 @@
     let currentPred = "";
     let lastInID = "";
 
-    // JALWA 1-MIN FORMULA: 12:25 PM = 10416
     function getJalwaID() {
         let now = new Date();
         let ymd = now.getFullYear().toString() + (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0');
-        
-        // Base: 12:25 (745 mins from midnight) -> Target 10416
-        // Difference = 10416 - 745 = 9671
         let totalMins = (now.getHours() * 60) + now.getMinutes() + 9671;
         return ymd + "1000" + totalMins;
     }
@@ -90,15 +75,13 @@
     setInterval(() => {
         let sec = new Date().getSeconds();
         let fullID = getJalwaID();
-        
-        document.getElementById('periodDisplay').innerText = "ID: " + fullID;
+        document.getElementById('periodDisplay').innerText = "RUNNING ID: " + fullID;
         document.getElementById('timer').innerText = "00:" + String(60 - sec).padStart(2, '0');
 
-        // Logic: Input only in first 30s
-        if (sec < 30) {
+        if (sec < 35) {
             if (fullID === lastInID) {
                 disable(true);
-                document.getElementById('statusMsg').innerText = "RESULT SAVED. WAIT NEXT.";
+                document.getElementById('statusMsg').innerText = "PREV RESULT SAVED";
             } else {
                 disable(false);
             }
@@ -115,13 +98,16 @@
         if (curID === lastInID) return;
         lastInID = curID;
 
+        // PREVIOUS LOGIC: Jo number dawayenge wo (curID - 1) ka mana jayega
+        let prevID = (parseInt(curID) - 1).toString();
         let res = (n >= 5) ? "BIG" : "SMALL";
         let status = "---";
+
         if (currentPred !== "" && currentPred !== "SKIP") {
             status = (res === currentPred) ? "WIN ✅" : "LOSS ❌";
         }
 
-        history.unshift({ p: curID.slice(-5), r: res, s: status });
+        history.unshift({ p: prevID.slice(-5), r: res, s: status });
         if (history.length > 10) history.pop();
         
         currentPred = ""; 
@@ -135,25 +121,22 @@
             document.getElementById('statusMsg').innerText = `NEED ${10 - history.length} MORE DATA`;
             return;
         }
-        
         let bigs = history.filter(x => x.r === "BIG").length;
         let smalls = 10 - bigs;
-        let last3 = history.slice(0, 3).filter(x => x.r === "BIG").length;
-
         const el = document.getElementById('mainResult');
-        // Optimized 95% Logic: More signal, less skip
+
         if (Math.abs(bigs - smalls) >= 1) { 
-            let p = (bigs > smalls || (bigs == smalls && last3 >= 2)) ? "BIG" : "SMALL";
+            let p = (bigs > smalls) ? "BIG" : "SMALL";
             currentPred = p;
             el.innerText = p;
-            el.style.color = (p === "BIG") ? "var(--jalwa-orange)" : "var(--jalwa-blue)";
-            el.style.textShadow = "0 0 40px " + (p === "BIG" ? "var(--jalwa-orange)" : "var(--jalwa-blue)");
-            document.getElementById('statusMsg').innerText = "JALWA TREND DETECTED";
+            el.style.color = (p === "BIG") ? "#e69138" : "#3d85c6";
+            el.style.textShadow = "0 0 40px " + (p === "BIG" ? "#e69138" : "#3d85c6");
+            document.getElementById('statusMsg').innerText = "NEXT PREDICTION READY";
         } else {
             currentPred = "SKIP";
             el.innerText = "SKIP";
             el.style.color = "var(--gold)";
-            document.getElementById('statusMsg').innerText = "WAITING FOR TREND";
+            document.getElementById('statusMsg').innerText = "TREND NOT CLEAR";
         }
     }
 
