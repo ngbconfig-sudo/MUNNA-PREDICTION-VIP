@@ -1,146 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KING GAMES PRO</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empire Mods - Audio Predictor</title>
     <style>
-        :root {
-            --bg-deep: #020a1a; --card-bg: #051125; --cyan: #00e5ff;
-            --green: #28a745; --red: #dc3545; --violet: #9c27b0;
-            --orange: #ff9900; --text-dim: #5b7192;
-        }
-        body { margin: 0; background: var(--bg-deep); color: white; font-family: sans-serif; overflow-x: hidden; }
-        .screen { display: none; padding: 15px; padding-bottom: 80px; }
-        .screen.active { display: block; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
+        body { background: #02050a; color: #00ff41; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
         
-        /* WALLET & TIMER STYLE */
-        .wallet-card { background: linear-gradient(135deg, #051125, #0a1f3d); border-radius: 20px; padding: 20px; border: 1px solid #1a2a44; margin-bottom: 15px; text-align: center;}
-        .wingo-timer-card { background: linear-gradient(to right, #40ffaa33, #00e5ff33); border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--cyan); margin-bottom: 15px; }
-        .timer-box { background: #000; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-size: 1.2rem; border: 1px solid #333; color: var(--cyan); }
-
-        /* BUTTONS */
-        .bet-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        .btn-big { background: var(--orange); height: 50px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
-        .btn-small { background: var(--cyan); height: 50px; border-radius: 10px; border: none; color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
+        .main-card { width: 95%; max-width: 380px; background: rgba(10, 20, 35, 0.95); border-radius: 20px; padding: 25px; border: 1px solid #00ff41; box-shadow: 0 0 20px #00ff4133; position: relative; }
         
-        /* LIVE LIST */
-        .live-list { background: var(--card-bg); border-radius: 15px; padding: 10px; height: 150px; overflow: hidden; border: 1px solid #111; }
-        .log-row { display: flex; justify-content: space-between; font-size: 0.75rem; padding: 5px 0; border-bottom: 1px solid #0d1a30; animation: slideUp 0.5s ease; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .scanner { width: 100%; height: 2px; background: #00ff41; position: absolute; top: 0; left: 0; box-shadow: 0 0 15px #00ff41; animation: scan 4s linear infinite; display: none; z-index: 10; }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-        /* NAV */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--card-bg); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #1a2a44; }
-        .nav-item { text-align: center; color: var(--text-dim); font-size: 0.6rem; }
-        .nav-item.active { color: var(--cyan); }
+        .header h2 { text-align: center; color: #fff; text-shadow: 0 0 10px #00ff41; letter-spacing: 3px; }
+        
+        .timer-box { display: flex; justify-content: space-between; padding: 15px; background: #000; border: 1px solid #333; margin: 15px 0; border-radius: 10px; }
+        #timer { font-size: 24px; color: #ff3e3e; font-weight: bold; }
+
+        .display { background: #000; height: 160px; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px inset #00ff41; margin-bottom: 20px; position: relative; }
+        .res-val { font-size: 50px; font-weight: bold; text-shadow: 0 0 20px currentColor; }
+        
+        .btn-row { display: flex; gap: 10px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
+        .btn-b { background: #ffcc00; color: #000; }
+        .btn-s { background: #00ff41; color: #000; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        #startBtn { width: 100%; padding: 10px; background: #555; color: white; border: none; margin-bottom: 10px; border-radius: 5px; cursor: pointer; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div id="home" class="screen active">
-        <div class="wallet-card">
-            <div style="color:var(--text-dim)">Available Balance</div>
-            <div id="balanceDisplay" style="font-size: 2rem; font-weight: bold; margin: 10px 0;">₹500.00</div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <button style="background:var(--green); border:none; padding:10px; border-radius:20px; color:white; font-weight:bold;">Deposit</button>
-                <button style="background:var(--red); border:none; padding:10px; border-radius:20px; color:white; font-weight:bold;">Withdraw</button>
-            </div>
-        </div>
-
-        <div class="wingo-timer-card">
-            <div><div style="font-size:0.7rem">WinGo 1 Min</div><div id="periodID" style="font-weight:bold">202603241000...</div></div>
-            <div class="timer-box" id="timer">00:60</div>
-        </div>
-
-        <div class="bet-btns">
-            <button class="btn-big" onclick="placeBet('BIG')">BIG</button>
-            <button class="btn-small" onclick="placeBet('SMALL')">SMALL</button>
-        </div>
-
-        <div style="font-size:0.8rem; margin-bottom:10px; color:var(--cyan)">Live Betting Information</div>
-        <div class="live-list" id="betLogs"></div>
+<div class="main-card">
+    <button id="startBtn" onclick="initAudio()">TAP TO ACTIVATE AUDIO SYSTEM</button>
+    <div id="scanLine" class="scanner"></div>
+    
+    <div class="header">
+        <h2>EMPIRE AI</h2>
+        <p style="text-align:center; font-size:10px; color:#00ff41;">VIRTUAL HACK ACTIVE</p>
     </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item"><i class="fa-solid fa-house"></i><br>Home</div>
-        <div class="nav-item active"><i class="fa-solid fa-gamepad"></i><br>WinGo</div>
-        <div class="nav-item"><i class="fa-solid fa-user"></i><br>Account</div>
+    <div class="timer-box">
+        <div>PERIOD: <span id="pNum">...001</span></div>
+        <div id="timer">00:60</div>
     </div>
+
+    <div class="display">
+        <div id="status" style="font-size: 10px; margin-bottom: 5px;">SYSTEM READY</div>
+        <div id="res" class="res-val">---</div>
+    </div>
+
+    <div id="inputGroup">
+        <div class="btn-row">
+            <button class="btn btn-b" onclick="submitData('BIG')">BIG</button>
+            <button class="btn btn-s" onclick="submitData('SMALL')">SMALL</button>
+        </div>
+    </div>
+</div>
 
 <script>
-    let balance = 500.00;
-    let pool = { BIG: 0, SMALL: 0 };
-    let userBet = { side: "", amount: 0 };
+    let timeLeft = 60;
+    let history = [];
+    let audioCtx = null;
 
-    // 1. TIMER & SYNC
-    function startTimer() {
-        let sec = 60;
-        setInterval(() => {
-            sec--;
-            if (sec < 0) { 
-                calculateWinner(); // Round Over
-                sec = 60; 
-            }
-            document.getElementById('timer').innerText = "00:" + (sec < 10 ? "0" + sec : sec);
-            if (sec % 3 === 0) addFakeBet(); // Fake betting feeling
-        }, 1000);
+    // Audio functions
+    function initAudio() {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        document.getElementById('startBtn').classList.add('hidden');
+        playTone(440, 0.1); // Start beep
     }
 
-    // 2. BETTING LOGIC
-    function placeBet(side) {
-        let amt = prompt("Enter Bet Amount (Min ₹10):", "10");
-        amt = parseInt(amt);
-        if (amt >= 10 && balance >= amt) {
-            balance -= amt;
-            userBet = { side: side, amount: amt };
-            pool[side] += amt; // Add to logic
-            updateUI();
-            alert(`Bet Placed on ${side}!`);
-        } else { alert("Check balance or amount!"); }
+    function playTone(freq, duration, type = 'sine') {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
     }
 
-    // 3. PROFIT MANAGEMENT LOGIC (LOW MONEY WINS)
-    function calculateWinner() {
-        let winner = "";
-        // Jidhar kam paisa laga hai, wahi BIG/SMALL aayega
-        if (pool.BIG < pool.SMALL) { winner = "BIG"; } 
-        else if (pool.SMALL < pool.BIG) { winner = "SMALL"; } 
-        else { winner = Math.random() > 0.5 ? "BIG" : "SMALL"; }
-
-        if (userBet.side === winner) {
-            let winAmt = userBet.amount * 1.98;
-            balance += winAmt;
-            alert(`RESULT: ${winner}\nCONGRATS! You won ₹${winAmt.toFixed(2)}`);
-        } else if (userBet.side !== "") {
-            alert(`RESULT: ${winner}\nBetter luck next time!`);
+    // Prediction Logic
+    setInterval(() => {
+        if(timeLeft > 0) {
+            timeLeft--;
+        } else {
+            timeLeft = 60;
+            resetUI();
         }
 
-        // Reset for next round
-        pool = { BIG: Math.floor(Math.random() * 500), SMALL: Math.floor(Math.random() * 500) }; 
-        userBet = { side: "", amount: 0 };
-        updateUI();
+        document.getElementById('timer').innerText = `00:${timeLeft < 10 ? '0' + timeLeft : timeLeft}`;
+
+        // Sound on critical time
+        if(timeLeft === 30) playTone(880, 0.5, 'square'); 
+        
+        if(timeLeft <= 30) {
+            document.getElementById('inputGroup').classList.add('hidden');
+            if(history.length > 0 && timeLeft === 29) runAnalysis();
+        } else {
+            document.getElementById('inputGroup').classList.remove('hidden');
+        }
+    }, 1000);
+
+    function submitData(val) {
+        history.push(val);
+        playTone(660, 0.1); 
+        document.getElementById('status').innerText = "DATA INJECTED...";
+        document.getElementById('inputGroup').classList.add('hidden');
+        document.getElementById('scanLine').style.display = 'block';
     }
 
-    // 4. FAKE DATA LIST
-    function addFakeBet() {
-        const names = ["Mem***DTU", "Mem***HXL", "Mem***TFJ", "Mem***CJS"];
-        const sides = ["Big", "Small"];
-        const logs = document.getElementById('betLogs');
-        let row = `<div class="log-row">
-            <span>${names[Math.floor(Math.random()*4)]}</span>
-            <span style="color:var(--cyan)">${sides[Math.floor(Math.random()*2)]}</span>
-            <span style="color:var(--green)">+₹${(Math.random()*500).toFixed(2)}</span>
-        </div>`;
-        logs.innerHTML = row + logs.innerHTML;
+    function runAnalysis() {
+        playTone(1200, 0.2, 'sawtooth');
+        setTimeout(() => playTone(1500, 0.3, 'sawtooth'), 200);
+
+        const resDiv = document.getElementById('res');
+        const status = document.getElementById('status');
+        
+        status.innerText = "PATTERN DECRYPTED";
+        let last = history[history.length - 1];
+        
+        // Random bias with history logic
+        let prediction = (Math.random() > 0.5) ? 'BIG' : 'SMALL';
+        
+        resDiv.innerText = prediction;
+        resDiv.style.color = (prediction === 'BIG' ? '#ffcc00' : '#00ff41');
     }
 
-    function updateUI() {
-        document.getElementById('balanceDisplay').innerText = "₹" + balance.toFixed(2);
+    function resetUI() {
+        document.getElementById('res').innerText = "---";
+        document.getElementById('status').innerText = "SYSTEM READY";
+        document.getElementById('scanLine').style.display = 'none';
+        playTone(200, 0.2);
     }
-
-    window.onload = () => { startTimer(); updateUI(); };
 </script>
+
 </body>
 </html>
 
