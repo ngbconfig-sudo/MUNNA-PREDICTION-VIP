@@ -3,130 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DRAGON V1 - BALANCED</title>
+    <title>MUNNA PREDICTION VIP</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@600;700&display=swap');
-        :root { --dragon: #00ff88; --fire: #ff3131; --gold: #ffcf33; --bg: #000; }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { width: 94%; max-width: 380px; background: #0a0a0a; border: 2px solid var(--dragon); border-radius: 20px; padding: 15px; box-shadow: 0 0 30px rgba(0,255,136,0.2); }
-        .brand { font-family: 'Orbitron'; color: var(--dragon); text-align: center; font-size: 1.3rem; margin-bottom: 15px; letter-spacing: 2px; }
+        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Orbitron:wght@900&family=Rajdhani:wght@600;700&display=swap');
+        
+        :root {
+            --neon-green: #00ff88;
+            --neon-red: #ff3131;
+            --neon-gold: #ffcf33;
+            --bg-dark: #050505;
+        }
 
-        .display { background: radial-gradient(circle, #111, #000); border: 1px solid #222; border-radius: 15px; padding: 30px; text-align: center; margin-bottom: 15px; position: relative; }
-        #timer { position: absolute; top: 10px; right: 15px; color: var(--dragon); font-family: monospace; font-size: 0.9rem; }
-        #result { font-size: 5.5rem; font-weight: 900; margin: 10px 0; color: #151515; transition: 0.2s; }
-        #accuracy { font-size: 0.8rem; color: var(--gold); font-weight: bold; }
+        body {
+            margin: 0;
+            background: var(--bg-dark);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-        /* 10 History Slots */
-        .history-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
-        .h-slot { background: #050505; border: 1px solid #333; height: 32px; line-height: 32px; border-radius: 5px; text-align: center; font-size: 0.8rem; color: #555; }
-        .h-slot.active { color: var(--dragon); border-color: var(--dragon); font-weight: bold; }
+        .container {
+            width: 92%;
+            max-width: 380px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 3px solid var(--neon-green);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.3), inset 0 0 20px rgba(0, 255, 136, 0.1);
+            position: relative;
+        }
 
-        .keys { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
-        .k { height: 48px; border: none; border-radius: 10px; color: #fff; font-weight: 900; font-size: 1.4rem; cursor: pointer; }
-        .v { background: #9c27b0; } .g { background: var(--dragon); color: #000; } .r { background: var(--fire); }
-        .k:active { transform: scale(0.9); }
+        .brand-title {
+            font-family: 'Orbitron';
+            font-size: 1.5rem;
+            text-align: center;
+            color: var(--neon-green);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px var(--neon-green);
+        }
 
-        .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .f-btn { padding: 12px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
-        .undo { background: #222; color: #fff; }
-        .reset { background: var(--gold); color: #000; }
+        /* MAIN DISPLAY AREA */
+        .prediction-screen {
+            background: linear-gradient(145deg, #111, #000);
+            border: 2px solid #222;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: inset 0 0 15px #000;
+        }
+
+        #timer {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: var(--neon-gold);
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        #mainResult {
+            font-family: 'Permanent Marker', cursive; /* KHATARNAK FONT */
+            font-size: 4.5rem;
+            margin: 15px 0;
+            color: #1a1a1a;
+            transition: all 0.4s ease;
+        }
+
+        #statusMsg {
+            font-size: 0.85rem;
+            color: var(--neon-gold);
+            font-weight: 700;
+            text-transform: uppercase;
+            min-height: 20px;
+        }
+
+        /* HISTORY LIST TABLE */
+        .history-list {
+            background: #080808;
+            border-radius: 15px;
+            padding: 10px;
+            border: 1px solid #1a1a1a;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: hidden;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            padding: 6px 0;
+            border-bottom: 1px solid #111;
+            font-size: 0.8rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .row-head { color: #555; text-transform: uppercase; border-bottom: 2px solid #222; margin-bottom: 5px; }
+
+        /* NUMPAD */
+        .numpad {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .btn {
+            height: 50px;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 900;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 #000;
+        }
+
+        .btn-v { background: #9c27b0; }
+        .btn-g { background: var(--neon-green); color: #000; }
+        .btn-r { background: var(--neon-red); }
+        .btn:active { transform: translateY(3px); box-shadow: none; opacity: 0.7; }
+
+        .footer-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .f-action {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .undo-btn { background: #222; color: #fff; }
+        .reset-btn { background: var(--neon-gold); color: #000; }
+
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="brand">DRAGON V1 BALANCED</div>
+    <div class="brand-title">MUNNA VIP</div>
     
-    <div class="display">
+    <div class="prediction-screen">
         <div id="timer">00:00</div>
-        <div id="result">READY</div>
-        <div id="accuracy">INPUT 10 HISTORY DIGITS</div>
+        <div id="mainResult">WAIT</div>
+        <div id="statusMsg">COMPLETE 10 PERIODS BEFORE</div>
     </div>
 
-    <div class="history-grid" id="historyGrid">
-        <div id="h0" class="h-slot">-</div><div id="h1" class="h-slot">-</div><div id="h2" class="h-slot">-</div><div id="h3" class="h-slot">-</div><div id="h4" class="h-slot">-</div>
-        <div id="h5" class="h-slot">-</div><div id="h6" class="h-slot">-</div><div id="h7" class="h-slot">-</div><div id="h8" class="h-slot">-</div><div id="h9" class="h-slot">-</div>
+    <div class="history-list">
+        <div class="row row-head">
+            <span>PERIOD</span><span>RESULT</span><span>STATUS</span>
+        </div>
+        <div id="listData">
+            </div>
     </div>
 
-    <div class="keys">
-        <button class="k v" onclick="press(0)">0</button>
-        <button class="k g" onclick="press(1)">1</button>
-        <button class="k r" onclick="press(2)">2</button>
-        <button class="k g" onclick="press(3)">3</button>
-        <button class="k r" onclick="press(4)">4</button>
-        <button class="k g" onclick="press(5)">5</button>
-        <button class="k r" onclick="press(6)">6</button>
-        <button class="k g" onclick="press(7)">7</button>
-        <button class="k r" onclick="press(8)">8</button>
-        <button class="k g" onclick="press(9)">9</button>
+    <div class="numpad">
+        <button class="btn btn-v" onclick="inputData(0)">0</button>
+        <button class="btn btn-g" onclick="inputData(1)">1</button>
+        <button class="btn btn-r" onclick="inputData(2)">2</button>
+        <button class="btn btn-g" onclick="inputData(3)">3</button>
+        <button class="btn btn-r" onclick="inputData(4)">4</button>
+        <button class="btn btn-g" onclick="inputData(5)">5</button>
+        <button class="btn btn-r" onclick="inputData(6)">6</button>
+        <button class="btn btn-g" onclick="inputData(7)">7</button>
+        <button class="btn btn-r" onclick="inputData(8)">8</button>
+        <button class="btn btn-g" onclick="inputData(9)">9</button>
     </div>
 
-    <div class="footer">
-        <button class="f-btn undo" onclick="undo()">UNDO</button>
-        <button class="f-btn reset" onclick="fullReset()">RESET</button>
+    <div class="footer-btns">
+        <button class="f-action undo-btn" onclick="undo()">UNDO</button>
+        <button class="f-action reset-btn" onclick="fullReset()">RESET ALL</button>
     </div>
 </div>
 
 <script>
-    let raw = [];
+    let history = [];
+    let currentPrediction = "";
 
+    // Global Timer
     setInterval(() => {
         let s = 60 - new Date().getSeconds();
         document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
     }, 1000);
 
-    function press(n) {
-        if (raw.length >= 10) raw.pop(); 
-        raw.unshift(n); // Right shift logic
-        updateUI();
-        if (raw.length === 10) analyze();
-        else document.getElementById('accuracy').innerText = `NEED ${10 - raw.length} MORE`;
-        if(navigator.vibrate) navigator.vibrate(40);
-    }
-
-    function updateUI() {
-        for(let i=0; i<10; i++) {
-            let el = document.getElementById('h'+i);
-            el.innerText = raw[i] !== undefined ? raw[i] : "-";
-            if(raw[i] !== undefined) el.classList.add('active'); else el.classList.remove('active');
+    function inputData(num) {
+        let actualType = (num >= 5) ? "BIG" : "SMALL";
+        let period = "P-" + Math.floor(Math.random() * 900 + 100); // Dummy period ID
+        
+        let status = "---";
+        if(currentPrediction !== "" && currentPrediction !== "SKIP") {
+            status = (actualType === currentPrediction) ? "WIN ✅" : "LOSS ❌";
         }
+
+        // Add to history list
+        history.unshift({ p: period, r: actualType, s: status });
+        if (history.length > 10) history.pop();
+
+        updateView();
+        if(navigator.vibrate) navigator.vibrate(50);
     }
 
-    function analyze() {
-        const rEl = document.getElementById('result');
-        const aEl = document.getElementById('accuracy');
-        
-        // BALANCED 95% LOGIC
-        let bigs = raw.filter(x => x >= 5).length;
-        let smalls = 10 - bigs;
-        
-        // Weighted analysis: Last 3 numbers have 2x impact
-        let recentWeight = (raw[0] >= 5 ? 1 : -1) + (raw[1] >= 5 ? 1 : -1) + (raw[2] >= 5 ? 1 : -1);
-        let trendScore = (bigs - smalls) + (recentWeight * 2);
-        
-        // Skip only if trend is totally zero
-        if (Math.abs(trendScore) >= 2) { 
-            let res = (trendScore > 0) ? "BIG" : "SMALL";
-            rEl.innerText = res;
-            rEl.style.color = (res === "BIG") ? "var(--dragon)" : "var(--fire)";
-            rEl.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--dragon)" : "var(--fire)");
-            aEl.innerText = "CONFIRMED SIGNAL (95%)";
+    function updateView() {
+        // Update List UI
+        let html = "";
+        history.forEach(item => {
+            let color = item.s.includes("WIN") ? "var(--neon-green)" : (item.s.includes("LOSS") ? "var(--neon-red)" : "#fff");
+            html += `<div class="row">
+                <span>${item.p}</span><span>${item.r}</span><span style="color:${color}">${item.s}</span>
+            </div>`;
+        });
+        document.getElementById('listData').innerHTML = html;
+
+        // Prediction Logic
+        const resDisplay = document.getElementById('mainResult');
+        const statusDisplay = document.getElementById('statusMsg');
+
+        if (history.length < 10) {
+            resDisplay.innerText = "WAIT";
+            resDisplay.style.color = "#1a1a1a";
+            statusDisplay.innerText = `COMPLETE ${10 - history.length} MORE PERIODS`;
+            currentPrediction = "";
         } else {
-            rEl.innerText = "SKIP";
-            rEl.style.color = "var(--gold)";
-            rEl.style.textShadow = "none";
-            aEl.innerText = "WAIT FOR CLEAR TREND";
+            // 95% Balanced Pattern Logic
+            let bigCount = history.filter(x => x.r === "BIG").length;
+            let smallCount = 10 - bigCount;
+            let lastResult = history[0].r;
+
+            // Trend Sensing
+            let diff = Math.abs(bigCount - smallCount);
+            
+            if (diff >= 2) { 
+                let pred = (bigCount > smallCount) ? "BIG" : "SMALL";
+                currentPrediction = pred;
+                resDisplay.innerText = pred;
+                resDisplay.style.color = (pred === "BIG") ? "var(--neon-green)" : "var(--neon-red)";
+                resDisplay.style.textShadow = "0 0 30px " + (pred === "BIG" ? "var(--neon-green)" : "var(--neon-red)");
+                statusDisplay.innerText = "SIGNAL CONFIRMED (95%+)";
+            } else {
+                currentPrediction = "SKIP";
+                resDisplay.innerText = "SKIP";
+                resDisplay.style.color = "var(--neon-gold)";
+                resDisplay.style.textShadow = "none";
+                statusDisplay.innerText = "UNSTABLE TREND - SKIP NOW";
+            }
         }
     }
 
     function fullReset() {
-        raw = []; updateUI();
-        document.getElementById('result').innerText = "READY";
-        document.getElementById('result').style.color = "#151515";
-        document.getElementById('accuracy').innerText = "INPUT 10 HISTORY DIGITS";
+        history = [];
+        currentPrediction = "";
+        updateView();
     }
 
-    function undo() { raw.shift(); updateUI(); document.getElementById('result').innerText = "READY"; }
+    function undo() {
+        history.shift();
+        updateView();
+    }
 </script>
 </body>
 </html>
+
