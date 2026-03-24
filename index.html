@@ -3,31 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA VIP - SMART WALLET</title>
+    <title>DRAGON V1 - BALANCED</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@600;700&display=swap');
-        :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
+        :root { --dragon: #00ff88; --fire: #ff3131; --gold: #ffcf33; --bg: #000; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { width: 96%; max-width: 385px; background: #0a0a0a; border: 2px solid var(--gold); border-radius: 20px; padding: 15px; box-shadow: 0 0 30px rgba(255,207,51,0.2); }
-        .brand { font-family: 'Orbitron'; color: var(--gold); text-align: center; margin-bottom: 12px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .container { width: 94%; max-width: 380px; background: #0a0a0a; border: 2px solid var(--dragon); border-radius: 20px; padding: 15px; box-shadow: 0 0 30px rgba(0,255,136,0.2); }
+        .brand { font-family: 'Orbitron'; color: var(--dragon); text-align: center; font-size: 1.3rem; margin-bottom: 15px; letter-spacing: 2px; }
 
-        /* WALLET SYSTEM */
-        .wallet-section { background: #111; border: 1px solid #222; border-radius: 12px; padding: 12px; margin-bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .w-input { width: 90%; background: #000; border: 1px solid var(--gold); border-radius: 5px; color: var(--gold); padding: 5px; text-align: center; font-weight: bold; }
-        .target-box { color: var(--green); font-weight: 900; font-size: 0.9rem; border-left: 1px solid #333; padding-left: 10px; }
+        .display { background: radial-gradient(circle, #111, #000); border: 1px solid #222; border-radius: 15px; padding: 30px; text-align: center; margin-bottom: 15px; position: relative; }
+        #timer { position: absolute; top: 10px; right: 15px; color: var(--dragon); font-family: monospace; font-size: 0.9rem; }
+        #result { font-size: 5.5rem; font-weight: 900; margin: 10px 0; color: #151515; transition: 0.2s; }
+        #accuracy { font-size: 0.8rem; color: var(--gold); font-weight: bold; }
 
-        .display { background: radial-gradient(circle, #1a1a1a, #000); border: 1px solid #333; border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 15px; position: relative; border-bottom: 4px solid #222; }
-        #timer { position: absolute; top: 10px; right: 15px; color: var(--green); font-family: monospace; font-size: 0.9rem; }
-        #result { font-size: 5rem; font-weight: 900; line-height: 1; color: #151515; margin: 10px 0; transition: 0.3s; }
-        
-        .slots-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
-        .slot { background: #111; border: 1px solid #333; height: 35px; line-height: 35px; border-radius: 6px; text-align: center; color: var(--gold); font-weight: bold; font-size: 1.2rem; }
-        
-        .bet-advice { background: #111; border: 2px solid var(--green); padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 15px; font-weight: 900; color: #fff; font-size: 0.85rem; }
+        /* 10 History Slots */
+        .history-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
+        .h-slot { background: #050505; border: 1px solid #333; height: 32px; line-height: 32px; border-radius: 5px; text-align: center; font-size: 0.8rem; color: #555; }
+        .h-slot.active { color: var(--dragon); border-color: var(--dragon); font-weight: bold; }
 
-        .numpad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 10px; }
-        .k { height: 46px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1.2rem; cursor: pointer; }
-        .v { background: #9c27b0; } .g { background: var(--green); color: #000; } .r { background: var(--red); }
+        .keys { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
+        .k { height: 48px; border: none; border-radius: 10px; color: #fff; font-weight: 900; font-size: 1.4rem; cursor: pointer; }
+        .v { background: #9c27b0; } .g { background: var(--dragon); color: #000; } .r { background: var(--fire); }
         .k:active { transform: scale(0.9); }
 
         .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -39,135 +35,98 @@
 <body>
 
 <div class="container">
-    <div class="brand">MUNNA VIP - AUTO RECOVERY</div>
-
-    <div class="wallet-section">
-        <div>
-            <span style="font-size: 0.6rem; color: #888;">YOUR BALANCE:</span><br>
-            <input type="number" id="balance" class="w-input" value="1000" oninput="updateTarget()">
-        </div>
-        <div class="target-box">
-            <span style="font-size: 0.6rem; color: #888;">TARGET PROFIT:</span><br>
-            ₹<span id="targetVal">1500</span>
-        </div>
-    </div>
+    <div class="brand">DRAGON V1 BALANCED</div>
     
     <div class="display">
         <div id="timer">00:00</div>
-        <div id="result">SCAN</div>
-        <div id="vStatus" style="font-size: 0.7rem; margin-top: 10px; font-weight: bold; color: var(--gold);">ENTER 5 DIGITS TO START</div>
+        <div id="result">READY</div>
+        <div id="accuracy">INPUT 10 HISTORY DIGITS</div>
     </div>
 
-    <div class="slots-row">
-        <div id="s0" class="slot">-</div>
-        <div id="s1" class="slot">-</div>
-        <div id="s2" class="slot">-</div>
-        <div id="s3" class="slot">-</div>
-        <div id="s4" class="slot">-</div>
+    <div class="history-grid" id="historyGrid">
+        <div id="h0" class="h-slot">-</div><div id="h1" class="h-slot">-</div><div id="h2" class="h-slot">-</div><div id="h3" class="h-slot">-</div><div id="h4" class="h-slot">-</div>
+        <div id="h5" class="h-slot">-</div><div id="h6" class="h-slot">-</div><div id="h7" class="h-slot">-</div><div id="h8" class="h-slot">-</div><div id="h9" class="h-slot">-</div>
     </div>
 
-    <div class="bet-advice" id="advice">SET BALANCE & START SCAN</div>
-
-    <div class="numpad">
-        <button class="k v" onclick="addNum(0)">0</button>
-        <button class="k g" onclick="addNum(1)">1</button>
-        <button class="k r" onclick="addNum(2)">2</button>
-        <button class="k g" onclick="addNum(3)">3</button>
-        <button class="k r" onclick="addNum(4)">4</button>
-        <button class="k g" onclick="addNum(5)">5</button>
-        <button class="k r" onclick="addNum(6)">6</button>
-        <button class="k g" onclick="addNum(7)">7</button>
-        <button class="k r" onclick="addNum(8)">8</button>
-        <button class="k g" onclick="addNum(9)">9</button>
+    <div class="keys">
+        <button class="k v" onclick="press(0)">0</button>
+        <button class="k g" onclick="press(1)">1</button>
+        <button class="k r" onclick="press(2)">2</button>
+        <button class="k g" onclick="press(3)">3</button>
+        <button class="k r" onclick="press(4)">4</button>
+        <button class="k g" onclick="press(5)">5</button>
+        <button class="k r" onclick="press(6)">6</button>
+        <button class="k g" onclick="press(7)">7</button>
+        <button class="k r" onclick="press(8)">8</button>
+        <button class="k g" onclick="press(9)">9</button>
     </div>
 
     <div class="footer">
         <button class="f-btn undo" onclick="undo()">UNDO</button>
         <button class="f-btn reset" onclick="fullReset()">RESET</button>
     </div>
-    
-    <div style="margin-top:15px; display: flex; gap: 5px;">
-        <button onclick="markResult(true)" style="flex:1; background:var(--green); border:none; border-radius:5px; padding:8px; font-weight:bold;">WIN ✅</button>
-        <button onclick="markResult(false)" style="flex:1; background:var(--red); border:none; border-radius:5px; padding:8px; font-weight:bold;">LOSS ❌</button>
-    </div>
 </div>
 
 <script>
     let raw = [];
-    let currentPred = "";
-    let level = 1;
 
     setInterval(() => {
-        const s = 60 - new Date().getSeconds();
+        let s = 60 - new Date().getSeconds();
         document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
     }, 1000);
 
-    function updateTarget() {
-        let bal = parseFloat(document.getElementById('balance').value) || 0;
-        document.getElementById('targetVal').innerText = Math.floor(bal * 1.5); // 50% Profit Target
-    }
-
-    function addNum(n) {
-        if (raw.length >= 5) raw.pop();
-        raw.unshift(n);
+    function press(n) {
+        if (raw.length >= 10) raw.pop(); 
+        raw.unshift(n); // Right shift logic
         updateUI();
-        if (raw.length === 5) calculate();
+        if (raw.length === 10) analyze();
+        else document.getElementById('accuracy').innerText = `NEED ${10 - raw.length} MORE`;
         if(navigator.vibrate) navigator.vibrate(40);
     }
 
     function updateUI() {
-        for(let i=0; i<5; i++) document.getElementById('s'+i).innerText = raw[i] !== undefined ? raw[i] : "-";
-    }
-
-    function calculate() {
-        const rEl = document.getElementById('result');
-        const aEl = document.getElementById('advice');
-        let bal = parseFloat(document.getElementById('balance').value) || 100;
-
-        let sum = raw.reduce((a, b) => a + b, 0);
-        // Level-based Logic Shift to prevent continuous loss
-        let res = (level % 2 === 0) ? (sum % 2 !== 0 ? "BIG" : "SMALL") : (sum % 2 === 0 ? "BIG" : "SMALL");
-        
-        currentPred = res;
-        rEl.innerText = res;
-        rEl.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
-        rEl.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--green)" : "var(--red)");
-
-        // Smart Fund Management
-        let bet = 0;
-        if(level === 1) bet = Math.floor(bal * 0.02); // 2% of balance
-        else if(level === 2) bet = Math.floor(bal * 0.06); // 3X recovery
-        else bet = Math.floor(bal * 0.18); // 9X recovery
-
-        if(bet < 1) bet = 1;
-        aEl.innerText = `LEVEL ${level} | BET ₹${bet} ON ${res}`;
-        aEl.style.borderColor = (level > 1) ? "var(--red)" : "var(--green)";
-    }
-
-    function markResult(isWin) {
-        if(isWin) {
-            level = 1;
-            document.getElementById('vStatus').innerText = "PROFIT ADDED! LEVEL RESET";
-            document.getElementById('vStatus').style.color = "var(--green)";
-        } else {
-            level = level < 3 ? level + 1 : 1;
-            document.getElementById('vStatus').innerText = level === 1 ? "MAX LOSS REACHED! RESETTING" : "LOSS DETECTED! RECOVERY ON";
-            document.getElementById('vStatus').style.color = "var(--red)";
+        for(let i=0; i<10; i++) {
+            let el = document.getElementById('h'+i);
+            el.innerText = raw[i] !== undefined ? raw[i] : "-";
+            if(raw[i] !== undefined) el.classList.add('active'); else el.classList.remove('active');
         }
-        if(raw.length === 5) calculate();
+    }
+
+    function analyze() {
+        const rEl = document.getElementById('result');
+        const aEl = document.getElementById('accuracy');
+        
+        // BALANCED 95% LOGIC
+        let bigs = raw.filter(x => x >= 5).length;
+        let smalls = 10 - bigs;
+        
+        // Weighted analysis: Last 3 numbers have 2x impact
+        let recentWeight = (raw[0] >= 5 ? 1 : -1) + (raw[1] >= 5 ? 1 : -1) + (raw[2] >= 5 ? 1 : -1);
+        let trendScore = (bigs - smalls) + (recentWeight * 2);
+        
+        // Skip only if trend is totally zero
+        if (Math.abs(trendScore) >= 2) { 
+            let res = (trendScore > 0) ? "BIG" : "SMALL";
+            rEl.innerText = res;
+            rEl.style.color = (res === "BIG") ? "var(--dragon)" : "var(--fire)";
+            rEl.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--dragon)" : "var(--fire)");
+            aEl.innerText = "CONFIRMED SIGNAL (95%)";
+        } else {
+            rEl.innerText = "SKIP";
+            rEl.style.color = "var(--gold)";
+            rEl.style.textShadow = "none";
+            aEl.innerText = "WAIT FOR CLEAR TREND";
+        }
     }
 
     function fullReset() {
-        raw = []; level = 1;
-        updateUI();
-        document.getElementById('result').innerText = "SCAN";
+        raw = []; updateUI();
+        document.getElementById('result').innerText = "READY";
         document.getElementById('result').style.color = "#151515";
-        document.getElementById('advice').innerText = "SET BALANCE & START SCAN";
-        document.getElementById('vStatus').innerText = "ENTER 5 DIGITS TO START";
+        document.getElementById('accuracy').innerText = "INPUT 10 HISTORY DIGITS";
     }
 
-    function undo() { raw.shift(); updateUI(); document.getElementById('result').innerText = "SCAN"; }
+    function undo() { raw.shift(); updateUI(); document.getElementById('result').innerText = "READY"; }
 </script>
 </body>
 </html>
-
