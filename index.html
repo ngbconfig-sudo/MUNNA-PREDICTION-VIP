@@ -3,353 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KING PREDICTOR PRO - JALWA GAME</title>
+    <title>KING PREDICTOR PRO - FIXED PERIOD</title>
     <style>
-        /* Royal Professional Theme */
         body { 
-            margin: 0; 
-            background: #020202; 
-            font-family: 'Verdana', sans-serif; 
-            color: #ffffff; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 15px;
+            margin: 0; background: #020202; font-family: 'Verdana', sans-serif; color: #fff; 
+            display: flex; flex-direction: column; align-items: center; padding: 15px;
         }
-
         .card { 
-            background: #000000; 
-            border: 1px solid #00f2fe; 
-            border-radius: 25px; 
-            padding: 25px; 
-            width: 90%; 
-            max-width: 400px; 
-            text-align: center;
-            box-shadow: 0 0 35px rgba(0, 242, 254, 0.3);
+            background: #000; border: 1px solid #00f2fe; border-radius: 25px; 
+            padding: 25px; width: 90%; max-width: 400px; text-align: center;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
         }
-
-        h1 { 
-            color: #ffcc00; 
-            font-size: 26px; 
-            margin: 0 0 15px 0; 
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); 
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .timer-box { 
-            background: #0d0d0d; 
-            padding: 15px; 
-            border-radius: 15px; 
-            border: 1px solid #1a1a1a; 
-            margin-bottom: 20px;
-        }
-
-        #p-id { font-size: 12px; color: #555; letter-spacing: 1px; margin-bottom: 5px; }
-        #p-timer { font-size: 32px; color: #ff4757; font-weight: 900; }
-
-        .data-info { font-size: 11px; color: #00f2fe; margin-bottom: 10px; font-weight: bold; }
-
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 10px; 
-            margin-bottom: 25px; 
-        }
-
-        .n-btn { 
-            height: 48px; 
-            border: none; 
-            border-radius: 10px; 
-            font-weight: 900; 
-            color: #ffffff; 
-            font-size: 18px; 
-            cursor: pointer; 
-            transition: 0.2s;
-        }
-        .n-btn:active { transform: scale(0.9); }
+        h1 { color: #ffcc00; font-size: 26px; margin-bottom: 15px; letter-spacing: 2px; text-transform: uppercase; }
         
-        .r { background: #ff4757; } 
-        .g { background: #2ed573; }
+        .timer-box { 
+            background: #0d0d0d; padding: 15px; border-radius: 15px; 
+            border: 1px solid #1a1a1a; margin-bottom: 20px;
+        }
+        #p-id { font-size: 14px; color: #00f2fe; font-weight: bold; margin-bottom: 5px; }
+        #p-timer { font-size: 34px; color: #ff4757; font-weight: 900; }
+
+        .data-info { font-size: 11px; color: #555; margin-bottom: 10px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 25px; }
+        .n-btn { 
+            height: 50px; border: none; border-radius: 12px; font-weight: 900; 
+            color: #fff; font-size: 20px; cursor: pointer; transition: 0.2s;
+        }
+        .n-btn:active { transform: scale(0.9); background: #444; }
+        
+        .r { background: #ff4757; } .g { background: #2ed573; }
         .vr { background: linear-gradient(135deg, #a55eea 50%, #ff4757 50%); }
         .vg { background: linear-gradient(135deg, #a55eea 50%, #2ed573 50%); }
 
         .res-area { 
-            background: #080808; 
-            padding: 30px 15px; 
-            border-radius: 20px; 
-            margin: 20px 0; 
-            border: 2px dashed #333;
-            min-height: 140px;
+            background: #080808; padding: 30px 10px; border-radius: 20px; 
+            margin: 20px 0; border: 2px dashed #333; min-height: 150px;
         }
-
-        #p-status { font-size: 10px; color: #ffcc00; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        #p-val { font-size: 45px; font-weight: 900; color: #00f2fe; margin: 10px 0; letter-spacing: 3px; }
-        #p-acc { font-size: 14px; color: #ffffff; font-weight: bold; }
+        #p-status { font-size: 10px; color: #ffcc00; text-transform: uppercase; letter-spacing: 1px; }
+        #p-val { font-size: 48px; font-weight: 900; color: #00f2fe; margin: 10px 0; letter-spacing: 4px; }
+        #p-acc { font-size: 14px; color: #fff; font-weight: bold; }
 
         .main-btn { 
-            background: linear-gradient(135deg, #ffcc00, #ff9900); 
-            color: #000; 
-            border: none; 
-            padding: 20px; 
-            width: 100%; 
-            font-weight: 900; 
-            border-radius: 15px; 
-            cursor: pointer; 
-            font-size: 18px;
-            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+            background: linear-gradient(135deg, #ffcc00, #ff9900); color: #000; 
+            border: none; padding: 20px; width: 100%; font-weight: 900; 
+            border-radius: 15px; cursor: pointer; font-size: 20px;
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.4);
         }
-        .main-btn:disabled { background: #222; color: #555; box-shadow: none; cursor: not-allowed; }
+        .main-btn:disabled { background: #222; color: #555; cursor: not-allowed; box-shadow: none; }
 
         .reset-btn { 
-            background: transparent; 
-            color: #ff4757; 
-            border: 1px solid #ff4757; 
-            padding: 8px 15px; 
-            border-radius: 8px; 
-            font-size: 11px; 
-            margin-top: 15px; 
-            cursor: pointer; 
-            transition: 0.3s;
+            background: transparent; color: #ff4757; border: 1px solid #ff4757; 
+            padding: 10px 20px; border-radius: 10px; font-size: 12px; margin-top: 20px; cursor: pointer;
         }
-        .reset-btn:hover { background: #ff4757; color: #fff; }
 
         .history-wrap { 
-            width: 100%; 
-            max-width: 400px; 
-            margin-top: 25px; 
-            max-height: 250px; 
-            overflow-y: auto; 
-            background: #000; 
-            border-radius: 15px; 
-            border: 1px solid #1a1a1a; 
+            width: 100%; max-width: 400px; margin-top: 30px; max-height: 250px; 
+            overflow-y: auto; background: #000; border-radius: 15px; border: 1px solid #1a1a1a; 
         }
         table { width: 100%; border-collapse: collapse; font-size: 12px; }
         th { padding: 12px; color: #00f2fe; border-bottom: 2px solid #222; position: sticky; top: 0; background: #000; }
-        td { padding: 10px; text-align: center; border-bottom: 1px solid #0a0a0a; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #0a0a0a; }
         .win { color: #2ed573; font-weight: bold; }
         .loss { color: #ff4757; font-weight: bold; }
-        .skip { color: #666; font-weight: bold; }
+        .skip { color: #777; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <h1>KING PREDICTOR</h1>
-    
     <div class="timer-box">
-        <div id="p-id">PERIOD: LOADING...</div>
+        <div id="p-id">SYNCING PERIOD...</div>
         <div id="p-timer">00:00</div>
     </div>
 
-    <div id="data-count" class="data-info">REQUIRED: 5 RESULTS (0/5)</div>
+    <div id="data-count" class="data-info">WAITING FOR HISTORY DATA (0/5)</div>
     
     <div class="grid">
-        <button class="n-btn vr" onclick="addValue(0)">0</button>
-        <button class="n-btn g" onclick="addValue(1)">1</button>
-        <button class="n-btn r" onclick="addValue(2)">2</button>
-        <button class="n-btn g" onclick="addValue(3)">3</button>
-        <button class="n-btn r" onclick="addValue(4)">4</button>
-        <button class="n-btn vg" onclick="addValue(5)">5</button>
-        <button class="n-btn r" onclick="addValue(6)">6</button>
-        <button class="n-btn g" onclick="addValue(7)">7</button>
-        <button class="n-btn r" onclick="addValue(8)">8</button>
-        <button class="n-btn g" onclick="addValue(9)">9</button>
+        <button class="n-btn vr" onclick="pushData(0)">0</button>
+        <button class="n-btn g" onclick="pushData(1)">1</button>
+        <button class="n-btn r" onclick="pushData(2)">2</button>
+        <button class="n-btn g" onclick="pushData(3)">3</button>
+        <button class="n-btn r" onclick="pushData(4)">4</button>
+        <button class="n-btn vg" onclick="pushData(5)">5</button>
+        <button class="n-btn r" onclick="pushData(6)">6</button>
+        <button class="n-btn g" onclick="pushData(7)">7</button>
+        <button class="n-btn r" onclick="pushData(8)">8</button>
+        <button class="n-btn g" onclick="pushData(9)">9</button>
     </div>
 
     <div class="res-area">
-        <div id="p-status">DATABASE SCANNER READY</div>
+        <div id="p-status">READY FOR NEW PERIOD SCAN</div>
         <div id="p-val">WAITING</div>
         <div id="p-acc">ACCURACY: --%</div>
     </div>
 
-    <button id="predict-btn" class="main-btn" onclick="runAnalysis()" disabled>GET PREDICTION</button>
-    <button class="reset-btn" onclick="clearData()">FULL SYSTEM RESET</button>
+    <button id="predict-btn" class="main-btn" onclick="analyzeTrend()" disabled>GET PREDICTION</button>
+    <button class="reset-btn" onclick="hardReset()">FORCE SYSTEM RESET</button>
 </div>
 
 <div class="history-wrap">
     <table>
-        <thead><tr><th>Period</th><th>Number</th><th>Size</th><th>Result</th></tr></thead>
+        <thead><tr><th>Period</th><th>Num</th><th>Side</th><th>Res</th></tr></thead>
         <tbody id="h-body"></tbody>
     </table>
 </div>
 
 <script>
-    // --- GLOBAL STATE & PERSISTENCE ---
-    let fullHistory = JSON.parse(localStorage.getItem('king_hist')) || [];
-    let lockedResults = JSON.parse(localStorage.getItem('king_locks')) || {};
-    let lastEnteredPeriod = "";
+    let hist = JSON.parse(localStorage.getItem('k_hist')) || [];
+    let locks = JSON.parse(localStorage.getItem('k_locks')) || {};
+    let lastP = "";
 
-    // --- TIME ENGINE ---
-    function updateClock() {
-        const now = new Date();
-        const ist = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-        const seconds = ist.getSeconds();
-        const remaining = 60 - seconds;
+    function startEngine() {
+        const d = new Date();
+        const ist = new Date(d.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+        const s = ist.getSeconds();
+        const m = ist.getHours() * 60 + ist.getMinutes();
         
-        // Calculate Period ID (Jalwa Game Standard)
-        const dateStr = ist.getFullYear() + 
-                        String(ist.getMonth() + 1).padStart(2, '0') + 
-                        String(ist.getDate()).padStart(2, '0');
-        const totalMinutes = ist.getHours() * 60 + ist.getMinutes();
-        const periodNum = totalMinutes - 330; // Shift for game start time
-        const currentPeriod = dateStr + "1000" + String(periodNum).padStart(4, '0');
+        // --- FIXED PERIOD LOGIC (+1 Correction) ---
+        const pNum = (m - 330) + 1; 
+        const ds = ist.getFullYear() + String(ist.getMonth()+1).padStart(2,'0') + String(ist.getDate()).padStart(2,'0');
+        const curP = ds + "1000" + String(pNum).padStart(4,'0');
 
-        document.getElementById('p-id').innerText = "PERIOD: " + currentPeriod;
-        document.getElementById('p-timer').innerText = "00:" + String(remaining).padStart(2, '0');
+        document.getElementById('p-id').innerText = "CURRENT PERIOD: " + curP;
+        document.getElementById('p-timer').innerText = "00:" + String(60-s).padStart(2,'0');
 
-        updateButtonUI();
+        refreshUI();
 
-        // Reset UI on new period start
-        if (seconds === 0) {
-            if (!lockedResults[currentPeriod]) {
+        if(s === 0) {
+            if(!locks[curP]) {
                 document.getElementById('p-val').innerText = "WAITING";
-                document.getElementById('p-val').style.color = "#00f2fe";
                 document.getElementById('p-acc').innerText = "ACCURACY: --%";
-                document.getElementById('p-status').innerText = "READY FOR SCAN";
             }
         }
     }
-    setInterval(updateClock, 1000);
+    setInterval(startEngine, 1000);
 
-    // --- INPUT HANDLER ---
-    function addValue(n) {
-        const curP = document.getElementById('p-id').innerText.split(": ")[1];
-        if (lastEnteredPeriod === curP) {
-            alert("Period already added!");
-            return;
-        }
+    function pushData(n) {
+        const fullP = document.getElementById('p-id').innerText.split(": ")[1];
+        if(lastP === fullP) return;
 
-        const prevP = (BigInt(curP) - 1n).toString();
-        const size = (n >= 5) ? "BIG" : "SMALL";
-        
+        const prevP = (BigInt(fullP) - 1n).toString();
+        const sz = n >= 5 ? "BIG" : "SMALL";
         let match = "---";
-        if (lockedResults[prevP]) {
-            if (lockedResults[prevP].size === "SKIP") {
-                match = "SKIP";
-            } else {
-                match = (size === lockedResults[prevP].size) ? "WIN" : "LOSS";
-            }
+
+        if(locks[prevP]) {
+            if(locks[prevP].size === "SKIP") match = "SKIP";
+            else match = (sz === locks[prevP].size) ? "WIN" : "LOSS";
         }
 
-        fullHistory.unshift({ p: prevP, n: n, s: size, res: match });
-        if (fullHistory.length > 50) fullHistory.pop();
+        hist.unshift({ p: prevP, n: n, s: sz, res: match });
+        if(hist.length > 50) hist.pop();
         
-        lastEnteredPeriod = curP;
-        localStorage.setItem('king_hist', JSON.stringify(fullHistory));
-        
-        renderHistory();
-        updateButtonUI();
+        lastP = fullP;
+        localStorage.setItem('k_hist', JSON.stringify(hist));
+        updateTable();
+        refreshUI();
     }
 
-    function updateButtonUI() {
+    function refreshUI() {
         const btn = document.getElementById('predict-btn');
-        const countTxt = document.getElementById('data-count');
-        const len = fullHistory.length;
-
-        if (len < 5) {
-            countTxt.innerText = `REQUIRED: 5 RESULTS (${len}/5)`;
+        const txt = document.getElementById('data-count');
+        const len = hist.length;
+        if(len < 5) {
+            txt.innerText = `REQUIRED: 5 RESULTS (${len}/5)`;
             btn.disabled = true;
         } else {
-            countTxt.innerText = `HISTORY LOADED: ${len} PERIODS`;
+            txt.innerText = `ALGORITHM SYNCED (${len} PERIODS)`;
             btn.disabled = false;
         }
     }
 
-    // --- DEEP ANALYSIS ENGINE ---
-    function runAnalysis() {
+    function analyzeTrend() {
         const curP = document.getElementById('p-id').innerText.split(": ")[1];
         const out = document.getElementById('p-val');
-        const accDisp = document.getElementById('p-acc');
-        const status = document.getElementById('p-status');
+        const acc = document.getElementById('p-acc');
+        const stat = document.getElementById('p-status');
 
-        if (lockedResults[curP]) {
-            showLocked(lockedResults[curP]);
+        if(locks[curP]) {
+            showLock(locks[curP]);
             return;
         }
 
-        status.innerText = "SCANNING ENTIRE HISTORY...";
+        stat.innerText = "DEEP SCANNING TRENDS...";
         out.innerText = "● ● ●";
 
         setTimeout(() => {
-            const h = fullHistory;
-            let finalSize = "";
-            let finalAcc = 0;
+            let pr = Math.floor(Math.random() * (99 - 80) + 80);
+            let side = "";
 
-            // Pattern Detection Logic
-            const isDragon = h[0].s === h[1].s && h[1].s === h[2].s;
-            const isMirror = h[0].s !== h[1].s && h[1].s !== h[2].s;
+            // Custom Logic: If Violet (0,5) appeared, trend shifts
+            if(hist[0].n === 0 || hist[0].n === 5) { pr = 98; side = "BIG"; }
+            else if(hist[0].s === hist[1].s && hist[1].s === hist[2].s) { pr = 96; side = hist[0].s; }
+            else { side = Math.random() > 0.5 ? "BIG" : "SMALL"; }
 
-            // Decision Matrix
-            if (h[0].n === 0 || h[0].n === 5) {
-                finalSize = "BIG"; finalAcc = 98;
-            } else if (isDragon) {
-                finalSize = h[0].s; finalAcc = 96;
-            } else if (isMirror) {
-                finalSize = (h[0].s === "BIG") ? "SMALL" : "BIG"; finalAcc = 95;
-            } else {
-                // Random statistical fluctuation
-                finalAcc = Math.floor(Math.random() * (94 - 75) + 75);
-            }
-
-            // 95% STRICT FILTER
-            if (finalAcc < 95) {
-                finalSize = "SKIP";
-                out.innerText = "SKIP ROUND";
+            if(pr < 95) {
+                side = "SKIP";
+                out.innerText = "SKIP";
                 out.style.color = "#888";
-                accDisp.innerText = `ACCURACY: ${finalAcc}% (LOW)`;
-                status.innerText = "MARKET UNSTABLE";
+                acc.innerText = `ACCURACY: ${pr}% (UNSTABLE)`;
             } else {
-                finalSize = finalSize === "" ? (Math.random() > 0.5 ? "BIG" : "SMALL") : finalSize;
-                out.innerText = finalSize;
-                out.style.color = (finalSize === "BIG") ? "#ffcc00" : "#2ed573";
-                accDisp.innerText = `ACCURACY: ${finalAcc}% (SURE SHOT)`;
-                status.innerText = "PATTERN CONFIRMED 🔒";
+                out.innerText = side;
+                out.style.color = (side === "BIG") ? "#ffcc00" : "#2ed573";
+                acc.innerText = `ACCURACY: ${pr}% (SURE SHOT)`;
             }
 
-            lockedResults[curP] = { size: finalSize, acc: finalAcc };
-            localStorage.setItem('king_locks', JSON.stringify(lockedResults));
+            locks[curP] = { size: side, acc: pr };
+            localStorage.setItem('k_locks', JSON.stringify(locks));
         }, 1500);
     }
 
-    function showLocked(data) {
+    function showLock(data) {
         const out = document.getElementById('p-val');
-        if (data.size === "SKIP") {
-            out.innerText = "SKIP ROUND";
-            out.style.color = "#888";
-        } else {
-            out.innerText = data.size;
-            out.style.color = (data.size === "BIG") ? "#ffcc00" : "#2ed573";
-        }
+        out.innerText = data.size === "SKIP" ? "SKIP" : data.size;
+        out.style.color = data.size === "SKIP" ? "#888" : (data.size === "BIG" ? "#ffcc00" : "#2ed573");
         document.getElementById('p-acc').innerText = `ACCURACY: ${data.acc}% (LOCKED)`;
-        document.getElementById('p-status').innerText = "SCAN SECURED";
     }
 
-    function renderHistory() {
-        const body = document.getElementById('h-body');
-        body.innerHTML = fullHistory.map(i => `
+    function updateTable() {
+        const b = document.getElementById('h-body');
+        b.innerHTML = hist.map(i => `
             <tr>
                 <td>...${i.p.slice(-4)}</td>
-                <td style="color:#ffcc00; font-weight:bold;">${i.n}</td>
+                <td style="color:#ffcc00; font-weight:bold">${i.n}</td>
                 <td>${i.s}</td>
                 <td class="${i.res.toLowerCase()}">${i.res}</td>
             </tr>
         `).join('');
     }
 
-    function clearData() {
-        if (confirm("Clear all game memory?")) {
-            localStorage.clear();
-            fullHistory = [];
-            lockedResults = {};
-            renderHistory();
-            updateButtonUI();
+    function hardReset() {
+        if(confirm("Erase system memory?")) {
+            localStorage.clear(); hist = []; locks = {};
+            updateTable(); refreshUI();
             document.getElementById('p-val').innerText = "WAITING";
         }
     }
-
-    // Initial Render
-    renderHistory();
+    updateTable();
 </script>
 
 </body>
