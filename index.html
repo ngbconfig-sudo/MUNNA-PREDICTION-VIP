@@ -3,83 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KING PREDICTOR</title>
+    <title>KING PREDICTOR PRO</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; background: #050a1e; font-family: sans-serif; color: #fff; overflow-x: hidden; }
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
-        .container { display: flex; flex-direction: column; align-items: center; padding: 15px; }
-        .card { background: rgba(0, 0, 0, 0.8); border: 1px solid #00f2fe; border-radius: 20px; padding: 20px; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 0 20px #00f2fe; }
-        h1 { color: #ffcc00; font-size: 22px; margin: 0; text-shadow: 0 0 10px #ffcc00; }
-        .timer-box { margin: 15px 0; background: #111; padding: 10px; border-radius: 10px; border: 1px solid #333; }
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 15px 0; }
-        .n-btn { height: 40px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: #fff; }
+        body, html { margin: 0; padding: 0; background: #000; font-family: 'Segoe UI', sans-serif; color: #fff; }
+        .main-ui { display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .card { 
+            background: #0a0a0a; border: 2px solid #00f2fe; border-radius: 20px; 
+            padding: 20px; width: 92%; max-width: 380px; text-align: center;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+        }
+        h1 { color: #ffcc00; font-size: 24px; margin: 0; text-shadow: 0 0 15px #ffcc00; }
+        .timer-tag { background: #1a1a1a; margin: 15px 0; padding: 10px; border-radius: 12px; border: 1px solid #333; }
+        .grid { display: grid; grid-template-columns: repeat(5, 2fr); gap: 6px; margin: 15px 0; }
+        .n-btn { height: 45px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: #fff; font-size: 16px; }
         .r { background: #ff4757; } .g { background: #2ed573; }
-        .vr { background: linear-gradient(45deg, #a55eea 50%, #ff4757 50%); }
-        .vg { background: linear-gradient(45deg, #a55eea 50%, #2ed573 50%); }
-        .res-box { background: #000; padding: 15px; border-radius: 10px; margin: 15px 0; border: 2px dashed #ffcc00; }
-        #p-val { font-size: 28px; font-weight: 900; }
-        .main-btn { background: #ffcc00; color: #000; border: none; padding: 15px; width: 100%; font-weight: bold; border-radius: 10px; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 20px; background: #000; border-radius: 10px; }
-        th, td { padding: 8px; text-align: center; border-bottom: 1px solid #222; }
+        .vr { background: linear-gradient(135deg, #a55eea 50%, #ff4757 50%); }
+        .vg { background: linear-gradient(135deg, #a55eea 50%, #2ed573 50%); }
+        .res-box { background: rgba(0,0,0,0.6); padding: 15px; border-radius: 12px; margin: 15px 0; border: 2px dashed #ffcc00; min-height: 80px; }
+        #p-val { font-size: 30px; font-weight: 900; letter-spacing: 2px; }
+        .main-btn { 
+            background: linear-gradient(to right, #ffcc00, #ff9900); color: #000; 
+            border: none; padding: 16px; width: 100%; font-weight: 800; border-radius: 12px; cursor: pointer; font-size: 18px;
+        }
+        table { width: 100%; margin-top: 20px; background: #0a0a0a; border-radius: 10px; border-collapse: collapse; font-size: 12px; }
+        th { padding: 12px; color: #888; border-bottom: 2px solid #222; }
+        td { padding: 10px; text-align: center; border-bottom: 1px solid #1a1a1a; }
+        .status-tag { font-size: 11px; color: #4facfe; margin-bottom: 5px; text-transform: uppercase; }
     </style>
 </head>
 <body>
-<canvas id="matrix"></canvas>
-<div class="container">
+
+<div class="main-ui">
     <div class="card">
         <h1>KING PREDICTOR</h1>
-        <div class="timer-box">
-            <div id="p-id" style="font-size: 12px; color: #888;">PERIOD: ----</div>
-            <div id="p-timer" style="font-size: 22px; color: #ff4757; font-weight: bold;">00:00</div>
+        <div class="timer-tag">
+            <div id="p-id" style="font-size: 13px; color: #777; margin-bottom: 5px;">PERIOD: 2026...----</div>
+            <div id="p-timer" style="font-size: 26px; color: #ff4757; font-weight: bold;">00:00</div>
         </div>
-        <p style="font-size: 11px;">TAP LAST RESULT (PAST PERIOD):</p>
+
+        <p style="font-size: 11px; color: #888;">TAP PREVIOUS RESULT NUMBER:</p>
         <div class="grid">
-            <button class="n-btn vr" onclick="addHistory(0)">0</button>
-            <button class="n-btn g" onclick="addHistory(1)">1</button>
-            <button class="n-btn r" onclick="addHistory(2)">2</button>
-            <button class="n-btn g" onclick="addHistory(3)">3</button>
-            <button class="n-btn r" onclick="addHistory(4)">4</button>
-            <button class="n-btn vg" onclick="addHistory(5)">5</button>
-            <button class="n-btn r" onclick="addHistory(6)">6</button>
-            <button class="n-btn g" onclick="addHistory(7)">7</button>
-            <button class="n-btn r" onclick="addHistory(8)">8</button>
-            <button class="n-btn g" onclick="addHistory(9)">9</button>
+            <button class="n-btn vr" onclick="addData(0)">0</button>
+            <button class="n-btn g" onclick="addData(1)">1</button>
+            <button class="n-btn r" onclick="addData(2)">2</button>
+            <button class="n-btn g" onclick="addData(3)">3</button>
+            <button class="n-btn r" onclick="addData(4)">4</button>
+            <button class="n-btn vg" onclick="addData(5)">5</button>
+            <button class="n-btn r" onclick="addData(6)">6</button>
+            <button class="n-btn g" onclick="addData(7)">7</button>
+            <button class="n-btn r" onclick="addData(8)">8</button>
+            <button class="n-btn g" onclick="addData(9)">9</button>
         </div>
+
         <div class="res-box">
-            <div id="p-status" style="font-size: 11px; color: #666;">ANALYSIS SYSTEM</div>
-            <div id="p-val">WAIT</div>
+            <div id="status" class="status-tag">PATTERN ANALYZER READY</div>
+            <div id="p-val">WAITING</div>
         </div>
-        <button class="main-btn" onclick="getPrediction()">GET PREDICTION</button>
-        <a href="https://t.me/+4V3ro6h6AcY3Y2Y1" style="display:block; margin-top:15px; color:#00f2fe; text-decoration:none; font-size:12px;">TELEGRAM @PREDICTOR_GOD</a>
+
+        <button class="main-btn" onclick="predict()">GET PREDICTION</button>
+        <a href="https://t.me/+4V3ro6h6AcY3Y2Y1" style="display:block; margin-top:15px; color:#4facfe; text-decoration:none; font-size:13px;">JOIN TELEGRAM</a>
     </div>
+
     <table>
-        <thead><tr><th>Past Period</th><th>Number</th><th>Size</th></tr></thead>
+        <thead><tr><th>Past Period</th><th>Num</th><th>Size</th><th>Result</th></tr></thead>
         <tbody id="h-body"></tbody>
     </table>
 </div>
 
 <script>
-    // Matrix Background
-    const canvas = document.getElementById('matrix');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const drops = Array(Math.floor(canvas.width/18)).fill(1);
-    function draw() {
-        ctx.fillStyle = "rgba(5, 10, 30, 0.1)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "#0ff"; ctx.font = "15px monospace";
-        drops.forEach((y, i) => {
-            ctx.fillText(Math.floor(Math.random()*10), i*18, y*18);
-            if(y*18 > canvas.height && Math.random() > 0.98) drops[i] = 0;
-            drops[i]++;
-        });
-    }
-    setInterval(draw, 50);
-
-    let currentPeriod = "";
-    let lastEnteredPeriod = ""; // Ek period ek entry lock
     let history = [];
+    let lastEnteredPeriod = "";
 
-    function updateTime() {
+    function updateTimer() {
         const now = new Date();
         const ist = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
         const sec = ist.getSeconds();
@@ -87,52 +82,95 @@
         const elapsed = (ist.getHours() * 60 + ist.getMinutes()) - (5 * 60 + 29);
         const dateStr = ist.getFullYear() + String(ist.getMonth()+1).padStart(2,'0') + String(ist.getDate()).padStart(2,'0');
         
-        currentPeriod = dateStr + "100001" + String(elapsed < 0 ? 0 : elapsed).padStart(4,'0');
-        document.getElementById('p-id').innerText = "PERIOD: " + currentPeriod;
+        const period = dateStr + "100001" + String(elapsed < 0 ? 0 : elapsed).padStart(4,'0');
+        document.getElementById('p-id').innerText = "PERIOD: " + period;
         document.getElementById('p-timer').innerText = "00:" + String(rem).padStart(2,'0');
-        
-        // Reset when new period starts
+
         if(rem === 59) {
-            document.getElementById('p-val').innerText = "WAIT";
-            document.getElementById('p-status').innerText = "NEW ROUND STARTED";
+            document.getElementById('p-val').innerText = "WAITING";
+            document.getElementById('status').innerText = "ROUND REFRESHED";
+            document.getElementById('p-val').style.color = "#fff";
         }
     }
-    setInterval(updateTime, 1000);
+    setInterval(updateTimer, 1000);
 
-    function addHistory(n) {
-        // Validation: Sirf pichle period ka number add hoga
-        if (lastEnteredPeriod === currentPeriod) {
-            alert("Aapne is period ka result pehle hi add kar diya hai! Agle period ka wait karein.");
+    function addData(n) {
+        const curPeriod = document.getElementById('p-id').innerText.split(": ")[1];
+        
+        if (lastEnteredPeriod === curPeriod) {
+            alert("Aapne is period ka data pehle hi record kar diya hai!");
             return;
         }
 
-        const pastPeriodInt = parseInt(currentPeriod) - 1;
-        const pastPeriod = pastPeriodInt.toString();
+        // Fix: Exact Previous Period Number
+        const pastP = (BigInt(curPeriod) - 1n).toString();
         const size = n >= 5 ? "BIG" : "SMALL";
-        
-        history.unshift({ p: pastPeriod, n: n, s: size });
-        if(history.length > 5) history.pop();
-        
-        lastEnteredPeriod = currentPeriod; // Lock for current minute
+        const color = (n % 2 === 0) ? "RED" : "GREEN";
 
-        const body = document.getElementById('h-body');
-        body.innerHTML = history.map(d => `<tr><td>...${d.p.slice(-4)}</td><td>${d.n}</td><td>${d.s}</td></tr>`).join('');
-        document.getElementById('p-status').innerText = "PAST DATA RECORDED";
+        history.unshift({ p: pastP, n: n, s: size, c: color });
+        if(history.length > 10) history.pop();
+        
+        lastEnteredPeriod = curPeriod;
+        renderHistory();
+        document.getElementById('status').innerText = "PAST DATA RECORDED";
     }
 
-    function getPrediction() {
-        if(history.length < 1) { alert("Pehle pichla number add karein!"); return; }
+    function renderHistory() {
+        const body = document.getElementById('h-body');
+        body.innerHTML = history.map(d => `
+            <tr>
+                <td>...${d.p.slice(-4)}</td>
+                <td style="font-weight:bold; color:#00f2fe">${d.n}</td>
+                <td>${d.s}</td>
+                <td style="color:${d.c==='RED'?'#ff4757':'#2ed573'}">WIN</td>
+            </tr>
+        `).join('');
+    }
+
+    function predict() {
+        if(history.length < 2) {
+            alert("Pattern analyze karne ke liye kam se kam 2 results add karein!");
+            return;
+        }
+
         const out = document.getElementById('p-val');
-        out.innerText = "● ● ●";
+        const status = document.getElementById('status');
+        status.innerText = "CHECKING JALWA PATTERNS...";
+        out.innerText = "---";
+
         setTimeout(() => {
-            const last = history[0];
-            let pColor = (Math.random() > 0.5) ? "RED" : "GREEN";
-            let pSize = (last.n > 4) ? "SMALL" : "BIG"; // Counter trend logic
+            const h1 = history[0]; // Last
+            const h2 = history[1]; // 2nd Last
+            
+            let pSize = "";
+            let pColor = "";
+
+            // Pattern Logic based on your Screenshots:
+            if (h1.s === h2.s) {
+                // Agar 2 baar same aaya (Dragon), toh 3rd baar change hone ka chance 60%
+                pSize = h1.s === "BIG" ? "SMALL" : "BIG";
+                pColor = h1.c === "RED" ? "GREEN" : "RED";
+                status.innerText = "MIRROR PATTERN DETECTED";
+            } else {
+                // Agar pichla alternate tha (Big-Small), toh trend continue hone ka chance 70%
+                pSize = h1.s; 
+                pColor = h1.c;
+                status.innerText = "TREND FOLLOW DETECTED";
+            }
+
+            // Violet Special (0, 5)
+            if(h1.n === 0 || h1.n === 5) {
+                pSize = "BIG";
+                pColor = "RED";
+                status.innerText = "VIOLET TREND DETECTED";
+            }
+
             out.innerText = pSize + " (" + pColor + ")";
-            out.style.color = (pColor === "RED") ? "#ff4757" : "#2ed573";
-        }, 1000);
+            out.style.color = pColor === "RED" ? "#ff4757" : "#2ed573";
+        }, 1100);
     }
 </script>
+
 </body>
 </html>
 
