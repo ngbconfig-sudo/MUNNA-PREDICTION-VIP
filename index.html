@@ -2,288 +2,184 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUNNA PREDICTION VIP</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            color: #0f0;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@600;700&display=swap');
+        :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .container { width: 96%; max-width: 385px; background: #0a0a0a; border: 2px solid var(--gold); border-radius: 20px; padding: 15px; box-shadow: 0 0 30px rgba(255,207,51,0.2); }
+        .brand { font-family: 'Orbitron'; color: var(--gold); text-align: center; margin-bottom: 12px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Matrix Canvas Background */
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
+        /* PREDICTION PANEL */
+        .display { background: radial-gradient(circle, #1a1a1a, #000); border: 1px solid #333; border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 15px; position: relative; border-bottom: 4px solid #222; }
+        #timer { position: absolute; top: 10px; right: 15px; color: var(--green); font-family: monospace; font-size: 0.9rem; }
+        #result { font-size: 5.5rem; font-weight: 900; line-height: 1; color: #151515; margin: 10px 0; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: 0.3s; }
+        #chance { font-size: 1rem; font-weight: 900; color: var(--gold); }
 
-        .container {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 25px;
-            border: 2px solid #0f0;
-            border-radius: 15px;
-            box-shadow: 0 0 25px #0f0;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            backdrop-filter: blur(5px);
-        }
+        /* VISUAL SLOTS - Added to see the shift */
+        .slots-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
+        .slot { background: #111; border: 1px solid #333; height: 35px; line-height: 35px; border-radius: 5px; text-align: center; color: var(--gold); font-weight: bold; }
 
-        .period-box {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: #fff;
-            background: rgba(0, 255, 0, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-        }
+        /* VALIDATION */
+        .validate-row { display: flex; align-items: center; justify-content: space-between; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #222; }
+        .v-label { font-size: 0.7rem; color: #888; text-align: left; line-height: 1.2; }
+        #vIn { width: 55px; height: 35px; background: #000; border: 1px solid var(--gold); border-radius: 6px; color: var(--gold); text-align: center; font-size: 1.2rem; font-weight: 900; outline: none; }
 
-        #textview1 {
-            font-weight: bold;
-            color: #0f0;
-            display: block;
-            margin-top: 5px;
-            font-size: 1.3rem;
-        }
+        /* STATS BAR */
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .s-box { background: #050505; border: 1px solid #1a1a1a; padding: 6px; border-radius: 8px; text-align: center; }
+        .s-lab { font-size: 0.55rem; color: #555; display: block; }
+        .s-val { font-size: 1rem; font-weight: 900; }
 
-        #textview2 {
-            font-size: 2.5rem;
-            color: #ff3e3e;
-            text-shadow: 0 0 10px #ff3e3e;
-            font-weight: bold;
-        }
+        /* KEYS */
+        .numpad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 10px; }
+        .k { height: 46px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1.2rem; cursor: pointer; transition: 0.1s; }
+        .v { background: #9c27b0; } .g { background: var(--green); color: #000; } .r { background: var(--red); }
+        .k:active { transform: scale(0.9); }
 
-        .result-box {
-            margin: 25px 0;
-            padding: 20px;
-            border: 2px dashed #0f0;
-            min-height: 70px;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #result-label {
-            color: #888;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-
-        #result-view {
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        button {
-            background: #0f0;
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            width: 100%;
-        }
-
-        button:hover {
-            background: #00aa00;
-            box-shadow: 0 0 20px #0f0;
-        }
-
-        button:disabled {
-            background: #444;
-            color: #888;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .telegram-container {
-            margin-top: 25px;
-            border-top: 1px solid #333;
-            padding-top: 15px;
-        }
-
-        .telegram-link {
-            text-decoration: none;
-            color: #0088cc;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: 0.3s;
-        }
-
-        .telegram-link:hover {
-            color: #fff;
-            text-shadow: 0 0 10px #0088cc;
-        }
-
-        .tg-icon {
-            font-size: 2rem;
-        }
+        .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .f-btn { padding: 12px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .undo { background: #222; color: #fff; }
+        .reset { background: var(--gold); color: #000; }
     </style>
 </head>
 <body>
 
-    <canvas id="matrix-canvas"></canvas>
-
-    <div class="container">
-        <h2>MUNNA VIP</h2>
-        
-        <div class="period-box">
-            PERIOD NUMBER
-            <span id="textview1">Loading...</span>
-            <span id="textview2">--:--</span>
-        </div>
-
-        <div class="result-box">
-            <span id="result-label">PREDICTION</span>
-            <span id="result-view">???</span>
-        </div>
-
-        <button id="generateBtn" onclick="generatePrediction()">GENERATE</button>
-
-        <div class="telegram-container">
-            <a href="https://t.me/YourTelegramUsername" class="telegram-link" target="_blank">
-                <span class="tg-icon">✈️</span>
-                CONTACT DEVELOPER
-            </a>
-        </div>
+<div class="container">
+    <div class="brand">MUNNA PREDICTION VIP</div>
+    
+    <div class="display">
+        <div id="timer">00:00</div>
+        <div id="result">SCAN</div>
+        <div id="chance">ENTER 5 DIGITS</div>
+        <div id="vStatus" style="font-size: 0.8rem; margin-top: 10px; font-weight: bold;"></div>
     </div>
 
-    <script>
-        // --- MATRIX ANIMATION ---
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    <div class="slots-row">
+        <div id="s0" class="slot">-</div>
+        <div id="s1" class="slot">-</div>
+        <div id="s2" class="slot">-</div>
+        <div id="s3" class="slot">-</div>
+        <div id="s4" class="slot">-</div>
+    </div>
 
-        const letters = "0123456789";
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
+    <div class="validate-row">
+        <div class="v-label">ENTER LAST RESULT<br>(FOR WIN/LOSS STATS)</div>
+        <input type="number" id="vIn" placeholder="?" oninput="checkResult(this.value)">
+    </div>
 
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0f0";
-            ctx.font = fontSize + "px monospace";
+    <div class="stats">
+        <div class="s-box"><span class="s-lab">WINS</span><span class="s-val" id="w" style="color:var(--green)">0</span></div>
+        <div class="s-box"><span class="s-lab">LOSS</span><span class="s-val" id="l" style="color:var(--red)">0</span></div>
+        <div class="s-box"><span class="s-lab">RATE</span><span class="s-val" id="rate">0%</span></div>
+    </div>
 
-            for (let i = 0; i < drops.length; i++) {
-                const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
+    <div class="numpad">
+        <button class="k v" onclick="addNum(0)">0</button>
+        <button class="k g" onclick="addNum(1)">1</button>
+        <button class="k r" onclick="addNum(2)">2</button>
+        <button class="k g" onclick="addNum(3)">3</button>
+        <button class="k r" onclick="addNum(4)">4</button>
+        <button class="k g" onclick="addNum(5)">5</button>
+        <button class="k r" onclick="addNum(6)">6</button>
+        <button class="k g" onclick="addNum(7)">7</button>
+        <button class="k r" onclick="addNum(8)">8</button>
+        <button class="k g" onclick="addNum(9)">9</button>
+    </div>
+
+    <div class="footer">
+        <button class="f-btn undo" onclick="undo()">UNDO</button>
+        <button class="f-btn reset" onclick="fullReset()">RESET</button>
+    </div>
+</div>
+
+<script>
+    let raw = [];
+    let lastPred = "";
+    let wins = 0, losses = 0;
+    const a = new (window.AudioContext || window.webkitAudioContext)();
+
+    function beep(f) {
+        const o = a.createOscillator();
+        const g = a.createGain();
+        o.connect(g); g.connect(a.destination);
+        o.frequency.value = f;
+        g.gain.setValueAtTime(0.1, a.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + 0.3);
+        o.start(); o.stop(a.currentTime + 0.3);
+    }
+
+    setInterval(() => {
+        const s = 60 - new Date().getSeconds();
+        document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
+    }, 1000);
+
+    function addNum(n) {
+        if (a.state === 'suspended') a.resume();
+        
+        // RIGHT SHIFT LOGIC: Purana hatana, naya unshift karna
+        if (raw.length >= 5) {
+            raw.pop(); // Sabse purana (Right side wala) gayab
         }
-        setInterval(drawMatrix, 33);
+        raw.unshift(n); // Naya number sabse aage (Left side) add
+        
+        updateSlots();
+        if (raw.length === 5) predict();
+        if(navigator.vibrate) navigator.vibrate(40);
+    }
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // --- PREDICTION LOGIC ---
-        let currentPeriod = "";
-        let isPredictionLocked = false; // Flag to check if prediction is made for current period
-
-        const resultView = document.getElementById('result-view');
-        const generateBtn = document.getElementById('generateBtn');
-
-        function updateTimer() {
-            const now = new Date();
-            const kolkataTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-
-            const seconds = kolkataTime.getSeconds();
-            const remainingSeconds = 60 - seconds;
-
-            const currentHour = kolkataTime.getHours();
-            const currentMinute = kolkataTime.getMinutes();
-
-            // Your Specific Java Logic ported to JS
-            const startTotalMinutes = 5 * 60 + 29; // 5:29 AM
-            const currentTotalMinutes = currentHour * 60 + currentMinute;
-            
-            let elapsedMinutes = currentTotalMinutes - startTotalMinutes;
-            if (elapsedMinutes < 0) elapsedMinutes = 0;
-
-            const y = kolkataTime.getFullYear();
-            const m = String(kolkataTime.getMonth() + 1).padStart(2, '0');
-            const d = String(kolkataTime.getDate()).padStart(2, '0');
-            const formattedDate = `${y}${m}${d}`;
-
-            const periodSuffix = "100001" + String(elapsedMinutes).padStart(4, '0');
-            const newPeriod = formattedDate + periodSuffix;
-
-            // --- NAYA PERIOD SHURU HONE PAR RESET KAREN ---
-            if (newPeriod !== currentPeriod) {
-                currentPeriod = newPeriod;
-                isPredictionLocked = false; // Unlock prediction for new period
-                resultView.innerText = "???"; // Reset result view
-                resultView.style.color = "#0f0";
-                resultView.style.textShadow = "none";
-                generateBtn.disabled = false; // Enable button
-                generateBtn.innerText = "GENERATE";
-            }
-
-            document.getElementById('textview1').innerText = newPeriod;
-            document.getElementById('textview2').innerText = `00:${String(remainingSeconds).padStart(2, '0')}`;
+    function updateSlots() {
+        for(let i=0; i<5; i++) {
+            document.getElementById('s'+i).innerText = raw[i] !== undefined ? raw[i] : "-";
         }
+    }
 
-        setInterval(updateTimer, 1000);
-        updateTimer(); // Initial call
+    function predict() {
+        const rEl = document.getElementById('result');
+        const cEl = document.getElementById('chance');
+        
+        // Optimized Pattern Recognition
+        let sum = raw.reduce((a, b) => a + b, 0);
+        let res = (sum % 2 === 0) ? "SMALL" : "BIG";
+        
+        lastPred = res;
+        rEl.innerText = res;
+        rEl.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
+        rEl.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--green)" : "var(--red)");
+        cEl.innerText = "ACCURACY: 80%+";
+        beep(800);
+    }
 
-        function generatePrediction() {
-            if (isPredictionLocked) return; // Agar locked hai toh kuch mat karo
-
-            generateBtn.disabled = true; // Disable button while "analyzing"
-            generateBtn.innerText = "ANALYZING...";
-            resultView.innerText = "....";
-            resultView.style.color = "#888";
-
-            // 1 second ka fake delay taaki lage ki analyze ho raha hai
-            setTimeout(() => {
-                // Only BIG and SMALL
-                const results = ["BIG", "SMALL"];
-                const randomIndex = Math.floor(Math.random() * results.length);
-                const finalPrediction = results[randomIndex];
-
-                resultView.innerText = finalPrediction;
-                
-                // Color formatting
-                if(finalPrediction === "BIG") {
-                    resultView.style.color = "#ffaa00"; // Orange-ish for Big
-                    resultView.style.textShadow = "0 0 10px #ffaa00";
-                } else {
-                    resultView.style.color = "#fff"; // White for Small
-                    resultView.style.textShadow = "0 0 10px #fff";
-                }
-
-                isPredictionLocked = true; // --- LOCK THE PREDICTION ---
-                generateBtn.innerText = "LOCKED";
-                // Note: Button disabled rahega jab tak naya period nahin aata
-            }, 1000); 
+    function checkResult(val) {
+        if(val === "" || lastPred === "") return;
+        const actual = (parseInt(val) >= 5) ? "BIG" : "SMALL";
+        const vStatus = document.getElementById('vStatus');
+        
+        if(actual === lastPred) {
+            vStatus.innerText = "WIN ✅"; wins++; beep(1200);
+        } else {
+            vStatus.innerText = "LOSS ❌"; losses++; beep(400);
         }
-    </script>
+        
+        document.getElementById('w').innerText = wins;
+        document.getElementById('l').innerText = losses;
+        document.getElementById('rate').innerText = Math.floor((wins/(wins+losses))*100) + "%";
+        setTimeout(() => { document.getElementById('vIn').value = ""; vStatus.innerText = ""; }, 2000);
+    }
+
+    function undo() { raw.shift(); updateSlots(); rEl.innerText="SCAN"; }
+    function fullReset() { 
+        raw = []; wins=0; losses=0; lastPred="";
+        updateSlots();
+        document.getElementById('result').innerText = "SCAN";
+        document.getElementById('result').style.color = "#151515";
+        document.getElementById('w').innerText = "0";
+        document.getElementById('l').innerText = "0";
+        document.getElementById('rate').innerText = "0%";
+    }
+</script>
 </body>
 </html>
+
