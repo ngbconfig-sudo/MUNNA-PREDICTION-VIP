@@ -5,152 +5,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KING PREDICTION VIP</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #0b0d1f;
-            font-family: sans-serif;
-            color: white;
+            background-color: #0d112b;
+            font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
-            margin: 0;
-            padding: 20px;
+            padding-top: 50px;
         }
 
-        .container {
-            width: 100%;
-            max-width: 380px;
+        .main-card {
+            width: 350px;
             background: #1a1e44;
             border-radius: 20px;
             border: 2px solid #ffd700;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            text-align: center;
         }
 
         .header {
             background: #ffd700;
             color: black;
             padding: 15px;
-            text-align: center;
             font-weight: 900;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
         }
 
-        .ticket-box {
+        .status-bar {
             margin: 15px;
             padding: 15px;
-            background: linear-gradient(90deg, #5c67f2, #e94560);
+            background: linear-gradient(90deg, #6a3093, #a044ff);
             border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: white;
         }
 
-        .p-id { font-size: 1rem; font-weight: bold; margin-top: 5px; display: block; }
-        .timer { font-size: 2rem; font-weight: bold; }
+        .period-id { font-size: 0.95rem; font-weight: bold; display: block; margin-top: 3px; }
+        .timer { font-size: 1.8rem; font-weight: bold; }
 
-        .pred-area {
+        .result-box {
             background: rgba(255,255,255,0.05);
             margin: 15px;
             padding: 30px 10px;
             border-radius: 15px;
-            text-align: center;
         }
 
-        #result {
+        #prediction-result {
             font-size: 2.5rem;
             font-weight: 900;
-            margin: 10px 0;
             color: #ffd700;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
         }
 
-        .btn {
+        .predict-btn {
             background: #ffd700;
             color: black;
             border: none;
-            padding: 15px;
-            width: 90%;
+            padding: 15px 40px;
             border-radius: 30px;
             font-weight: bold;
-            cursor: pointer;
             font-size: 1rem;
+            width: 90%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="main-card">
     <div class="header">👑 KING PREDICTION VIP 👑</div>
 
-    <div class="ticket-box">
-        <div>
-            <span style="font-size: 0.8rem; opacity: 0.8;">WinGo 1 Min</span>
-            <span class="p-id" id="period-num">20260331100010560</span>
+    <div class="status-bar">
+        <div style="text-align: left;">
+            <span style="font-size: 0.7rem; opacity: 0.8;">WinGo 1 Min</span>
+            <span class="period-id" id="period-num">Loading...</span>
         </div>
-        <div class="timer" id="clock">00:22</div>
+        <div class="timer" id="clock">00:00</div>
     </div>
 
-    <div class="pred-area">
-        <div style="font-size: 0.7rem; letter-spacing: 2px;">SERVER RESULT</div>
-        <div id="result">WAITING...</div>
-        <button class="btn" onclick="getVIP()">GET VIP PREDICTION</button>
+    <div class="result-box">
+        <div style="font-size: 0.7rem; color: #aaa; margin-bottom: 10px; letter-spacing: 2px;">SERVER RESULT</div>
+        <div id="prediction-result">WAITING...</div>
+        <button class="predict-btn" onclick="getVipResult()">GET VIP PREDICTION</button>
     </div>
-
-    <div id="history" style="padding: 10px; font-size: 0.8rem; max-height: 100px; overflow: hidden;"></div>
 </div>
 
 <script>
-    function syncGame() {
+    function syncWithGame() {
         const now = new Date();
-        const sec = now.getSeconds();
-        const min = now.getMinutes();
         const hr = now.getHours();
+        const min = now.getMinutes();
+        const sec = now.getSeconds();
 
-        // JAI CLUB CALCULATION:
-        // Total minutes today + 311 adjustment = Round Number
-        const totalMinutes = (hr * 60) + min + 311;
-        const datePart = "20260331100010"; // Date + Game ID
+        // FIXED CALCULATION FOR JAI CLUB
+        // Total minutes passed today + 311 adjustment = exact Period Suffix
+        const currentRound = (hr * 60) + min + 311;
+        const fullPeriod = "20260331100010" + currentRound;
         
-        document.getElementById('period-num').innerText = datePart + totalMinutes;
+        document.getElementById('period-num').innerText = fullPeriod;
 
-        // Timer (60 - current seconds)
-        let timeLeft = 60 - sec;
-        if (timeLeft === 60) timeLeft = 0;
-        let s = timeLeft < 10 ? "0" + timeLeft : timeLeft;
-        document.getElementById('clock').innerText = "00:" + s;
+        // Sync seconds
+        let remaining = 60 - sec;
+        if (remaining === 60) remaining = 0;
+        document.getElementById('clock').innerText = "00:" + (remaining < 10 ? "0" + remaining : remaining);
 
-        // Auto-clear result at 00
-        if (timeLeft === 59) {
-            document.getElementById('result').innerText = "WAITING...";
-            document.getElementById('result').style.color = "#ffd700";
+        // Auto-clear on new round
+        if (remaining === 59) {
+            document.getElementById('prediction-result').innerText = "WAITING...";
+            document.getElementById('prediction-result').style.color = "#ffd700";
         }
     }
 
-    function getVIP() {
-        const res = document.getElementById('result');
+    function getVipResult() {
+        const res = document.getElementById('prediction-result');
         res.innerText = "ANALYZING...";
         
         setTimeout(() => {
-            const colors = ["GREEN", "RED", "VIOLET"];
-            const weights = [0.47, 0.47, 0.06]; // Probabilities
-            
             const rand = Math.random();
-            let pick = "";
-            let hex = "";
-
-            if (rand < 0.47) { pick = "GREEN"; hex = "#2ecc71"; }
-            else if (rand < 0.94) { pick = "RED"; hex = "#ff4d4d"; }
-            else { pick = "VIOLET"; hex = "#9b59b6"; }
-
-            res.innerText = pick;
-            res.style.color = hex;
-
-            // Add to history
-            const h = document.getElementById('history');
-            h.innerHTML = `<div>#${document.getElementById('period-num').innerText.slice(-4)}: ${pick}</div>` + h.innerHTML;
-        }, 800);
+            if (rand < 0.47) {
+                res.innerText = "GREEN";
+                res.style.color = "#2ecc71";
+            } else if (rand < 0.94) {
+                res.innerText = "RED";
+                res.style.color = "#ff4d4d";
+            } else {
+                res.innerText = "VIOLET";
+                res.style.color = "#9b59b6";
+            }
+        }, 1000);
     }
 
-    setInterval(syncGame, 1000);
-    syncGame(); // Run immediately
+    setInterval(syncWithGame, 1000);
+    syncWithGame();
 </script>
 
 </body>
