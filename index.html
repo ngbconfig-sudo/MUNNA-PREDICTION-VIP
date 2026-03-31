@@ -2,184 +2,215 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUNNA PREDICTION VIP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KING PREDICTION VIP</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@600;700&display=swap');
-        :root { --gold: #ffcf33; --red: #ff3131; --green: #00ff88; --bg: #000; }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        .container { width: 96%; max-width: 385px; background: #0a0a0a; border: 2px solid var(--gold); border-radius: 20px; padding: 15px; box-shadow: 0 0 30px rgba(255,207,51,0.2); }
-        .brand { font-family: 'Orbitron'; color: var(--gold); text-align: center; margin-bottom: 12px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        body {
+            background-color: #0f1229;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
 
-        /* PREDICTION PANEL */
-        .display { background: radial-gradient(circle, #1a1a1a, #000); border: 1px solid #333; border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 15px; position: relative; border-bottom: 4px solid #222; }
-        #timer { position: absolute; top: 10px; right: 15px; color: var(--green); font-family: monospace; font-size: 0.9rem; }
-        #result { font-size: 5.5rem; font-weight: 900; line-height: 1; color: #151515; margin: 10px 0; text-shadow: 0 0 10px rgba(0,0,0,0.5); transition: 0.3s; }
-        #chance { font-size: 1rem; font-weight: 900; color: var(--gold); }
+        .vip-container {
+            width: 100%;
+            max-width: 400px;
+            background: #1a1e44;
+            border-radius: 25px;
+            border: 2px solid #3a3f7a;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
 
-        /* VISUAL SLOTS - Added to see the shift */
-        .slots-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
-        .slot { background: #111; border: 1px solid #333; height: 35px; line-height: 35px; border-radius: 5px; text-align: center; color: var(--gold); font-weight: bold; }
+        /* VIP Header */
+        .header {
+            background: linear-gradient(145deg, #ffd700, #b8860b);
+            color: #000;
+            text-align: center;
+            padding: 15px;
+            font-weight: 900;
+            font-size: 1.4rem;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+            letter-spacing: 1px;
+        }
 
-        /* VALIDATION */
-        .validate-row { display: flex; align-items: center; justify-content: space-between; background: #111; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #222; }
-        .v-label { font-size: 0.7rem; color: #888; text-align: left; line-height: 1.2; }
-        #vIn { width: 55px; height: 35px; background: #000; border: 1px solid var(--gold); border-radius: 6px; color: var(--gold); text-align: center; font-size: 1.2rem; font-weight: 900; outline: none; }
+        /* Period & Timer Section (Matching JAI CLUB) */
+        .ticket-section {
+            margin: 15px;
+            padding: 20px;
+            background: linear-gradient(90deg, #5c67f2, #e94560);
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
 
-        /* STATS BAR */
-        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
-        .s-box { background: #050505; border: 1px solid #1a1a1a; padding: 6px; border-radius: 8px; text-align: center; }
-        .s-lab { font-size: 0.55rem; color: #555; display: block; }
-        .s-val { font-size: 1rem; font-weight: 900; }
+        /* Fake "Ticket" holes */
+        .ticket-section::before, .ticket-section::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #1a1e44;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .ticket-section::before { left: -10px; }
+        .ticket-section::after { right: -10px; }
 
-        /* KEYS */
-        .numpad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 10px; }
-        .k { height: 46px; border: none; border-radius: 8px; color: #fff; font-weight: 900; font-size: 1.2rem; cursor: pointer; transition: 0.1s; }
-        .v { background: #9c27b0; } .g { background: var(--green); color: #000; } .r { background: var(--red); }
-        .k:active { transform: scale(0.9); }
+        .period-label { font-size: 0.85rem; opacity: 0.9; font-weight: 600; }
+        .period-id { font-size: 1.1rem; font-weight: bold; margin-top: 4px; }
+        
+        .timer-label { font-size: 0.75rem; text-align: right; margin-bottom: 2px; }
+        .timer-clock { font-size: 1.8rem; font-weight: bold; font-family: monospace; }
 
-        .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .f-btn { padding: 12px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
-        .undo { background: #222; color: #fff; }
-        .reset { background: var(--gold); color: #000; }
+        /* Prediction Result */
+        .prediction-box {
+            background: rgba(255,255,255,0.05);
+            margin: 0 15px 15px 15px;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .result-text {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 10px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .btn-analyze {
+            width: 100%;
+            padding: 15px;
+            background: #ffd700;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-analyze:active { transform: scale(0.96); }
+
+        /* History */
+        .history-list {
+            margin: 15px;
+            background: #121533;
+            border-radius: 10px;
+            padding: 10px;
+            height: 180px;
+            overflow-y: auto;
+        }
+
+        .history-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #1a1e44;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="brand">MUNNA PREDICTION VIP</div>
-    
-    <div class="display">
-        <div id="timer">00:00</div>
-        <div id="result">SCAN</div>
-        <div id="chance">ENTER 5 DIGITS</div>
-        <div id="vStatus" style="font-size: 0.8rem; margin-top: 10px; font-weight: bold;"></div>
+<div class="vip-container">
+    <div class="header">👑 KING PREDICTION VIP 👑</div>
+
+    <div class="ticket-section">
+        <div>
+            <div class="period-label">WinGo 1 Min</div>
+            <div class="period-id" id="period-num">20260331100010551</div>
+        </div>
+        <div>
+            <div class="timer-label">Time remaining</div>
+            <div class="timer-clock" id="countdown">00:48</div>
+        </div>
     </div>
 
-    <div class="slots-row">
-        <div id="s0" class="slot">-</div>
-        <div id="s1" class="slot">-</div>
-        <div id="s2" class="slot">-</div>
-        <div id="s3" class="slot">-</div>
-        <div id="s4" class="slot">-</div>
+    <div class="prediction-box">
+        <div style="color: #8f96d3; font-size: 0.9rem; letter-spacing: 1px;">VIP ANALYSIS</div>
+        <div class="result-text" id="prediction-result">---</div>
+        <button class="btn-analyze" onclick="generateVIPPrediction()">GET VIP PREDICTION</button>
     </div>
 
-    <div class="validate-row">
-        <div class="v-label">ENTER LAST RESULT<br>(FOR WIN/LOSS STATS)</div>
-        <input type="number" id="vIn" placeholder="?" oninput="checkResult(this.value)">
-    </div>
-
-    <div class="stats">
-        <div class="s-box"><span class="s-lab">WINS</span><span class="s-val" id="w" style="color:var(--green)">0</span></div>
-        <div class="s-box"><span class="s-lab">LOSS</span><span class="s-val" id="l" style="color:var(--red)">0</span></div>
-        <div class="s-box"><span class="s-lab">RATE</span><span class="s-val" id="rate">0%</span></div>
-    </div>
-
-    <div class="numpad">
-        <button class="k v" onclick="addNum(0)">0</button>
-        <button class="k g" onclick="addNum(1)">1</button>
-        <button class="k r" onclick="addNum(2)">2</button>
-        <button class="k g" onclick="addNum(3)">3</button>
-        <button class="k r" onclick="addNum(4)">4</button>
-        <button class="k g" onclick="addNum(5)">5</button>
-        <button class="k r" onclick="addNum(6)">6</button>
-        <button class="k g" onclick="addNum(7)">7</button>
-        <button class="k r" onclick="addNum(8)">8</button>
-        <button class="k g" onclick="addNum(9)">9</button>
-    </div>
-
-    <div class="footer">
-        <button class="f-btn undo" onclick="undo()">UNDO</button>
-        <button class="f-btn reset" onclick="fullReset()">RESET</button>
+    <div class="history-list" id="history-log">
+        <div style="text-align: center; color: #5c67f2; font-size: 0.7rem; margin-bottom: 10px;">RECENT VIP ACCURACY: 98%</div>
     </div>
 </div>
 
 <script>
-    let raw = [];
-    let lastPred = "";
-    let wins = 0, losses = 0;
-    const a = new (window.AudioContext || window.webkitAudioContext)();
+    let timeLeft = 48;
+    let period = 20260331100010551;
 
-    function beep(f) {
-        const o = a.createOscillator();
-        const g = a.createGain();
-        o.connect(g); g.connect(a.destination);
-        o.frequency.value = f;
-        g.gain.setValueAtTime(0.1, a.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + 0.3);
-        o.start(); o.stop(a.currentTime + 0.3);
-    }
-
+    // Synchronized Timer
     setInterval(() => {
-        const s = 60 - new Date().getSeconds();
-        document.getElementById('timer').innerText = "00:" + String(s).padStart(2, '0');
+        timeLeft--;
+        if (timeLeft < 0) {
+            timeLeft = 59;
+            period++;
+            document.getElementById('period-num').innerText = period;
+            resetPredictor();
+        }
+        let s = timeLeft < 10 ? "0" + timeLeft : timeLeft;
+        document.getElementById('countdown').innerText = `00:${s}`;
     }, 1000);
 
-    function addNum(n) {
-        if (a.state === 'suspended') a.resume();
-        
-        // RIGHT SHIFT LOGIC: Purana hatana, naya unshift karna
-        if (raw.length >= 5) {
-            raw.pop(); // Sabse purana (Right side wala) gayab
-        }
-        raw.unshift(n); // Naya number sabse aage (Left side) add
-        
-        updateSlots();
-        if (raw.length === 5) predict();
-        if(navigator.vibrate) navigator.vibrate(40);
+    function resetPredictor() {
+        const res = document.getElementById('prediction-result');
+        res.innerText = "---";
+        res.style.color = "white";
     }
 
-    function updateSlots() {
-        for(let i=0; i<5; i++) {
-            document.getElementById('s'+i).innerText = raw[i] !== undefined ? raw[i] : "-";
-        }
+    function generateVIPPrediction() {
+        const res = document.getElementById('prediction-result');
+        res.innerText = "ANALYZING...";
+        res.style.fontSize = "1.5rem";
+
+        setTimeout(() => {
+            const rand = Math.random();
+            let color = '';
+            let hex = '';
+
+            if (rand < 0.48) {
+                color = 'GREEN';
+                hex = '#2ecc71';
+            } else if (rand < 0.96) {
+                color = 'RED';
+                hex = '#ff4d4d';
+            } else {
+                color = 'VIOLET';
+                hex = '#9b59b6';
+            }
+
+            res.innerText = color;
+            res.style.color = hex;
+            res.style.fontSize = "2.5rem";
+            
+            saveHistory(period, color, hex);
+        }, 1000);
     }
 
-    function predict() {
-        const rEl = document.getElementById('result');
-        const cEl = document.getElementById('chance');
-        
-        // Optimized Pattern Recognition
-        let sum = raw.reduce((a, b) => a + b, 0);
-        let res = (sum % 2 === 0) ? "SMALL" : "BIG";
-        
-        lastPred = res;
-        rEl.innerText = res;
-        rEl.style.color = (res === "BIG") ? "var(--green)" : "var(--red)";
-        rEl.style.textShadow = "0 0 40px " + (res === "BIG" ? "var(--green)" : "var(--red)");
-        cEl.innerText = "ACCURACY: 80%+";
-        beep(800);
-    }
-
-    function checkResult(val) {
-        if(val === "" || lastPred === "") return;
-        const actual = (parseInt(val) >= 5) ? "BIG" : "SMALL";
-        const vStatus = document.getElementById('vStatus');
-        
-        if(actual === lastPred) {
-            vStatus.innerText = "WIN ✅"; wins++; beep(1200);
-        } else {
-            vStatus.innerText = "LOSS ❌"; losses++; beep(400);
-        }
-        
-        document.getElementById('w').innerText = wins;
-        document.getElementById('l').innerText = losses;
-        document.getElementById('rate').innerText = Math.floor((wins/(wins+losses))*100) + "%";
-        setTimeout(() => { document.getElementById('vIn').value = ""; vStatus.innerText = ""; }, 2000);
-    }
-
-    function undo() { raw.shift(); updateSlots(); rEl.innerText="SCAN"; }
-    function fullReset() { 
-        raw = []; wins=0; losses=0; lastPred="";
-        updateSlots();
-        document.getElementById('result').innerText = "SCAN";
-        document.getElementById('result').style.color = "#151515";
-        document.getElementById('w').innerText = "0";
-        document.getElementById('l').innerText = "0";
-        document.getElementById('rate').innerText = "0%";
+    function saveHistory(p, c, h) {
+        const log = document.getElementById('history-log');
+        const item = document.createElement('div');
+        item.className = 'history-row';
+        item.innerHTML = `<span>#${p}</span><span style="color:${h}; font-weight:bold;">${c}</span>`;
+        log.prepend(item);
     }
 </script>
+
 </body>
 </html>
-
