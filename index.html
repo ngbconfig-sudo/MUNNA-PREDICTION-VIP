@@ -7,142 +7,150 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #0d112b;
+            background-color: #0b0d1b;
             font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
-            padding-top: 50px;
+            padding-top: 40px;
         }
 
-        .main-card {
-            width: 350px;
-            background: #1a1e44;
-            border-radius: 20px;
-            border: 2px solid #ffd700;
+        .vip-container {
+            width: 360px;
+            background: #151a3d;
+            border-radius: 25px;
+            border: 3px solid #ffd700;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
             text-align: center;
         }
 
-        .header {
+        .vip-header {
             background: #ffd700;
             color: black;
-            padding: 15px;
+            padding: 18px;
             font-weight: 900;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
+            font-size: 1.3rem;
+            text-transform: uppercase;
         }
 
-        .status-bar {
+        .game-bar {
             margin: 15px;
-            padding: 15px;
-            background: linear-gradient(90deg, #6a3093, #a044ff);
-            border-radius: 12px;
+            padding: 20px;
+            background: linear-gradient(90deg, #5b46e0, #d63384);
+            border-radius: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: white;
         }
 
-        .period-id { font-size: 0.95rem; font-weight: bold; display: block; margin-top: 3px; }
-        .timer { font-size: 1.8rem; font-weight: bold; }
+        .period-box { text-align: left; }
+        .period-label { font-size: 0.75rem; opacity: 0.9; }
+        .period-val { font-size: 1.05rem; font-weight: bold; display: block; margin-top: 4px; }
 
-        .result-box {
-            background: rgba(255,255,255,0.05);
+        .time-val { font-size: 1.9rem; font-weight: bold; }
+
+        .result-panel {
+            background: rgba(0,0,0,0.3);
             margin: 15px;
-            padding: 30px 10px;
-            border-radius: 15px;
+            padding: 35px 15px;
+            border-radius: 20px;
         }
 
-        #prediction-result {
-            font-size: 2.5rem;
+        #prediction-text {
+            font-size: 2.8rem;
             font-weight: 900;
             color: #ffd700;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
         }
 
-        .predict-btn {
+        .vip-button {
             background: #ffd700;
             color: black;
             border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1rem;
+            padding: 16px;
             width: 90%;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
         }
     </style>
 </head>
 <body>
 
-<div class="main-card">
-    <div class="header">👑 KING PREDICTION VIP 👑</div>
+<div class="vip-container">
+    <div class="vip-header">👑 KING PREDICTION VIP 👑</div>
 
-    <div class="status-bar">
-        <div style="text-align: left;">
-            <span style="font-size: 0.7rem; opacity: 0.8;">WinGo 1 Min</span>
-            <span class="period-id" id="period-num">Loading...</span>
+    <div class="game-bar">
+        <div class="period-box">
+            <span class="period-label">WinGo 1 Min</span>
+            <span class="period-val" id="period-id">Calculating...</span>
         </div>
-        <div class="timer" id="clock">00:00</div>
+        <div class="time-val" id="timer">00:00</div>
     </div>
 
-    <div class="result-box">
-        <div style="font-size: 0.7rem; color: #aaa; margin-bottom: 10px; letter-spacing: 2px;">SERVER RESULT</div>
-        <div id="prediction-result">WAITING...</div>
-        <button class="predict-btn" onclick="getVipResult()">GET VIP PREDICTION</button>
+    <div class="result-panel">
+        <div style="font-size: 0.8rem; color: #aaa; margin-bottom: 10px; letter-spacing: 2px;">SERVER RESULT</div>
+        <div id="prediction-text">WAITING...</div>
+        <button class="vip-button" onclick="getPrediction()">GET VIP PREDICTION</button>
     </div>
 </div>
 
 <script>
-    function syncWithGame() {
+    function updateSync() {
         const now = new Date();
-        const hr = now.getHours();
-        const min = now.getMinutes();
-        const sec = now.getSeconds();
+        const hrs = now.getHours();
+        const mins = now.getMinutes();
+        const secs = now.getSeconds();
 
-        // FIXED CALCULATION FOR JAI CLUB
-        // Total minutes passed today + 311 adjustment = exact Period Suffix
-        const currentRound = (hr * 60) + min + 311;
-        const fullPeriod = "20260331100010" + currentRound;
+        // FIXED JAI CLUB FORMULA:
+        // Based on 2:54 PM = 10565
+        // (14 * 60) + 54 = 894 minutes passed today.
+        // 10565 - 894 = 9671 (This is the fixed offset)
         
-        document.getElementById('period-num').innerText = fullPeriod;
+        const totalMinutesToday = (hrs * 60) + mins;
+        const currentPeriodSuffix = totalMinutesToday + 9671; 
+        const fullPeriodID = "202603311000" + currentPeriodSuffix;
+        
+        document.getElementById('period-id').innerText = fullPeriodID;
 
-        // Sync seconds
-        let remaining = 60 - sec;
+        // Seconds Sync
+        let remaining = 60 - secs;
         if (remaining === 60) remaining = 0;
-        document.getElementById('clock').innerText = "00:" + (remaining < 10 ? "0" + remaining : remaining);
+        document.getElementById('timer').innerText = "00:" + (remaining < 10 ? "0" + remaining : remaining);
 
-        // Auto-clear on new round
+        // Reset display on new minute
         if (remaining === 59) {
-            document.getElementById('prediction-result').innerText = "WAITING...";
-            document.getElementById('prediction-result').style.color = "#ffd700";
+            document.getElementById('prediction-text').innerText = "WAITING...";
+            document.getElementById('prediction-text').style.color = "#ffd700";
         }
     }
 
-    function getVipResult() {
-        const res = document.getElementById('prediction-result');
-        res.innerText = "ANALYZING...";
+    function getPrediction() {
+        const display = document.getElementById('prediction-text');
+        display.innerText = "ANALYZING...";
         
         setTimeout(() => {
             const rand = Math.random();
-            if (rand < 0.47) {
-                res.innerText = "GREEN";
-                res.style.color = "#2ecc71";
-            } else if (rand < 0.94) {
-                res.innerText = "RED";
-                res.style.color = "#ff4d4d";
+            if (rand < 0.48) {
+                display.innerText = "GREEN";
+                display.style.color = "#2ecc71";
+            } else if (rand < 0.96) {
+                display.innerText = "RED";
+                display.style.color = "#ff4d4d";
             } else {
-                res.innerText = "VIOLET";
-                res.style.color = "#9b59b6";
+                display.innerText = "VIOLET";
+                display.style.color = "#9b59b6";
             }
         }, 1000);
     }
 
-    setInterval(syncWithGame, 1000);
-    syncWithGame();
+    // Run every second
+    setInterval(updateSync, 1000);
+    updateSync();
 </script>
 
 </body>
