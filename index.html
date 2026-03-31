@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KING PREDICTION VIP - ANALYZER</title>
+    <title>KING PREDICTION VIP - AUTO</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #0b0d1b; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 20px; color: white; }
-        .container { width: 100%; max-width: 400px; background: #151a3d; border-radius: 25px; border: 3px solid #ffd700; overflow: hidden; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); }
-        .header { background: #ffd700; color: #000; padding: 15px; text-align: center; font-weight: 900; font-size: 1.2rem; }
+        body { background-color: #0b0d1b; font-family: 'Arial', sans-serif; display: flex; justify-content: center; padding: 20px; color: white; }
+        .container { width: 100%; max-width: 380px; background: #161a3d; border-radius: 20px; border: 2px solid #ffd700; overflow: hidden; box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+        .header { background: #ffd700; color: #000; padding: 15px; text-align: center; font-weight: 900; letter-spacing: 1px; }
         
-        .game-info { margin: 15px; padding: 15px; background: linear-gradient(90deg, #4facfe, #00f2fe); border-radius: 15px; display: flex; justify-content: space-between; align-items: center; color: #000; }
-        .period-val { font-size: 1rem; font-weight: bold; display: block; }
-        .timer { font-size: 1.8rem; font-weight: 900; }
+        .timer-bar { margin: 15px; padding: 15px; background: linear-gradient(90deg, #5c67f2, #e94560); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .timer { font-size: 1.8rem; font-weight: bold; font-family: monospace; }
 
-        .input-section { margin: 15px; padding: 15px; background: rgba(255,215,0,0.1); border: 1px dashed #ffd700; border-radius: 12px; display: none; }
-        input { width: 100%; padding: 10px; margin-top: 10px; border-radius: 8px; border: none; text-align: center; font-weight: bold; }
+        .input-panel { margin: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px dashed #ffd700; display: none; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; text-align: center; font-weight: bold; font-size: 1.2rem; background: #fff; color: #000; }
 
-        .prediction-box { margin: 15px; padding: 30px 10px; background: rgba(0,0,0,0.4); border-radius: 20px; text-align: center; }
-        #status-msg { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; }
-        #main-res { font-size: 2.2rem; font-weight: 900; color: #ffd700; min-height: 60px; }
+        .prediction-area { margin: 15px; padding: 30px; background: rgba(0,0,0,0.3); border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        #main-display { font-size: 2.2rem; font-weight: 900; color: #ffd700; min-height: 50px; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
+        #status-sub { font-size: 0.7rem; color: #888; margin-bottom: 10px; text-transform: uppercase; }
 
-        .btn { background: #ffd700; color: #000; border: none; padding: 15px; width: 90%; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn:disabled { background: #444; color: #888; }
-
-        .history { margin: 15px; background: #0b0d1b; border-radius: 15px; padding: 10px; }
-        .h-head { display: flex; justify-content: space-between; padding: 5px 10px; font-size: 0.7rem; color: #ffd700; border-bottom: 1px solid #222; }
-        .h-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #1a1e44; font-size: 0.8rem; }
+        .history-card { margin: 15px; background: #0b0d1f; border-radius: 12px; padding: 10px; height: 280px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { color: #ffd700; padding-bottom: 10px; border-bottom: 1px solid #333; }
+        td { padding: 10px 2px; text-align: center; border-bottom: 1px solid #1a1e44; }
+        
         .win { color: #2ecc71; font-weight: bold; }
         .loss { color: #ff4d4d; font-weight: bold; }
+        .skip { color: #666; }
+        .btn-submit { background: #ffd700; color: #000; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -36,168 +36,155 @@
 <div class="container">
     <div class="header">👑 KING PREDICTION VIP 👑</div>
     
-    <div class="game-info">
+    <div class="timer-bar">
         <div>
-            <span style="font-size: 0.7rem; font-weight: bold;">WinGo 1 Min</span>
-            <span class="period-val" id="current-p">...</span>
+            <div style="font-size: 0.7rem; opacity: 0.8;">WinGo 1 Min</div>
+            <div id="current-p" style="font-weight: bold; font-size: 0.9rem;">...</div>
         </div>
         <div class="timer" id="clock">00:00</div>
     </div>
 
-    <div class="input-section" id="input-ui">
-        <div id="input-label" style="font-size: 0.75rem;">ENTER RESULT FOR PERIOD ...</div>
-        <input type="number" id="user-input" placeholder="Enter Number (0-9)" min="0" max="9">
-        <button class="btn" style="padding: 8px; margin-top: 10px;" onclick="submitLastResult()">SUBMIT RESULT</button>
+    <div class="input-panel" id="input-box">
+        <div id="input-title" style="font-size: 0.75rem; color: #ffd700;">ENTER RESULT FOR PREVIOUS PERIOD:</div>
+        <input type="number" id="num-input" placeholder="Enter Result (0-9)" min="0" max="9">
+        <button class="btn-submit" onclick="submitData()">SUBMIT RESULT</button>
     </div>
 
-    <div class="prediction-box">
-        <div id="status-msg">ANALYSIS STATUS</div>
-        <div id="main-res">Please fill before 5 bets result</div>
-        <button class="btn" id="predict-btn" onclick="generatePrediction()" disabled>GET PREDICTION</button>
+    <div class="prediction-area">
+        <div id="status-sub">System Status</div>
+        <div id="main-display">INITIALIZING...</div>
     </div>
 
-    <div class="history" id="history-box">
-        <div class="h-head">
-            <span>PERIOD</span>
-            <span>PREDICT</span>
-            <span>RESULT</span>
-            <span>STATUS</span>
-        </div>
-        </div>
+    <div class="history-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th>Predict</th>
+                    <th>Actual</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="log-body"></tbody>
+        </table>
+    </div>
 </div>
 
 <script>
-    let historyData = []; // To store {period, predicted, actual}
-    let currentPrediction = null;
-    let lastPeriodAdded = "";
-    let canPredict = false;
+    let history = []; 
+    let lastHandledPeriod = "";
+    let isAutoPredictionDone = false;
 
-    function updateGame() {
+    function engine() {
         const now = new Date();
-        const hrs = now.getHours();
-        const mins = now.getMinutes();
-        const secs = now.getSeconds();
+        const hrs = now.getHours(), mins = now.getMinutes(), secs = now.getSeconds();
 
-        // Exact Period Formula (9671 offset)
-        const currentSuffix = (hrs * 60) + mins + 9671;
-        const fullPeriod = "202603311000" + currentSuffix;
-        const lastPeriod = "202603311000" + (currentSuffix - 1);
+        // Standard 9671 Offset
+        const pSuffix = (hrs * 60) + mins + 9671;
+        const currentP = "202603311000" + pSuffix;
+        const lastP = "202603311000" + (pSuffix - 1);
         
-        document.getElementById('current-p').innerText = fullPeriod;
+        document.getElementById('current-p').innerText = currentP;
 
-        let remaining = 60 - secs;
-        document.getElementById('clock').innerText = "00:" + (remaining < 10 ? "0" + remaining : (remaining === 60 ? "00" : remaining));
+        let rem = 60 - secs;
+        document.getElementById('clock').innerText = "00:" + (rem < 10 ? "0" + rem : (rem === 60 ? "00" : rem));
 
-        // First 30 Seconds: Show Input for Previous Period
-        const inputUI = document.getElementById('input-ui');
-        if (remaining > 30) {
-            inputUI.style.display = "block";
-            document.getElementById('input-label').innerText = "ENTER RESULT FOR PERIOD: " + lastPeriod.slice(-4);
+        // Input window (First 30 seconds)
+        const inputDiv = document.getElementById('input-box');
+        if (rem > 30) {
+            inputDiv.style.display = "block";
+            document.getElementById('input-title').innerText = "RESULT FOR: " + lastP.slice(-4);
         } else {
-            inputUI.style.display = "none";
+            inputDiv.style.display = "none";
+        }
+
+        // Auto-Trigger Prediction (When timer is between 30 and 25)
+        if (rem <= 30 && rem > 25 && !isAutoPredictionDone) {
+            checkAndPredict(currentP);
         }
 
         // New Minute Reset
-        if (remaining === 59 && fullPeriod !== lastPeriodAdded) {
-            lastPeriodAdded = fullPeriod;
-            currentPrediction = null; 
-            if(historyData.length < 5) {
-                document.getElementById('main-res').innerText = "Please fill before 5 bets result";
-                document.getElementById('predict-btn').disabled = true;
-            } else {
-                document.getElementById('main-res').innerText = "READY";
-                document.getElementById('predict-btn').disabled = false;
+        if (currentP !== lastHandledPeriod) {
+            if (lastHandledPeriod !== "" && !history.find(h => h.p === lastP)) {
+                history.push({ p: lastP, pred: "---", actual: "---", status: "SKIPPED" });
             }
+            lastHandledPeriod = currentP;
+            isAutoPredictionDone = false; 
+            refreshUI();
         }
     }
 
-    function submitLastResult() {
-        const val = document.getElementById('user-input').value;
-        if (val === "") return alert("Please enter a number!");
-        
-        const lastP = (parseInt(document.getElementById('current-p').innerText.slice(-5)) - 1).toString();
-        
-        // Find if we had a prediction for this last period
-        let lastEntry = historyData.find(h => h.period.includes(lastP));
-        
-        const num = parseInt(val);
-        let actualColor = (num % 2 === 0) ? "RED" : "GREEN";
-        if (num === 0 || num === 5) actualColor = "VIOLET";
+    function checkAndPredict(p) {
+        const validCount = history.filter(h => h.actual !== "---" && h.actual !== "WAITING").length;
+        const display = document.getElementById('main-display');
 
-        if (lastEntry) {
-            lastEntry.actual = actualColor;
-            renderHistory();
-            document.getElementById('input-ui').style.display = "none";
-            document.getElementById('user-input').value = "";
-        } else {
-            alert("No prediction was made for the previous round to compare.");
+        if (validCount < 5) {
+            display.innerText = `FILL ${5 - validCount} MORE`;
+            display.style.color = "#888";
+            return;
         }
-    }
 
-    function generatePrediction() {
-        if (historyData.length < 5) return;
+        // Start Auto Prediction
+        isAutoPredictionDone = true;
+        display.innerText = "ANALYZING...";
+        display.style.color = "#ffd700";
 
-        const display = document.getElementById('main-res');
-        display.innerText = "ANALYZING PATTERN...";
-        
         setTimeout(() => {
-            const colors = ["RED", "GREEN"];
-            const pick = colors[Math.floor(Math.random() * colors.length)];
-            currentPrediction = pick;
+            const res = Math.random() > 0.5 ? "RED" : "GREEN";
+            display.innerText = res;
+            display.style.color = (res === "RED") ? "#ff4d4d" : "#2ecc71";
             
-            display.innerText = pick;
-            display.style.color = (pick === "RED") ? "#ff4d4d" : "#2ecc71";
-
-            // Add to history as "Pending Result"
-            const p = document.getElementById('current-p').innerText;
-            historyData.push({ period: p, predicted: pick, actual: "WAITING", status: "..." });
-            renderHistory();
-            
-            document.getElementById('predict-btn').disabled = true;
+            history.push({ p: p, pred: res, actual: "WAITING", status: "..." });
+            refreshUI();
         }, 1500);
     }
 
-    function renderHistory() {
-        const box = document.getElementById('history-box');
-        // Clear except header
-        const rows = box.querySelectorAll('.h-row');
-        rows.forEach(r => r.remove());
+    function submitData() {
+        const val = document.getElementById('num-input').value;
+        if (val === "") return;
 
-        historyData.slice().reverse().forEach(item => {
-            let status = "...";
-            let statusClass = "";
+        const pSuffix = (new Date().getHours() * 60) + new Date().getMinutes() + 9671;
+        const targetP = "202603311000" + (pSuffix - 1);
+        
+        const num = parseInt(val);
+        const actualColor = (num === 0 || num === 5) ? "VIOLET" : (num % 2 === 0 ? "RED" : "GREEN");
 
-            if (item.actual !== "WAITING") {
-                if (item.predicted === item.actual) {
-                    status = "WIN";
-                    statusClass = "win";
-                } else {
-                    status = "LOSS";
-                    statusClass = "loss";
-                }
+        let entry = history.find(h => h.p === targetP);
+        if (entry) {
+            entry.actual = actualColor;
+            if (entry.pred !== "---") {
+                entry.status = (entry.pred === actualColor) ? "WIN" : "LOSS";
             }
+        } else {
+            history.push({ p: targetP, pred: "---", actual: actualColor, status: "SKIPPED" });
+        }
 
-            const row = document.createElement('div');
-            row.className = 'h-row';
-            row.innerHTML = `
-                <span>${item.period.slice(-4)}</span>
-                <span style="color:${item.predicted === 'RED' ? '#ff4d4d' : '#2ecc71'}">${item.predicted}</span>
-                <span>${item.actual}</span>
-                <span class="${statusClass}">${status}</span>
-            `;
-            box.appendChild(row);
+        document.getElementById('num-input').value = "";
+        document.getElementById('input-box').style.display = "none";
+        refreshUI();
+    }
+
+    function refreshUI() {
+        const body = document.getElementById('log-body');
+        body.innerHTML = "";
+        
+        history.slice().reverse().forEach(h => {
+            let sClass = h.status === "WIN" ? "win" : (h.status === "LOSS" ? "loss" : "skip");
+            body.innerHTML += `<tr>
+                <td>${h.p.slice(-4)}</td>
+                <td style="color:${h.pred === 'RED' ? '#ff4d4d' : (h.pred === 'GREEN' ? '#2ecc71' : '#fff')}">${h.pred}</td>
+                <td>${h.actual}</td>
+                <td class="${sClass}">${h.status}</td>
+            </tr>`;
         });
 
-        // 5 Results check
-        if (historyData.filter(h => h.actual !== "WAITING").length >= 5) {
-            canPredict = true;
-        } else {
-            document.getElementById('main-res').innerText = "Please fill before 5 bets result (" + historyData.filter(h => h.actual !== "WAITING").length + "/5)";
+        const validCount = history.filter(h => h.actual !== "---" && h.actual !== "WAITING").length;
+        if (validCount < 5 && !isAutoPredictionDone) {
+            document.getElementById('main-display').innerText = `NEED ${5 - validCount} RESULTS`;
         }
     }
 
-    setInterval(updateGame, 1000);
-    updateGame();
+    setInterval(engine, 1000);
 </script>
 
 </body>
