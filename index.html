@@ -1,175 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KING VIP V3.6 - PATTERN FIX</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
-        :root { --gold: #ffd700; --bg: #03050a; --card: #0d111b; --green: #00ff88; --red: #ff3366; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg); font-family: sans-serif; display: flex; justify-content: center; padding: 10px; color: white; }
-        .container { width: 100%; max-width: 400px; background: var(--card); border-radius: 20px; border: 2.5px solid var(--gold); overflow: hidden; box-shadow: 0 0 40px rgba(255, 215, 0, 0.15); }
+        body { background: transparent; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; overflow: hidden; }
         
-        .header { background: var(--gold); color: #000; padding: 12px; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 1rem; }
-        
-        .status-row { display: flex; justify-content: space-between; padding: 12px 20px; background: rgba(255,255,255,0.03); border-bottom: 1px solid #222; }
-        #timer { font-size: 1.5rem; font-weight: bold; color: var(--gold); font-family: monospace; }
+        .injector-card {
+            width: 260px; background: rgba(0, 0, 0, 0.9); border: 2.5px solid #39ff14; 
+            border-radius: 25px; padding: 20px; text-align: center;
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.5); color: white; position: relative;
+        }
 
-        .pred-box { margin: 20px 15px; padding: 45px 10px; background: #000; border-radius: 25px; text-align: center; border: 1px solid #333; }
-        #output { font-size: 3.5rem; font-weight: 900; letter-spacing: 3px; }
-        #sub-msg { font-size: 0.7rem; color: var(--gold); font-weight: bold; margin-bottom: 10px; opacity: 0.8; }
+        .header { color: #39ff14; font-weight: bold; font-size: 16px; margin-bottom: 10px; text-shadow: 0 0 10px #39ff14; letter-spacing: 1px; }
+        .close-btn { position: absolute; right: 15px; top: 15px; color: #39ff14; font-size: 18px; cursor: pointer; }
 
-        .input-box { margin: 15px; padding: 15px; background: rgba(255,215,0,0.03); border-radius: 15px; border: 1px dashed #555; }
-        input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; text-align: center; font-size: 1.1rem; margin-bottom: 10px; }
-        button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: var(--gold); color: #000; font-weight: 900; cursor: pointer; }
+        /* Loader */
+        .loader-container { display: none; margin: 20px 0; }
+        .loader {
+            width: 50px; height: 50px; border: 4px solid #1a1a1a; border-top: 4px solid #39ff14;
+            border-radius: 50%; margin: 0 auto; animation: spin 0.8s linear infinite;
+            box-shadow: 0 0 10px #39ff14;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .status-text { color: #39ff14; font-size: 11px; margin-top: 10px; font-weight: bold; letter-spacing: 1px; }
 
-        .logs { margin: 10px; height: 250px; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        th { color: var(--gold); padding: 8px; border-bottom: 1px solid #333; }
-        td { padding: 10px; text-align: center; border-bottom: 1px solid #1a1e26; }
-        .win { color: var(--green); font-weight: bold; }
-        .loss { color: var(--red); font-weight: bold; }
+        /* Result Display */
+        #result-circle { 
+            width: 80px; height: 80px; border-radius: 50%; margin: 15px auto; 
+            display: none; align-items: center; justify-content: center; 
+            font-size: 18px; font-weight: bold; border: 3px solid #39ff14;
+            text-shadow: 0 0 5px #fff; box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        /* Period Box */
+        .period-box {
+            background: #1a1a1a; border-radius: 12px; padding: 8px; font-size: 13px;
+            color: #39ff14; margin-top: 15px; border: 1px solid #333; font-weight: bold;
+        }
+
+        /* Button */
+        .btn-hack {
+            background: linear-gradient(to right, #ff0000, #990000); border: none;
+            color: white; padding: 12px; border-radius: 12px; font-weight: bold;
+            width: 100%; margin-top: 15px; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+            font-size: 14px; cursor: pointer; transition: 0.3s;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">KING VIP V3.6 - NEURAL ENGINE</div>
+<div class="injector-card">
+    <div class="close-btn" onclick="Android.closeMenu()">×</div>
+    <div class="header">XS STORE PRO</div>
     
-    <div class="status-row">
-        <div><small style="opacity: 0.6;">PERIOD</small><br><span id="p-id" style="font-weight: bold;">---</span></div>
-        <div id="timer">00:00</div>
+    <div id="loader-area" class="loader-container">
+        <div class="loader"></div>
+        <div class="status-text">QUANTUM ANALYZING...</div>
     </div>
+    
+    <div id="result-circle"></div>
 
-    <div class="pred-box">
-        <div id="sub-msg">NEURAL SCANNING ACTIVE</div>
-        <div id="output">WAIT</div>
-    </div>
+    <button id="hack_btn" class="btn-hack" onclick="handleHack()">⚡ START HACK ⚡</button>
 
-    <div class="input-box" id="ui-area">
-        <input type="number" id="manual-val" placeholder="ENTER RESULT (0-9)">
-        <button onclick="saveData()">SYNC DATA</button>
-    </div>
-
-    <div class="logs">
-        <table>
-            <thead><tr><th>Period</th><th>Color</th><th>Result</th><th>Status</th></tr></thead>
-            <tbody id="table-body"></tbody>
-        </table>
+    <div class="period-box" id="period_text">
+        PERIOD: 20260117XXXX----
     </div>
 </div>
 
 <script>
-    let logData = [];
-    let lastPID = "";
-    let calculated = false;
+    let lastPeriod = "";
 
-    function clock() {
-        const d = new Date();
-        const s = d.getSeconds();
-        const rem = 60 - s;
-        const pNum = (d.getHours() * 60) + d.getMinutes() + 9671;
-        const fullP = "20260401" + pNum;
+    function handleHack() {
+        // Current date and dummy logic for last 4 digits
+        let now = new Date();
+        let dateStr = "20260117"; // Static as per your requirement
+        let randomLast4 = Math.floor(1000 + Math.random() * 9000); 
+        let currentFullPeriod = dateStr + "XXXX" + randomLast4;
 
-        document.getElementById('p-id').innerText = fullP;
-        document.getElementById('timer').innerText = "00:" + (rem < 10 ? "0" + rem : (rem === 60 ? "00" : rem));
-
-        document.getElementById('ui-area').style.display = (rem > 20) ? "block" : "none";
-
-        if (rem <= 25 && rem > 5 && !calculated) {
-            if (logData.filter(x => x.res !== "---").length >= 3) {
-                runLogic(fullP);
-            } else {
-                document.getElementById('output').innerText = "SYNC...";
-            }
+        // Check if same period clicked again
+        if (currentFullPeriod === lastPeriod) {
+            Android.showToast("Please wait for next period!");
+            return;
         }
 
-        if (fullP !== lastPID) {
-            lastPID = fullP;
-            calculated = false;
-            updateTable();
-        }
-    }
+        // UI Transition to Loading
+        document.getElementById('hack_btn').style.display = 'none';
+        document.getElementById('result-circle').style.display = 'none';
+        document.getElementById('loader-area').style.display = 'block';
 
-    function runLogic(p) {
-        calculated = true;
-        const out = document.getElementById('output');
-        const msg = document.getElementById('sub-msg');
-        
-        out.innerText = "....";
-        
         setTimeout(() => {
-            let resHistory = logData.filter(h => h.res !== "---").map(h => (h.res % 2 === 0 ? "RED" : "GREEN"));
+            document.getElementById('loader-area').style.display = 'none';
             
-            // Fix: Intelligent Color Balancing
-            let redCount = resHistory.filter(c => c === "RED").length;
-            let greenCount = resHistory.filter(c => c === "GREEN").length;
+            // Prediction Logic (Big/Small)
+            let prediction = Math.random() > 0.5 ? "BIG" : "SMALL";
+            let color = (prediction === "BIG") ? "#39ff14" : "#ff0000";
             
-            let prediction = "RED";
+            let resCircle = document.getElementById('result-circle');
+            resCircle.innerHTML = prediction;
+            resCircle.style.display = 'flex';
+            resCircle.style.borderColor = color;
+            resCircle.style.color = color;
+            resCircle.style.boxShadow = "0 0 20px " + color;
 
-            // If system is leaning too much on one side, it forces an alternation check
-            if (redCount >= greenCount + 2) {
-                prediction = "GREEN";
-            } else if (greenCount >= redCount + 1) {
-                prediction = "RED";
-            } else {
-                // Random based on last result if balance is equal
-                prediction = (resHistory[0] === "RED") ? "GREEN" : "RED";
-            }
-
-            // Dragon Trend Safeguard (If 4 same colors in history, follow it)
-            if (resHistory.length >= 4) {
-                let last4 = resHistory.slice(0, 4);
-                if (last4.every(v => v === last4[0])) prediction = last4[0];
-            }
-
-            out.innerText = prediction;
-            out.style.color = (prediction === "RED") ? "var(--red)" : "var(--green)";
-            msg.innerText = "ACCURACY: 98% (PATTERN FIXED)";
-
-            logData.push({ p: p, pred: prediction, res: "---", st: "..." });
-            updateTable();
-        }, 1500);
+            document.getElementById('period_text').innerText = "PERIOD: " + currentFullPeriod;
+            document.getElementById('hack_btn').style.display = 'block';
+            
+            lastPeriod = currentFullPeriod;
+        }, 2500); // 2.5 seconds processing
     }
-
-    function saveData() {
-        const val = document.getElementById('manual-val').value;
-        if (val === "" || val < 0 || val > 9) return;
-        
-        const pNum = (new Date().getHours() * 60) + new Date().getMinutes() + 9671;
-        const target = "20260401" + (pNum - 1);
-        const rNum = parseInt(val);
-        
-        let rCol = (rNum % 2 === 0) ? "RED" : "GREEN";
-        if (rNum === 0) rCol = "RED"; if (rNum === 5) rCol = "GREEN";
-
-        let entry = logData.find(h => h.p === target);
-        if (entry) {
-            entry.res = rNum;
-            if (entry.pred !== "---") entry.st = (entry.pred === rCol) ? "WIN" : "LOSS";
-        } else {
-            logData.push({ p: target, pred: "---", res: rNum, st: "DATA" });
-        }
-        document.getElementById('manual-val').value = "";
-        updateTable();
-    }
-
-    function updateTable() {
-        const body = document.getElementById('table-body');
-        body.innerHTML = "";
-        logData.slice().reverse().forEach(h => {
-            let sCls = h.st === "WIN" ? "win" : (h.st === "LOSS" ? "loss" : "");
-            body.innerHTML += `<tr>
-                <td>${h.p.slice(-3)}</td>
-                <td style="color:${h.pred==='RED'?'#ff3366':(h.pred==='GREEN'?'#00ff88':'#888')}">${h.pred}</td>
-                <td><b>${h.res}</b></td>
-                <td class="${sCls}">${h.st}</td>
-            </tr>`;
-        });
-    }
-
-    setInterval(clock, 1000);
 </script>
+
 </body>
 </html>
 
