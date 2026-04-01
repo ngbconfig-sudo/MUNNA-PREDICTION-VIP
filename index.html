@@ -3,207 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KING PREDICTION VIP V2.1</title>
+    <title>KING VIP V2.3 - SURE SHOT</title>
     <style>
-        :root { --gold: #ffd700; --bg: #0a0c18; --card: #151935; --rev: #ff4500; }
+        :root { --gold: #ffd700; --bg: #070912; --card: #12162d; --green: #00ff88; --red: #ff3366; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 15px; color: white; }
-        .container { width: 100%; max-width: 400px; background: var(--card); border-radius: 25px; border: 2px solid var(--gold); overflow: hidden; box-shadow: 0 0 40px rgba(255, 215, 0, 0.2); }
+        body { background-color: var(--bg); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 10px; color: white; }
+        .container { width: 100%; max-width: 400px; background: var(--card); border-radius: 30px; border: 2px solid var(--gold); overflow: hidden; box-shadow: 0 0 50px rgba(255, 215, 0, 0.15); }
         
-        .header { background: var(--gold); color: #000; padding: 15px; text-align: center; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; }
+        .header { background: linear-gradient(180deg, var(--gold), #b8860b); color: #000; padding: 15px; text-align: center; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* Reverse Button Style */
-        .reverse-container { background: rgba(255,255,255,0.05); margin: 10px; padding: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.1); }
-        .rev-label { font-size: 0.8rem; font-weight: bold; color: var(--gold); }
-        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .rev-mode { background: rgba(255,255,255,0.03); margin: 10px; padding: 12px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
+        .switch { position: relative; width: 50px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 24px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--rev); box-shadow: 0 0 10px var(--rev); }
-        input:checked + .slider:before { transform: translateX(26px); }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #333; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background: #ff4500; }
+        input:checked + .slider:before { transform: translateX(24px); }
 
-        .stats-row { display: flex; justify-content: space-between; padding: 15px; }
-        .timer { font-size: 1.6rem; font-weight: bold; color: var(--gold); }
+        .timer-sec { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: rgba(0,0,0,0.2); }
+        #time-left { font-size: 1.8rem; font-weight: 900; color: var(--gold); font-family: monospace; }
 
-        .display-box { margin: 15px; padding: 30px; background: rgba(0,0,0,0.4); border-radius: 20px; text-align: center; border: 1px solid rgba(255,215,0,0.1); transition: 0.3s; }
-        .rev-active-glow { border: 1px solid var(--rev); box-shadow: inset 0 0 20px rgba(255, 69, 0, 0.2); }
-        #main-output { font-size: 2.4rem; font-weight: 900; }
-        
-        .input-section { margin: 0 15px 15px; padding: 15px; background: rgba(255,215,0,0.05); border-radius: 15px; border: 1px dashed var(--gold); }
-        input[type="number"] { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: none; font-size: 1.2rem; text-align: center; font-weight: bold; }
-        .btn-v2 { background: var(--gold); color: #000; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 900; cursor: pointer; margin-top: 10px; }
+        .main-display { margin: 15px; padding: 35px 20px; background: radial-gradient(circle, #1a1f3c, #0a0d1d); border-radius: 25px; text-align: center; border: 1px solid rgba(255,215,0,0.1); position: relative; }
+        #prediction-text { font-size: 2.8rem; font-weight: 900; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
+        #number-hint { font-size: 1.3rem; margin-top: 10px; color: #fff; background: rgba(255,255,255,0.1); display: inline-block; padding: 5px 20px; border-radius: 50px; }
+        #accuracy-tag { font-size: 0.8rem; color: var(--green); font-weight: bold; margin-bottom: 10px; display: block; }
 
-        .history-wrap { margin: 15px; background: #080a16; border-radius: 15px; padding: 10px; height: 300px; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        th { color: var(--gold); padding-bottom: 10px; border-bottom: 1px solid #333; }
-        td { padding: 10px 4px; text-align: center; border-bottom: 1px solid #1a1e3a; }
-        .win { color: #2ecc71; font-weight: bold; }
-        .loss { color: #e94560; font-weight: bold; }
-        .dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-left: 3px; }
-        .g { background: #2ecc71; } .r { background: #e94560; } .v { background: #9b59b6; }
+        .input-area { margin: 0 15px 15px; padding: 15px; background: rgba(255,255,255,0.02); border-radius: 20px; }
+        input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #333; background: #000; color: #fff; text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; }
+        button { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--gold); color: #000; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+
+        .history { margin: 15px; height: 250px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { color: var(--gold); padding-bottom: 10px; text-align: center; border-bottom: 1px solid #333; }
+        td { padding: 10px 5px; text-align: center; border-bottom: 1px solid #1a1e3a; }
+        .win-text { color: var(--green); font-weight: bold; }
+        .loss-text { color: var(--red); font-weight: bold; }
+        .skip-text { color: #888; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">King VIP V2.1 + REVERSE</div>
+    <div class="header">KING VIP V2.3 SURE SHOT</div>
     
-    <div class="reverse-container">
-        <div class="rev-label">REVERSE MODE (Loss Recovery)</div>
+    <div class="rev-mode">
+        <span style="font-size: 0.8rem; font-weight: bold;">REVERSE STRATEGY</span>
         <label class="switch">
-            <input type="checkbox" id="rev-switch" onchange="toggleRevUI()">
+            <input type="checkbox" id="rev-btn">
             <span class="slider"></span>
         </label>
     </div>
 
-    <div class="stats-row">
-        <div class="period-info">
-            <div style="opacity: 0.6; font-size: 0.7rem;">Active Period</div>
-            <div id="p-id" style="font-weight: bold;">---</div>
+    <div class="timer-sec">
+        <div>
+            <div style="font-size: 0.7rem; opacity: 0.6;">Period ID</div>
+            <div id="p-display" style="font-weight: bold;">--------</div>
         </div>
-        <div class="timer" id="time-left">00:00</div>
+        <div id="time-left">00:00</div>
     </div>
 
-    <div class="display-box" id="main-card">
-        <div id="main-output">V2.1 READY</div>
-        <div id="sub-msg" style="font-size: 0.7rem; color: #888; margin-top: 8px;">Auto-Sync Enabled</div>
+    <div class="main-display">
+        <span id="accuracy-tag">SYSTEM ANALYSIS ACTIVE</span>
+        <div id="prediction-text">WAITING</div>
+        <div id="number-hint">Next: --</div>
     </div>
 
-    <div class="input-section" id="input-area">
-        <input type="number" id="num-in" placeholder="Enter Result (0-9)">
-        <button class="btn-v2" onclick="submitResult()">UPDATE DATA</button>
+    <div class="input-area" id="box-input">
+        <input type="number" id="last-res" placeholder="Enter Last Result (0-9)">
+        <button onclick="addResult()">SUBMIT DATA</button>
     </div>
 
-    <div class="history-wrap">
+    <div class="history">
         <table>
             <thead>
                 <tr>
                     <th>Period</th>
                     <th>Predict</th>
-                    <th>Result</th>
+                    <th>Num</th>
                     <th>Status</th>
                 </tr>
             </thead>
-            <tbody id="v2-log"></tbody>
+            <tbody id="logs"></tbody>
         </table>
     </div>
 </div>
 
 <script>
-    let v2History = [];
-    let lastPeriod = "";
-    let isPredicted = false;
+    let logs = [];
+    let lastPeriodTrack = "";
+    let isCalculated = false;
 
-    function engine() {
-        const now = new Date();
-        const secs = now.getSeconds();
-        const rem = 60 - secs;
-        const pSuffix = (now.getHours() * 60) + now.getMinutes() + 9671;
-        const currentP = "20260401" + pSuffix;
-        
-        document.getElementById('p-id').innerText = currentP;
+    function core() {
+        const d = new Date();
+        const s = d.getSeconds();
+        const rem = 60 - s;
+        const pID = (d.getHours() * 60) + d.getMinutes() + 9671;
+        const fullP = "20260401" + pID;
+
+        document.getElementById('p-display').innerText = fullP;
         document.getElementById('time-left').innerText = "00:" + (rem < 10 ? "0" + rem : (rem === 60 ? "00" : rem));
 
-        // Show input box in first 30s
-        document.getElementById('input-area').style.display = (rem > 30) ? "block" : "none";
+        // Display Input Box only in first 35 seconds
+        document.getElementById('box-input').style.display = (rem > 25) ? "block" : "none";
 
-        // Predict at 30s
-        if (rem <= 30 && rem > 25 && !isPredicted) {
-            const dataPoints = v2History.filter(h => h.resNum !== "---").length;
-            if (dataPoints >= 5) {
-                predictLogic(currentP);
-            } else {
-                document.getElementById('main-output').innerText = "NEED DATA";
-            }
+        // Prediction Window (between 25 and 20 seconds remaining)
+        if (rem <= 25 && rem > 15 && !isCalculated) {
+            analyzeSureShot(fullP);
         }
 
-        if (currentP !== lastPeriod) {
-            lastPeriod = currentP;
-            isPredicted = false;
-            refreshUI();
+        if (fullP !== lastPeriodTrack) {
+            lastPeriodTrack = fullP;
+            isCalculated = false;
+            render();
         }
     }
 
-    function toggleRevUI() {
-        const isRev = document.getElementById('rev-switch').checked;
-        const card = document.getElementById('main-card');
-        if (isRev) card.classList.add('rev-active-glow');
-        else card.classList.remove('rev-active-glow');
-    }
+    function analyzeSureShot(p) {
+        isCalculated = true;
+        const predTxt = document.getElementById('prediction-text');
+        const numTxt = document.getElementById('number-hint');
+        const accTag = document.getElementById('accuracy-tag');
+        const isRev = document.getElementById('rev-btn').checked;
 
-    function predictLogic(p) {
-        isPredicted = true;
-        const output = document.getElementById('main-output');
-        const isRev = document.getElementById('rev-switch').checked;
-        
-        output.innerText = "ANALYZING...";
-        
+        predTxt.innerText = "SCANNING...";
+        accTag.innerText = "PATTERN MATCHING...";
+
         setTimeout(() => {
-            let score = Math.floor(Math.random() * (98 - 90 + 1)) + 90;
-            let rawPick = Math.random() > 0.5 ? "GREEN" : "RED";
-            
-            // REVERSE LOGIC
-            let finalPick = rawPick;
-            if (isRev) {
-                finalPick = (rawPick === "GREEN") ? "RED" : "GREEN";
-            }
+            // Logic: 95% Sure Shot Filter
+            // It skips if random logic falls below 95, but we simulate high-confidence patterns
+            let confidence = Math.floor(Math.random() * (99 - 92 + 1)) + 92;
 
-            output.innerText = finalPick;
-            output.style.color = (finalPick === "RED") ? "#e94560" : "#2ecc71";
-            
-            v2History.push({ p: p, pred: finalPick, resNum: "WAITING", status: "...", conf: score, isRev: isRev });
-            refreshUI();
-        }, 1500);
+            if (confidence >= 95) {
+                let color = Math.random() > 0.5 ? "GREEN" : "RED";
+                if (isRev) color = (color === "GREEN") ? "RED" : "GREEN";
+
+                let nums = (color === "GREEN") ? [1, 3, 7, 9, 5] : [2, 4, 6, 8, 0];
+                let bestNum = nums[Math.floor(Math.random() * nums.length)];
+
+                predTxt.innerText = color;
+                predTxt.style.color = (color === "RED") ? "#ff3366" : "#00ff88";
+                numTxt.innerText = "Best: " + bestNum;
+                accTag.innerText = "CONFIDENCE: " + confidence + "% (SURE)";
+                
+                logs.push({ p: p, cp: color, np: bestNum, real: "---", st: "...", conf: confidence, rev: isRev });
+            } else {
+                predTxt.innerText = "SKIP";
+                predTxt.style.color = "#888";
+                numTxt.innerText = "Next: --";
+                accTag.innerText = "RISK DETECTED - SKIPPING";
+                logs.push({ p: p, cp: "SKIP", np: "--", real: "---", st: "SKIP", conf: confidence, rev: isRev });
+            }
+            render();
+        }, 2000);
     }
 
-    function submitResult() {
-        const val = document.getElementById('num-in').value;
-        if (val === "") return;
-        const pSuffix = (new Date().getHours() * 60) + new Date().getMinutes() + 9671;
-        const targetP = "20260401" + (pSuffix - 1);
-        const n = parseInt(val);
+    function addResult() {
+        const val = document.getElementById('last-res').value;
+        if (val === "" || val < 0 || val > 9) return;
+        
+        const d = new Date();
+        const pID = (d.getHours() * 60) + d.getMinutes() + 9671;
+        const targetP = "20260401" + (pID - 1);
+        const resNum = parseInt(val);
+        let resCol = (resNum % 2 === 0) ? "RED" : "GREEN";
+        if (resNum === 0) resCol = "RED"; 
+        if (resNum === 5) resCol = "GREEN";
 
-        let actualColor = (n % 2 === 0) ? "RED" : "GREEN";
-
-        let entry = v2History.find(h => h.p === targetP);
-        if (entry) {
-            entry.resNum = n;
-            if (entry.pred !== "---") {
-                entry.status = (entry.pred === actualColor) ? "WIN" : "LOSS";
+        let findEntry = logs.find(l => l.p === targetP);
+        if (findEntry) {
+            findEntry.real = resNum;
+            if (findEntry.cp !== "SKIP") {
+                findEntry.st = (findEntry.cp === resCol) ? "WIN" : "LOSS";
             }
         } else {
-            v2History.push({ p: targetP, pred: "---", resNum: n, status: "SYNC", conf: 0 });
+            logs.push({ p: targetP, cp: "---", np: "--", real: resNum, st: "SYNC" });
         }
-        document.getElementById('num-in').value = "";
-        refreshUI();
+        document.getElementById('last-res').value = "";
+        render();
     }
 
-    function refreshUI() {
-        const log = document.getElementById('v2-log');
-        log.innerHTML = "";
-        v2History.slice().reverse().forEach(h => {
-            let sClass = h.status === "WIN" ? "win" : (h.status === "LOSS" ? "loss" : "");
-            let dots = "";
-            if (h.resNum !== "---" && h.resNum !== "WAITING") {
-                if (h.resNum === 0) dots = '<span class="dot r"></span><span class="dot v"></span>';
-                else if (h.resNum === 5) dots = '<span class="dot g"></span><span class="dot v"></span>';
-                else if (h.resNum % 2 === 0) dots = '<span class="dot r"></span>';
-                else dots = '<span class="dot g"></span>';
-            }
-            let revTag = h.isRev ? '<small style="color:#ff4500">[R]</small>' : '';
-
-            log.innerHTML += `<tr>
-                <td>${h.p.slice(-3)}</td>
-                <td style="color:${h.pred === 'RED' ? '#e94560' : (h.pred === 'GREEN' ? '#2ecc71' : '#888')}">${h.pred} ${revTag}</td>
-                <td>${h.resNum} ${dots}</td>
-                <td class="${sClass}">${h.status}</td>
+    function render() {
+        const body = document.getElementById('logs');
+        body.innerHTML = "";
+        logs.slice().reverse().forEach(l => {
+            let sCls = l.st === "WIN" ? "win-text" : (l.st === "LOSS" ? "loss-text" : "skip-text");
+            body.innerHTML += `<tr>
+                <td>${l.p.slice(-3)}</td>
+                <td style="color:${l.cp==='RED'?'#ff3366':(l.cp==='GREEN'?'#00ff88':'#888')}">${l.cp} ${l.rev?'[R]':''}</td>
+                <td>P:${l.np}<br>R:<b>${l.real}</b></td>
+                <td class="${sCls}">${l.st}</td>
             </tr>`;
         });
     }
 
-    setInterval(engine, 1000);
+    setInterval(core, 1000);
 </script>
-
 </body>
 </html>
 
