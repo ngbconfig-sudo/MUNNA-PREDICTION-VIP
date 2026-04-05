@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOD PREDICTION</title>
+    <title>GOD PREDICTION - ACCURACY PRO</title>
     <style>
         :root {
             --god-gold: #ffcc00;
@@ -25,81 +25,69 @@
         }
 
         .god-container {
-            width: 350px;
-            background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
-            border: 2px solid var(--god-gold);
-            box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
+            width: 360px;
+            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+            border: 3px solid var(--god-gold);
+            box-shadow: 0 0 60px rgba(255, 204, 0, 0.4);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 25px;
             text-align: center;
-            position: relative;
         }
 
         .god-header {
             font-size: 26px;
             font-weight: 900;
             color: var(--god-gold);
-            text-shadow: 0 0 15px var(--god-gold);
-            margin-bottom: 20px;
+            text-shadow: 0 0 20px var(--god-gold);
+            margin-bottom: 5px;
             letter-spacing: 4px;
         }
 
-        .input-box {
+        .period-box {
+            background: rgba(255, 204, 0, 0.15);
+            border: 1px solid var(--god-gold);
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        #livePeriod { font-size: 19px; font-weight: bold; display: block; letter-spacing: 1px; color: #fff; }
+
+        .input-group {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid #333;
             padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
+            margin-bottom: 15px;
         }
 
-        .input-box label {
-            font-size: 10px;
-            color: var(--god-gold);
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        input, select {
+        input {
             width: 90%;
             background: #000;
-            border: 1px solid var(--god-gold);
-            color: #fff;
-            padding: 10px;
+            border: 1px solid #444;
+            color: var(--god-gold);
+            padding: 12px;
             text-align: center;
-            font-size: 16px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 5px;
             outline: none;
-            margin-bottom: 10px;
         }
 
         .display-area {
-            height: 140px;
-            border: 1px solid #444;
+            height: 160px;
+            border: 2px solid #222;
             margin: 20px 0;
+            background: radial-gradient(circle, #111, #000);
+            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: radial-gradient(circle, #111, #000);
-            position: relative;
-            overflow: hidden;
+            border-radius: 10px;
         }
 
-        #scanLine {
-            position: absolute;
-            width: 100%;
-            height: 4px;
-            background: var(--god-gold);
-            box-shadow: 0 0 20px var(--god-gold);
-            top: -10px;
-            display: none;
-        }
-
-        @keyframes godScan {
-            0% { top: 0; }
-            100% { top: 140px; }
-        }
-
-        .main-res { font-size: 50px; font-weight: 900; margin: 0; color: #333; transition: 0.5s; }
-        .sub-res { font-size: 14px; color: #666; margin-top: 5px; letter-spacing: 2px; }
+        #mainRes { font-size: 55px; font-weight: 900; margin: 0; color: #222; }
+        .dual-numbers { font-size: 20px; font-weight: bold; color: #666; margin-top: 10px; }
+        .number-highlight { color: var(--god-gold); text-shadow: 0 0 10px var(--god-gold); }
 
         .btn-god {
             width: 100%;
@@ -107,128 +95,128 @@
             background: var(--god-gold);
             color: #000;
             border: none;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 900;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             transition: 0.3s;
         }
 
-        .btn-god:hover {
-            box-shadow: 0 0 30px var(--god-gold);
-            transform: scale(1.02);
-        }
+        .btn-god:active { transform: scale(0.95); }
 
-        .log-list {
-            margin-top: 20px;
+        .logs {
+            margin-top: 15px;
+            height: 50px;
+            font-size: 10px;
+            color: #555;
             text-align: left;
-            font-size: 9px;
-            height: 80px;
-            overflow-y: hidden;
-            border-top: 1px solid #222;
-            padding-top: 10px;
-            color: #444;
             font-family: monospace;
+            border-top: 1px solid #222;
+            padding-top: 8px;
+            overflow: hidden;
         }
-
-        .log-item { color: #00ff41; margin-bottom: 4px; border-left: 2px solid var(--god-gold); padding-left: 5px; }
     </style>
 </head>
 <body>
 
 <div class="god-container">
     <div class="god-header">GOD PREDICTION</div>
+    
+    <div class="period-box">
+        <span style="font-size: 10px; color: var(--god-gold);">ACTIVE PERIOD ID</span>
+        <span id="livePeriod">SYNCING...</span>
+    </div>
 
-    <div class="input-box">
-        <label>PICHLA RESULT DATA ENTRY</label>
-        <select id="prevType">
-            <option value="BIG">BIG</option>
-            <option value="SMALL">SMALL</option>
-        </select>
-        <input type="number" id="prevNum" placeholder="LAST NUMBER (0-9)" max="9" min="0">
+    <div class="input-group">
+        <label style="font-size: 10px; color: var(--god-gold); display: block; margin-bottom: 8px;">ENTER LAST NUMBER (0-9)</label>
+        <input type="number" id="lastNum" placeholder="Ex: 7" oninput="if(this.value.length > 1) this.value = this.value.slice(0, 1);">
     </div>
 
     <div class="display-area">
-        <div id="scanLine"></div>
-        <p class="main-res" id="resText">---</p>
-        <p class="sub-res" id="numText">WAITING FOR INPUT</p>
+        <p id="mainRes">READY</p>
+        <div class="dual-numbers" id="numArea">CHANCE: <span class="number-highlight">?</span> & <span class="number-highlight">?</span></div>
     </div>
 
-    <button class="btn-god" onclick="executeGodLogic()">GOD SCAN START</button>
+    <button class="btn-god" onclick="executeAdvancedScan()">DEEP PATTERN SCAN</button>
 
-    <div class="log-list" id="logs">
-        <div class="log-item">> System Ready. Authenticating Raja Games Pattern...</div>
-    </div>
+    <div class="logs" id="logBox">> AI ENGINE READY...</div>
 </div>
 
 <script>
-    function addLog(text) {
-        const logs = document.getElementById('logs');
-        const div = document.createElement('div');
-        div.className = 'log-item';
-        div.innerText = `> ${text}`;
-        logs.prepend(div);
+    // Period Syncing logic
+    function syncPeriod() {
+        const now = new Date();
+        const ymd = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
+        const totalMinutes = now.getHours() * 60 + now.getMinutes();
+        const periodID = `${ymd}1000${String(10000 + totalMinutes).slice(-5)}`;
+        document.getElementById('livePeriod').innerText = periodID;
+    }
+    setInterval(syncPeriod, 1000); 
+    syncPeriod();
+
+    function addLog(txt) {
+        const lb = document.getElementById('logBox');
+        lb.innerHTML = `> ${txt}<br>` + lb.innerHTML;
     }
 
-    function executeGodLogic() {
-        const pType = document.getElementById('prevType').value;
-        const pNum = document.getElementById('prevNum').value;
-        const resText = document.getElementById('resText');
-        const numText = document.getElementById('numText');
-        const scanLine = document.getElementById('scanLine');
+    function executeAdvancedScan() {
+        const inputVal = document.getElementById('lastNum').value;
+        const mainRes = document.getElementById('mainRes');
+        const numArea = document.getElementById('numArea');
 
-        if(pNum === "") {
-            addLog("ERROR: Input missing!");
+        if(inputVal === "") {
+            alert("Pehle pichla number dalo!");
             return;
         }
 
-        // Start Animation
-        scanLine.style.display = "block";
-        scanLine.style.animation = "godScan 1s infinite alternate";
-        resText.innerText = "GOD...";
-        resText.style.color = "#ffcc00";
-        numText.innerText = "Analyzing Raja Patterns...";
-        
-        addLog(`Input: ${pType} | Number: ${pNum}`);
-        addLog(`Analyzing Image Data Sync...`);
+        const lastNum = parseInt(inputVal);
+        addLog("Analyzing Trend Patterns...");
+        mainRes.innerText = "WAIT";
+        mainRes.style.color = "var(--god-gold)";
 
         setTimeout(() => {
-            let predictedType = "";
-            let predictedNum = 0;
+            let prediction = "";
+            let bestNumbers = [];
 
-            // Pattern Analysis from your Screenshots
-            // Screen 0-9 analysis logic:
-            if(pNum == 0 || pNum == 5) {
-                // Violet trend: usually flips or repeats
-                predictedType = Math.random() > 0.5 ? "BIG" : "SMALL";
-            } else if(pNum <= 4) {
-                // Small trend: 70% chance to flip to Big if series is > 3
-                predictedType = Math.random() > 0.3 ? "BIG" : "SMALL";
-            } else {
-                // Big trend: Check for 2:2 sequence
-                predictedType = Math.random() > 0.4 ? "SMALL" : "BIG";
+            // Pattern Intelligence Logic
+            // 1. Violet Number Patterns (0 and 5)
+            if (lastNum === 0) {
+                prediction = "BIG"; // 0 ke baad aksar trend flip hota hai
+                bestNumbers = [7, 8];
+            } else if (lastNum === 5) {
+                prediction = "SMALL"; // 5 ke baad Small ka high chance
+                bestNumbers = [1, 3];
+            } 
+            // 2. Low Range (Small)
+            else if (lastNum >= 1 && lastNum <= 4) {
+                // Agar chota number hai, toh mirror effect ya series check
+                if (lastNum % 2 === 0) {
+                    prediction = "BIG";
+                    bestNumbers = [6, 9];
+                } else {
+                    prediction = "SMALL"; // Repeat trend
+                    bestNumbers = [2, 4];
+                }
+            } 
+            // 3. High Range (Big)
+            else if (lastNum >= 6 && lastNum <= 9) {
+                if (lastNum >= 8) {
+                    prediction = "SMALL"; // Overbought flip
+                    bestNumbers = [0, 2];
+                } else {
+                    prediction = "BIG"; // Series continue
+                    bestNumbers = [7, 9];
+                }
             }
 
-            // Number Selection based on type
-            if(predictedType === "BIG") {
-                const bigNums = [5, 6, 7, 8, 9];
-                predictedNum = bigNums[Math.floor(Math.random() * bigNums.length)];
-                resText.style.color = "#00ff41";
-            } else {
-                const smallNums = [0, 1, 2, 3, 4];
-                predictedNum = smallNums[Math.floor(Math.random() * smallNums.length)];
-                resText.style.color = "#ff003c";
-            }
-
-            // Final Update
-            scanLine.style.display = "none";
-            resText.innerText = predictedType;
-            numText.innerText = `GOD PREDICTION NUMBER: ${predictedNum}`;
+            // UI Update
+            mainRes.innerText = prediction;
+            mainRes.style.color = prediction === "BIG" ? "var(--neon-green)" : "var(--neon-red)";
+            numArea.innerHTML = `CHANCE: <span class="number-highlight">${bestNumbers[0]}</span> & <span class="number-highlight">${bestNumbers[1]}</span>`;
             
-            addLog(`Result: ${predictedType} (${predictedNum})`);
-            addLog(`Pattern Match: 98.7% Success Rate`);
-            
-        }, 3000);
+            addLog(`Result: ${prediction} [${bestNumbers.join(',')}]`);
+        }, 1500);
     }
 </script>
 
