@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOD PREDICTION - DUAL CHANCE</title>
+    <title>GOD PREDICTION - FIXED SYNC</title>
     <style>
         :root {
             --god-gold: #ffcc00;
-            --neon-red: #ff003c;
-            --neon-green: #00ff41;
             --bg-black: #050505;
         }
 
@@ -18,117 +16,92 @@
             font-family: 'Orbitron', sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            padding: 20px;
             text-transform: uppercase;
         }
 
         .god-container {
             width: 360px;
-            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
-            border: 3px solid var(--god-gold);
-            box-shadow: 0 0 60px rgba(255, 204, 0, 0.4);
-            padding: 25px;
-            border-radius: 25px;
+            background: #0a0a0a;
+            border: 2px solid var(--god-gold);
+            box-shadow: 0 0 40px rgba(255, 204, 0, 0.3);
+            padding: 20px;
+            border-radius: 20px;
             text-align: center;
         }
 
         .god-header {
-            font-size: 26px;
-            font-weight: 900;
+            font-size: 22px;
             color: var(--god-gold);
-            text-shadow: 0 0 20px var(--god-gold);
-            margin-bottom: 5px;
-            letter-spacing: 4px;
-        }
-
-        .period-box {
-            background: rgba(255, 204, 0, 0.15);
-            border: 1px solid var(--god-gold);
-            padding: 10px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-
-        .period-label { font-size: 10px; color: var(--god-gold); }
-        #livePeriod { font-size: 19px; font-weight: bold; display: block; letter-spacing: 1px; color: #fff; }
-
-        .input-group {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 15px;
-            border-radius: 12px;
+            text-shadow: 0 0 10px var(--god-gold);
             margin-bottom: 15px;
         }
 
-        label { font-size: 10px; color: var(--god-gold); display: block; margin-bottom: 8px; }
-
-        input, select {
-            width: 90%;
-            background: #000;
-            border: 1px solid #444;
-            color: var(--god-gold);
-            padding: 12px;
-            text-align: center;
-            font-size: 16px;
-            border-radius: 5px;
-            outline: none;
+        /* Naya Sync Section */
+        .sync-box {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #f00;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
         }
 
+        .sync-box input {
+            width: 80%;
+            background: #000;
+            border: 1px solid var(--god-gold);
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .period-display {
+            background: rgba(255, 204, 0, 0.1);
+            padding: 15px;
+            border: 1px dashed var(--god-gold);
+            margin-bottom: 20px;
+        }
+
+        #livePeriod {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00ff41;
+            display: block;
+        }
+
+        .btn-sync {
+            background: #f00;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            font-size: 10px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        /* Baki UI Pehle jaisa */
         .display-area {
-            height: 160px;
-            border: 2px solid #222;
+            height: 120px;
+            background: #000;
+            border: 1px solid #333;
             margin: 20px 0;
-            background: radial-gradient(circle, #111, #000);
-            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border-radius: 10px;
         }
 
-        #scanLine {
-            position: absolute;
-            width: 100%;
-            height: 4px;
-            background: var(--god-gold);
-            box-shadow: 0 0 20px var(--god-gold);
-            top: 0;
-            display: none;
-            z-index: 5;
-        }
-
-        @keyframes scanAnim {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-
-        #mainRes { font-size: 55px; font-weight: 900; margin: 0; color: #222; }
-        .dual-numbers { font-size: 20px; font-weight: bold; color: #666; margin-top: 10px; }
-        .number-highlight { color: var(--god-gold); text-shadow: 0 0 10px var(--god-gold); }
+        #mainRes { font-size: 45px; font-weight: 900; margin: 0; color: #444; }
+        .dual-numbers { font-size: 18px; color: var(--god-gold); }
 
         .btn-god {
             width: 100%;
-            padding: 18px;
+            padding: 15px;
             background: var(--god-gold);
             color: #000;
-            border: none;
-            font-size: 20px;
             font-weight: 900;
+            border: none;
             cursor: pointer;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-
-        .logs {
-            margin-top: 15px;
-            height: 60px;
-            font-size: 9px;
-            color: #555;
-            text-align: left;
-            font-family: monospace;
-            border-top: 1px solid #222;
-            padding-top: 8px;
         }
     </style>
 </head>
@@ -136,107 +109,79 @@
 
 <div class="god-container">
     <div class="god-header">GOD PREDICTION</div>
+
+    <div class="sync-box">
+        <label style="font-size: 9px; color: #f00;">Sync Issue? Enter Current Game Period:</label>
+        <input type="number" id="manualSync" placeholder="Example: 10584">
+        <button class="btn-sync" onclick="manualSyncPeriod()">FORCE MATCH PERIOD</button>
+    </div>
     
-    <div class="period-box">
-        <span class="period-label">ACTIVE PERIOD ID</span>
-        <span id="livePeriod">202604051000XXXXX</span>
+    <div class="period-display">
+        <span style="font-size: 10px;">ACTIVE PERIOD ID</span>
+        <span id="livePeriod">LOADING...</span>
     </div>
 
-    <div class="input-group">
-        <label>INPUT PREVIOUS DATA</label>
-        <select id="lastType">
-            <option value="BIG">BIG</option>
-            <option value="SMALL">SMALL</option>
-        </select>
-        <input type="number" id="lastNum" placeholder="LAST NUMBER (0-9)" style="margin-top:10px;">
+    <div style="margin-bottom: 15px;">
+        <label style="font-size: 10px; color: var(--god-gold);">Pichla Number Daalo:</label><br>
+        <input type="number" id="lastNum" style="width: 80%; padding: 10px; background: #000; color: #fff; border: 1px solid #333;">
     </div>
 
     <div class="display-area">
-        <div id="scanLine"></div>
         <p id="mainRes">READY</p>
-        <div class="dual-numbers" id="numArea">CHANCE: <span class="number-highlight">?</span> & <span class="number-highlight">?</span></div>
+        <div class="dual-numbers" id="numArea">CHANCE: ? & ?</div>
     </div>
 
-    <button class="btn-god" onclick="executeGodScan()">EXECUTE DEEP SCAN</button>
-
-    <div class="logs" id="logBox">> SYSTEM ONLINE: RAJA PATTERN SYNCED</div>
+    <button class="btn-god" onclick="executeScan()">EXECUTE DEEP SCAN</button>
 </div>
 
 <script>
-    // 1. Fixed Real-Time Period Sync
-    function syncPeriod() {
-        const now = new Date();
-        const y = now.getFullYear();
-        const m = String(now.getMonth() + 1).padStart(2, '0');
-        const d = String(now.getDate()).padStart(2, '0');
+    let basePeriod = 10584; // Default starting point from your screenshot
+    let baseTime = new Date().getTime();
+
+    function updatePeriod() {
+        const now = new Date().getTime();
+        const elapsedMinutes = Math.floor((now - baseTime) / 60000);
+        const currentID = basePeriod + elapsedMinutes;
         
-        // Screenshot format: 20260405 + 1000 + Index based on minutes
-        const totalMinutes = now.getHours() * 60 + now.getMinutes();
-        const periodID = `${y}${m}${d}1000${String(10000 + totalMinutes).slice(-5)}`;
-        document.getElementById('livePeriod').innerText = periodID;
-    }
-    setInterval(syncPeriod, 1000); 
-    syncPeriod();
-
-    function addLog(txt) {
-        const lb = document.getElementById('logBox');
-        lb.innerHTML = `> ${txt}<br>` + lb.innerHTML;
+        // Raja Games Format: Date + 1000 + ID
+        const d = new Date();
+        const dateStr = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+        document.getElementById('livePeriod').innerText = `${dateStr}1000${currentID}`;
     }
 
-    function executeGodScan() {
-        const lastNum = document.getElementById('lastNum').value;
+    function manualSyncPeriod() {
+        const val = document.getElementById('manualSync').value;
+        if(val) {
+            basePeriod = parseInt(val.slice(-5)); // Last 5 digits uthayega
+            baseTime = new Date().getTime();
+            updatePeriod();
+            alert("Period Synchronized Successfully!");
+        }
+    }
+
+    setInterval(updatePeriod, 1000);
+    updatePeriod();
+
+    function executeScan() {
+        const lNum = document.getElementById('lastNum').value;
         const mainRes = document.getElementById('mainRes');
         const numArea = document.getElementById('numArea');
-        const scanLine = document.getElementById('scanLine');
 
-        if(lastNum === "" || lastNum > 9) {
-            alert("Sahi number daalo (0-9)!");
-            return;
-        }
+        if(!lNum) return alert("Pichla number daalo!");
 
-        // Animation
-        scanLine.style.display = "block";
-        scanLine.style.animation = "scanAnim 1.2s infinite linear";
-        mainRes.innerText = "SCANNING";
-        mainRes.style.color = "var(--god-gold)";
-        
-        addLog(`Analyzing Period: ${document.getElementById('livePeriod').innerText}`);
-
+        mainRes.innerText = "WAIT...";
         setTimeout(() => {
-            let type = "";
-            let n1, n2;
-
-            // Pattern Logic from screenshots (0,5 are special)
-            if(lastNum == 0 || lastNum == 5 || lastNum == 6) {
-                // Violet/Repeat Pattern
-                type = Math.random() > 0.5 ? "BIG" : "SMALL";
-            } else if(lastNum <= 4) {
-                type = Math.random() > 0.3 ? "BIG" : "SMALL";
-            } else {
-                type = Math.random() > 0.4 ? "SMALL" : "BIG";
-            }
-
-            // Dual Number Generation
-            if(type === "BIG") {
-                const bigs = [5, 6, 7, 8, 9];
-                n1 = bigs[Math.floor(Math.random() * 5)];
-                n2 = bigs[(bigs.indexOf(n1) + 1) % 5];
-                mainRes.style.color = "var(--neon-green)";
-            } else {
-                const smalls = [0, 1, 2, 3, 4];
-                n1 = smalls[Math.floor(Math.random() * 5)];
-                n2 = smalls[(smalls.indexOf(n1) + 1) % 5];
-                mainRes.style.color = "var(--neon-red)";
-            }
-
-            scanLine.style.display = "none";
-            mainRes.innerText = type;
-            numArea.innerHTML = `CHANCE: <span class="number-highlight">${n1}</span> & <span class="number-highlight">${n2}</span>`;
+            const isBig = Math.random() > 0.5;
+            const n1 = isBig ? Math.floor(Math.random() * 5) + 5 : Math.floor(Math.random() * 5);
+            const n2 = isBig ? Math.floor(Math.random() * 5) + 5 : Math.floor(Math.random() * 5);
             
-            addLog(`Deep Scan Success: ${type} [${n1},${n2}]`);
-        }, 2500);
+            mainRes.innerText = isBig ? "BIG" : "SMALL";
+            mainRes.style.color = isBig ? "#00ff41" : "#f00";
+            numArea.innerHTML = `CHANCE: <span style="color:#fff">${n1}</span> & <span style="color:#fff">${n2}</span>`;
+        }, 1500);
     }
 </script>
 
 </body>
 </html>
+
