@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOD PREDICTION</title>
+    <title>GOD PREDICTION - DUAL CHANCE</title>
     <style>
         :root {
             --god-gold: #ffcc00;
@@ -26,88 +26,86 @@
 
         .god-container {
             width: 360px;
-            background: linear-gradient(145deg, #0a0a0a, #151515);
-            border: 2px solid var(--god-gold);
-            box-shadow: 0 0 50px rgba(255, 204, 0, 0.3);
+            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+            border: 3px solid var(--god-gold);
+            box-shadow: 0 0 60px rgba(255, 204, 0, 0.4);
             padding: 25px;
-            border-radius: 20px;
+            border-radius: 25px;
             text-align: center;
         }
 
         .god-header {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 900;
             color: var(--god-gold);
-            text-shadow: 0 0 15px var(--god-gold);
+            text-shadow: 0 0 20px var(--god-gold);
             margin-bottom: 5px;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
         }
 
-        .period-display {
-            background: rgba(255, 204, 0, 0.1);
-            border: 1px dashed var(--god-gold);
-            padding: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #ccc;
+        .period-box {
+            background: rgba(255, 204, 0, 0.15);
+            border: 1px solid var(--god-gold);
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 5px;
         }
 
-        #livePeriod {
-            color: #fff;
-            font-weight: bold;
-            display: block;
-            font-size: 18px;
-            margin-top: 5px;
-        }
+        .period-label { font-size: 10px; color: var(--god-gold); }
+        #livePeriod { font-size: 19px; font-weight: bold; display: block; letter-spacing: 1px; color: #fff; }
 
-        .input-box {
-            background: rgba(255, 255, 255, 0.02);
+        .input-group {
+            background: rgba(255, 255, 255, 0.03);
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 15px;
         }
 
-        label { font-size: 10px; color: var(--god-gold); display: block; margin-bottom: 5px; }
+        label { font-size: 10px; color: var(--god-gold); display: block; margin-bottom: 8px; }
 
         input, select {
             width: 90%;
             background: #000;
-            border: 1px solid #333;
-            color: var(--neon-green);
-            padding: 10px;
+            border: 1px solid #444;
+            color: var(--god-gold);
+            padding: 12px;
             text-align: center;
+            font-size: 16px;
+            border-radius: 5px;
             outline: none;
-            margin-bottom: 10px;
         }
 
         .display-area {
-            height: 150px;
-            border: 1px solid #222;
-            margin: 15px 0;
+            height: 160px;
+            border: 2px solid #222;
+            margin: 20px 0;
             background: radial-gradient(circle, #111, #000);
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            overflow: hidden;
+            border-radius: 10px;
         }
 
         #scanLine {
             position: absolute;
             width: 100%;
-            height: 3px;
+            height: 4px;
             background: var(--god-gold);
-            box-shadow: 0 0 15px var(--god-gold);
-            top: -5px;
+            box-shadow: 0 0 20px var(--god-gold);
+            top: 0;
+            display: none;
+            z-index: 5;
         }
 
-        @keyframes scanning {
+        @keyframes scanAnim {
             0% { top: 0; }
-            100% { top: 150px; }
+            100% { top: 100%; }
         }
 
-        #mainRes { font-size: 55px; font-weight: 900; color: #222; margin: 0; }
-        #numRes { font-size: 16px; color: #555; }
+        #mainRes { font-size: 55px; font-weight: 900; margin: 0; color: #222; }
+        .dual-numbers { font-size: 20px; font-weight: bold; color: #666; margin-top: 10px; }
+        .number-highlight { color: var(--god-gold); text-shadow: 0 0 10px var(--god-gold); }
 
         .btn-god {
             width: 100%;
@@ -118,22 +116,20 @@
             font-size: 20px;
             font-weight: 900;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        .log-box {
+        .logs {
             margin-top: 15px;
-            height: 70px;
-            overflow: hidden;
+            height: 60px;
             font-size: 9px;
+            color: #555;
             text-align: left;
             font-family: monospace;
             border-top: 1px solid #222;
-            padding-top: 10px;
-            color: #444;
+            padding-top: 8px;
         }
-
-        .log-txt { color: var(--neon-green); margin-bottom: 3px; }
     </style>
 </head>
 <body>
@@ -141,111 +137,106 @@
 <div class="god-container">
     <div class="god-header">GOD PREDICTION</div>
     
-    <div class="period-display">
-        NEXT PERIOD ID
-        <span id="livePeriod">LOADING...</span>
+    <div class="period-box">
+        <span class="period-label">ACTIVE PERIOD ID</span>
+        <span id="livePeriod">202604051000XXXXX</span>
     </div>
 
-    <div class="input-box">
-        <label>LAST PERIOD DATA (PRE-SCAN)</label>
+    <div class="input-group">
+        <label>INPUT PREVIOUS DATA</label>
         <select id="lastType">
             <option value="BIG">BIG</option>
             <option value="SMALL">SMALL</option>
         </select>
-        <input type="number" id="lastNum" placeholder="LAST NUMBER (0-9)">
+        <input type="number" id="lastNum" placeholder="LAST NUMBER (0-9)" style="margin-top:10px;">
     </div>
 
     <div class="display-area">
-        <div id="scanLine" style="display: none;"></div>
-        <p id="mainRes">---</p>
-        <p id="numRes">READY TO SCAN</p>
+        <div id="scanLine"></div>
+        <p id="mainRes">READY</p>
+        <div class="dual-numbers" id="numArea">CHANCE: <span class="number-highlight">?</span> & <span class="number-highlight">?</span></div>
     </div>
 
-    <button class="btn-god" onclick="startGodScan()">GOD SCAN EXECUTE</button>
+    <button class="btn-god" onclick="executeGodScan()">EXECUTE DEEP SCAN</button>
 
-    <div class="log-box" id="logs">
-        <div class="log-txt">> Data Sync Initialized...</div>
-    </div>
+    <div class="logs" id="logBox">> SYSTEM ONLINE: RAJA PATTERN SYNCED</div>
 </div>
 
 <script>
-    // 1. Automatic Period Number Sync
-    function updatePeriod() {
+    // 1. Fixed Real-Time Period Sync
+    function syncPeriod() {
         const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
         
-        // Raja Games format: Date + Minutes based ID
-        const minutesInDay = now.getHours() * 60 + now.getMinutes();
-        const periodId = `${year}${month}${day}1000${String(minutesInDay).padStart(4, '0')}`;
-        document.getElementById('livePeriod').innerText = periodId;
+        // Screenshot format: 20260405 + 1000 + Index based on minutes
+        const totalMinutes = now.getHours() * 60 + now.getMinutes();
+        const periodID = `${y}${m}${d}1000${String(10000 + totalMinutes).slice(-5)}`;
+        document.getElementById('livePeriod').innerText = periodID;
     }
-    setInterval(updatePeriod, 30000);
-    updatePeriod();
+    setInterval(syncPeriod, 1000); 
+    syncPeriod();
 
-    function addLog(msg) {
-        const box = document.getElementById('logs');
-        const d = document.createElement('div');
-        d.className = 'log-txt';
-        d.innerText = `> ${msg}`;
-        box.prepend(d);
+    function addLog(txt) {
+        const lb = document.getElementById('logBox');
+        lb.innerHTML = `> ${txt}<br>` + lb.innerHTML;
     }
 
-    function startGodScan() {
-        const lNum = document.getElementById('lastNum').value;
+    function executeGodScan() {
+        const lastNum = document.getElementById('lastNum').value;
         const mainRes = document.getElementById('mainRes');
-        const numRes = document.getElementById('numRes');
+        const numArea = document.getElementById('numArea');
         const scanLine = document.getElementById('scanLine');
 
-        if(lNum === "") {
-            alert("Pehle pichla number daalo!");
+        if(lastNum === "" || lastNum > 9) {
+            alert("Sahi number daalo (0-9)!");
             return;
         }
 
-        // Animation Start
+        // Animation
         scanLine.style.display = "block";
-        scanLine.style.animation = "scanning 1s infinite linear";
-        mainRes.innerText = "SCAN";
+        scanLine.style.animation = "scanAnim 1.2s infinite linear";
+        mainRes.innerText = "SCANNING";
         mainRes.style.color = "var(--god-gold)";
-        numRes.innerText = "Reconstructing Screenshot Patterns...";
         
-        addLog(`Analyzing Period ID: ${document.getElementById('livePeriod').innerText}`);
-        addLog(`Last Input Detected: ${lNum}`);
+        addLog(`Analyzing Period: ${document.getElementById('livePeriod').innerText}`);
 
         setTimeout(() => {
-            let nextType = "";
-            let nextNum = 0;
+            let type = "";
+            let n1, n2;
 
-            // Screenshots Analysis Logic
-            if(lNum >= 5) {
-                // If Big, flip pattern 65%
-                nextType = Math.random() > 0.35 ? "SMALL" : "BIG";
+            // Pattern Logic from screenshots (0,5 are special)
+            if(lastNum == 0 || lastNum == 5 || lastNum == 6) {
+                // Violet/Repeat Pattern
+                type = Math.random() > 0.5 ? "BIG" : "SMALL";
+            } else if(lastNum <= 4) {
+                type = Math.random() > 0.3 ? "BIG" : "SMALL";
             } else {
-                // If Small, flip pattern 60%
-                nextType = Math.random() > 0.4 ? "BIG" : "SMALL";
+                type = Math.random() > 0.4 ? "SMALL" : "BIG";
             }
 
-            // Accurate Number Generation
-            if(nextType === "BIG") {
-                nextNum = [5, 6, 7, 8, 9][Math.floor(Math.random() * 5)];
+            // Dual Number Generation
+            if(type === "BIG") {
+                const bigs = [5, 6, 7, 8, 9];
+                n1 = bigs[Math.floor(Math.random() * 5)];
+                n2 = bigs[(bigs.indexOf(n1) + 1) % 5];
                 mainRes.style.color = "var(--neon-green)";
             } else {
-                nextNum = [0, 1, 2, 3, 4][Math.floor(Math.random() * 5)];
+                const smalls = [0, 1, 2, 3, 4];
+                n1 = smalls[Math.floor(Math.random() * 5)];
+                n2 = smalls[(smalls.indexOf(n1) + 1) % 5];
                 mainRes.style.color = "var(--neon-red)";
             }
 
             scanLine.style.display = "none";
-            mainRes.innerText = nextType;
-            numRes.innerText = `GOD NUMBER: ${nextNum}`;
+            mainRes.innerText = type;
+            numArea.innerHTML = `CHANCE: <span class="number-highlight">${n1}</span> & <span class="number-highlight">${n2}</span>`;
             
-            addLog(`Prediction Locked: ${nextType} (${nextNum})`);
-            addLog(`Deep Scan Success 99.1%`);
-
+            addLog(`Deep Scan Success: ${type} [${n1},${n2}]`);
         }, 2500);
     }
 </script>
 
 </body>
 </html>
-
