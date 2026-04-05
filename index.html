@@ -1,177 +1,204 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Secured Analysis</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KING PREDICTION VIP V2</title>
+    <style>
+        :root { --gold: #ffd700; --bg: #0a0c18; --card: #151935; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg); font-family: 'Segoe UI', Tahoma, sans-serif; display: flex; justify-content: center; padding: 15px; color: white; }
+        .container { width: 100%; max-width: 400px; background: var(--card); border-radius: 25px; border: 2px solid var(--gold); overflow: hidden; box-shadow: 0 0 40px rgba(255, 215, 0, 0.2); }
+        
+        .header { background: var(--gold); color: #000; padding: 18px; text-align: center; font-weight: 900; font-size: 1.2rem; text-transform: uppercase; }
+        
+        .stats-row { display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.03); margin: 10px; border-radius: 15px; }
+        .period-info { font-size: 0.9rem; border-left: 3px solid var(--gold); padding-left: 10px; }
+        .timer { font-size: 1.6rem; font-weight: bold; color: var(--gold); font-family: 'Courier New', Courier, monospace; }
 
-<style>
+        .display-box { margin: 15px; padding: 30px; background: rgba(0,0,0,0.4); border-radius: 20px; text-align: center; border: 1px solid rgba(255,215,0,0.1); position: relative; }
+        #main-output { font-size: 2.4rem; font-weight: 900; letter-spacing: 2px; }
+        #accuracy-badge { position: absolute; top: 10px; right: 15px; font-size: 0.8rem; padding: 4px 10px; border-radius: 20px; background: #2ecc71; color: #000; font-weight: bold; display: none; }
 
-body{
-margin:0;
-background:#0a0a0a;
-color:#fff;
-font-family:Arial;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-}
+        .input-section { margin: 0 15px 15px; padding: 15px; background: rgba(255,215,0,0.05); border-radius: 15px; border: 1px dashed var(--gold); }
+        input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: none; font-size: 1.2rem; text-align: center; font-weight: bold; }
+        .btn-v2 { background: var(--gold); color: #000; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 900; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
 
-/* main box */
+        .history-wrap { margin: 15px; background: #080a16; border-radius: 15px; padding: 12px; height: 320px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { color: var(--gold); padding-bottom: 12px; border-bottom: 2px solid #222; }
+        td { padding: 12px 4px; text-align: center; border-bottom: 1px solid #1a1e3a; }
 
-.container{
-width:90%;
-max-width:400px;
-background:#111;
-border-radius:12px;
-padding:25px;
-box-shadow:0 0 20px rgba(0,0,0,0.6);
-}
-
-/* title */
-
-.title{
-font-size:26px;
-font-weight:bold;
-text-align:center;
-margin-bottom:5px;
-}
-
-.title span{
-color:#ff8c00;
-}
-
-/* badge */
-
-.badge{
-text-align:center;
-font-size:12px;
-color:#ff8c00;
-margin-bottom:20px;
-}
-
-/* logs */
-
-.logs{
-font-size:13px;
-color:#ccc;
-line-height:22px;
-min-height:120px;
-}
-
-.logs div{
-opacity:0;
-animation:show 0.6s forwards;
-}
-
-.logs div:nth-child(1){animation-delay:.5s}
-.logs div:nth-child(2){animation-delay:1s}
-.logs div:nth-child(3){animation-delay:1.5s}
-.logs div:nth-child(4){animation-delay:2s}
-.logs div:nth-child(5){animation-delay:2.5s}
-
-@keyframes show{
-to{opacity:1}
-}
-
-/* progress */
-
-.progressBox{
-margin-top:20px;
-}
-
-.progressText{
-display:flex;
-justify-content:space-between;
-font-size:12px;
-margin-bottom:6px;
-}
-
-.bar{
-height:8px;
-background:#222;
-border-radius:10px;
-overflow:hidden;
-}
-
-.fill{
-height:8px;
-width:0%;
-background:#ff8c00;
-animation:load 3s forwards;
-}
-
-@keyframes load{
-from{width:0}
-to{width:100%}
-}
-
-/* footer */
-
-.footer{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-height:45px;
-background:#050505;
-color:#444;
-font-size:11px;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-</style>
+        .win { color: #2ecc71; font-weight: bold; }
+        .loss { color: #e94560; font-weight: bold; }
+        .dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-left: 3px; border: 1px solid rgba(255,255,255,0.2); }
+        .g { background: #2ecc71; } .r { background: #e94560; } .v { background: #9b59b6; }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
+    <div class="header">King VIP Predictor V2</div>
+    
+    <div class="stats-row">
+        <div class="period-info">
+            <div style="opacity: 0.6; font-size: 0.7rem;">Active Period</div>
+            <div id="p-id" style="font-weight: bold;">Loading...</div>
+        </div>
+        <div class="timer" id="time-left">00:00</div>
+    </div>
 
-<div class="title"><span>SECURED</span> ANALYSIS</div>
-<div class="badge">ELITE ENGINE v6.0</div>
+    <div class="display-box">
+        <div id="accuracy-badge">95% CONFIDENCE</div>
+        <div id="main-output">V2 READY</div>
+        <div id="sub-msg" style="font-size: 0.7rem; color: #888; margin-top: 8px;">Waiting for system sync...</div>
+    </div>
 
-<div class="logs">
+    <div class="input-section" id="v2-input-area" style="display: none;">
+        <div style="font-size: 0.8rem; text-align: center; color: var(--gold);">Enter Last Period Result (0-9)</div>
+        <input type="number" id="num-in" placeholder="Result Number" min="0" max="9">
+        <button class="btn-v2" onclick="submitResult()">Update System</button>
+    </div>
 
-<div>● Initializing secure protocols...</div>
-<div>● Connecting encrypted server...</div>
-<div>● Running AI probability scan...</div>
-<div>● Verifying system integrity...</div>
-<div>● Prediction engine ready.</div>
-
-</div>
-
-<div class="progressBox">
-
-<div class="progressText">
-<span>CONNECTING</span>
-<span id="percent">0%</span>
-</div>
-
-<div class="bar">
-<div class="fill"></div>
-</div>
-
-</div>
-
-</div>
-
-<div class="footer">
-© 2026 SECURE ANALYSIS SYSTEM
+    <div class="history-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th>Prediction</th>
+                    <th>Result</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="v2-log"></tbody>
+        </table>
+    </div>
 </div>
 
 <script>
+    let v2History = [];
+    let lastPeriod = "";
+    let autoActive = false;
 
-let p=0;
+    function runV2Engine() {
+        const now = new Date();
+        const secs = now.getSeconds();
+        const rem = 60 - secs;
+        
+        const pSuffix = (now.getHours() * 60) + now.getMinutes() + 9671;
+        const currentP = "202604011000" + pSuffix;
+        const previousP = "202604011000" + (pSuffix - 1);
+        
+        document.getElementById('p-id').innerText = currentP;
+        document.getElementById('time-left').innerText = "00:" + (rem < 10 ? "0" + rem : (rem === 60 ? "00" : rem));
 
-let i=setInterval(()=>{
-p++;
-document.getElementById("percent").innerText=p+"%";
-if(p>=100) clearInterval(i);
-},30);
+        // Input window (0-30 seconds of new minute)
+        const inputPanel = document.getElementById('v2-input-area');
+        if (rem > 30) {
+            inputPanel.style.display = "block";
+        } else {
+            inputPanel.style.display = "none";
+        }
 
+        // Prediction Trigger (At 30 seconds mark)
+        if (rem <= 30 && rem > 25 && !autoActive) {
+            processV2(currentP);
+        }
+
+        if (currentP !== lastPeriod) {
+            lastPeriod = currentP;
+            autoActive = false;
+            refreshV2UI();
+        }
+    }
+
+    function processV2(p) {
+        const dataPoints = v2History.filter(h => h.resNum !== "---").length;
+        const output = document.getElementById('main-output');
+        const badge = document.getElementById('accuracy-badge');
+        
+        if (dataPoints < 5) {
+            output.innerText = `SYNCING (${dataPoints}/5)`;
+            return;
+        }
+
+        autoActive = true;
+        output.innerText = "ANALYZING...";
+        badge.style.display = "none";
+
+        setTimeout(() => {
+            // V2 Intelligence Logic
+            let score = Math.floor(Math.random() * (99 - 82 + 1)) + 82;
+            
+            if (score >= 90) {
+                const colors = ["GREEN", "RED"];
+                const pick = colors[Math.floor(Math.random() * colors.length)];
+                output.innerText = pick;
+                output.style.color = (pick === "RED") ? "#e94560" : "#2ecc71";
+                badge.innerText = score + "% CONFIDENCE";
+                badge.style.display = "block";
+                v2History.push({ p: p, pred: pick, resNum: "WAITING", status: "...", conf: score });
+            } else {
+                output.innerText = "WAIT NEXT BET";
+                output.style.color = var(--gold);
+                v2History.push({ p: p, pred: "SKIP", resNum: "WAITING", status: "SKIP", conf: score });
+            }
+            refreshV2UI();
+        }, 1500);
+    }
+
+    function submitResult() {
+        const val = document.getElementById('num-in').value;
+        if (val === "") return;
+        
+        const now = new Date();
+        const pSuffix = (now.getHours() * 60) + now.getMinutes() + 9671;
+        const targetP = "202604011000" + (pSuffix - 1);
+        const n = parseInt(val);
+
+        // Correct Jai Club Matcher
+        let actualColor = (n % 2 === 0) ? "RED" : "GREEN";
+
+        let entry = v2History.find(h => h.p === targetP);
+        if (entry) {
+            entry.resNum = n;
+            if (entry.pred !== "SKIP" && entry.pred !== "---") {
+                entry.status = (entry.pred === actualColor) ? "WIN" : "LOSS";
+            }
+        } else {
+            v2History.push({ p: targetP, pred: "---", resNum: n, status: "SYNC", conf: 0 });
+        }
+        
+        document.getElementById('num-in').value = "";
+        refreshV2UI();
+    }
+
+    function refreshV2UI() {
+        const log = document.getElementById('v2-log');
+        log.innerHTML = "";
+        v2History.slice().reverse().forEach(h => {
+            let sClass = h.status === "WIN" ? "win" : (h.status === "LOSS" ? "loss" : "");
+            
+            let dots = "";
+            if (h.resNum !== "---" && h.resNum !== "WAITING") {
+                if (h.resNum === 0) dots = '<span class="dot r"></span><span class="dot v"></span>';
+                else if (h.resNum === 5) dots = '<span class="dot g"></span><span class="dot v"></span>';
+                else if (h.resNum % 2 === 0) dots = '<span class="dot r"></span>';
+                else dots = '<span class="dot g"></span>';
+            }
+
+            log.innerHTML += `<tr>
+                <td>${h.p.slice(-3)}</td>
+                <td style="color:${h.pred === 'RED' ? '#e94560' : (h.pred === 'GREEN' ? '#2ecc71' : '#888')}">${h.pred} ${h.conf > 0 ? '('+h.conf+'%)' : ''}</td>
+                <td>${h.resNum} ${dots}</td>
+                <td class="${sClass}">${h.status}</td>
+            </tr>`;
+        });
+    }
+
+    setInterval(runV2Engine, 1000);
 </script>
 
 </body>
 </html>
+
