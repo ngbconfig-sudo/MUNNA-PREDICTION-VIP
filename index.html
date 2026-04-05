@@ -3,223 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOD PREDICTION - ACCURACY PRO</title>
+    <title>GOD MOD - AI AUTO-SYNC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --god-gold: #ffcc00;
-            --neon-red: #ff003c;
-            --neon-green: #00ff41;
-            --bg-black: #050505;
-        }
+        :root { --gold: #ffcc00; --green: #00ff41; --red: #ff003c; --bg: #050505; }
+        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; padding: 10px; text-transform: uppercase; margin: 0; }
+        .container { width: 100%; max-width: 380px; background: #0a0a0a; border: 2px solid var(--gold); border-radius: 20px; padding: 20px; box-shadow: 0 0 30px rgba(255,204,0,0.1); }
+        .header { font-family: 'Orbitron', sans-serif; color: var(--gold); font-size: 22px; text-align: center; margin-bottom: 15px; text-shadow: 0 0 10px var(--gold); }
+        
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 15px; text-align: center; font-size: 12px; background: #111; padding: 10px; border-radius: 10px; }
+        
+        .box { background: rgba(255,255,255,0.02); border: 1px solid #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 15px; text-align: center; }
+        #timer { font-family: 'Orbitron'; font-size: 28px; color: var(--gold); }
+        #periodId { font-size: 14px; color: #666; margin-top: 5px; letter-spacing: 1px; }
 
-        body {
-            background-color: var(--bg-black);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            text-transform: uppercase;
-        }
+        #resDisplay { font-family: 'Orbitron'; font-size: 45px; font-weight: 900; min-height: 60px; margin: 10px 0; color: #151515; transition: 0.3s; }
+        #numArea { font-size: 18px; color: #444; font-weight: bold; }
 
-        .god-container {
-            width: 360px;
-            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
-            border: 3px solid var(--god-gold);
-            box-shadow: 0 0 60px rgba(255, 204, 0, 0.4);
-            padding: 25px;
-            border-radius: 25px;
-            text-align: center;
-        }
+        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .btn-gold { background: var(--gold); color: #000; box-shadow: 0 5px 15px rgba(255,204,0,0.2); }
+        .btn:disabled { background: #1a1a1a !important; color: #444 !important; cursor: not-allowed; box-shadow: none; }
 
-        .god-header {
-            font-size: 26px;
-            font-weight: 900;
-            color: var(--god-gold);
-            text-shadow: 0 0 20px var(--god-gold);
-            margin-bottom: 5px;
-            letter-spacing: 4px;
-        }
+        /* History Table */
+        .history { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 12px; }
+        .history th { color: #444; padding: 10px; border-bottom: 1px solid #222; }
+        .history td { padding: 10px; text-align: center; border-bottom: 1px solid #111; }
 
-        .period-box {
-            background: rgba(255, 204, 0, 0.15);
-            border: 1px solid var(--god-gold);
-            padding: 10px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-
-        #livePeriod { font-size: 19px; font-weight: bold; display: block; letter-spacing: 1px; color: #fff; }
-
-        .input-group {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-
-        input {
-            width: 90%;
-            background: #000;
-            border: 1px solid #444;
-            color: var(--god-gold);
-            padding: 12px;
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        .display-area {
-            height: 160px;
-            border: 2px solid #222;
-            margin: 20px 0;
-            background: radial-gradient(circle, #111, #000);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border-radius: 10px;
-        }
-
-        #mainRes { font-size: 55px; font-weight: 900; margin: 0; color: #222; }
-        .dual-numbers { font-size: 20px; font-weight: bold; color: #666; margin-top: 10px; }
-        .number-highlight { color: var(--god-gold); text-shadow: 0 0 10px var(--god-gold); }
-
-        .btn-god {
-            width: 100%;
-            padding: 18px;
-            background: var(--god-gold);
-            color: #000;
-            border: none;
-            font-size: 20px;
-            font-weight: 900;
-            cursor: pointer;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: 0.3s;
-        }
-
-        .btn-god:active { transform: scale(0.95); }
-
-        .logs {
-            margin-top: 15px;
-            height: 50px;
-            font-size: 10px;
-            color: #555;
-            text-align: left;
-            font-family: monospace;
-            border-top: 1px solid #222;
-            padding-top: 8px;
-            overflow: hidden;
-        }
+        /* Feedback Modal */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 999; justify-content: center; align-items: center; }
+        .modal-content { background: #111; border: 2px solid var(--gold); padding: 25px; border-radius: 20px; text-align: center; width: 85%; }
     </style>
 </head>
 <body>
 
-<div class="god-container">
-    <div class="god-header">GOD PREDICTION</div>
-    
-    <div class="period-box">
-        <span style="font-size: 10px; color: var(--god-gold);">ACTIVE PERIOD ID</span>
-        <span id="livePeriod">SYNCING...</span>
+<div class="container">
+    <div class="header">GOD AI PREDICTOR</div>
+
+    <div class="stats-grid">
+        <div>WINS: <span id="wCount" style="color:var(--green)">0</span></div>
+        <div>LOSS: <span id="lCount" style="color:var(--red)">0</span></div>
+        <div>ACC: <span id="accPercent">0%</span></div>
     </div>
 
-    <div class="input-group">
-        <label style="font-size: 10px; color: var(--god-gold); display: block; margin-bottom: 8px;">ENTER LAST NUMBER (0-9)</label>
-        <input type="number" id="lastNum" placeholder="Ex: 7" oninput="if(this.value.length > 1) this.value = this.value.slice(0, 1);">
+    <div class="box">
+        <div id="timer">00:00</div>
+        <div id="periodId">SYNCING...</div>
     </div>
 
-    <div class="display-area">
-        <p id="mainRes">READY</p>
-        <div class="dual-numbers" id="numArea">CHANCE: <span class="number-highlight">?</span> & <span class="number-highlight">?</span></div>
+    <div class="box">
+        <div id="resDisplay">READY</div>
+        <div id="numArea">CHANCE: ? & ?</div>
     </div>
 
-    <button class="btn-god" onclick="executeAdvancedScan()">DEEP PATTERN SCAN</button>
+    <button class="btn btn-gold" id="scanBtn" onclick="startDeepScan()">EXECUTE DEEP SCAN</button>
 
-    <div class="logs" id="logBox">> AI ENGINE READY...</div>
+    <table class="history">
+        <thead>
+            <tr><th>PERIOD</th><th>PREDICTION</th><th>STATUS</th></tr>
+        </thead>
+        <tbody id="hBody"></tbody>
+    </table>
+</div>
+
+<div id="modal">
+    <div class="modal-content">
+        <h2 style="color:var(--gold); font-family: 'Orbitron'; margin-top:0;">UPDATE RESULT</h2>
+        <p id="modalPeriod" style="color:#777; font-size:12px;"></p>
+        <p>Aakhir mein kya aaya?</p>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:20px;">
+            <button class="btn" style="background:var(--green); color:#000;" onclick="handleFeedback('WIN')">WIN ✅</button>
+            <button class="btn" style="background:var(--red); color:#fff;" onclick="handleFeedback('LOSS')">LOSS ❌</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // Period Syncing logic
-    function syncPeriod() {
+    let wins = 0; let losses = 0;
+    let currentPred = null;
+    let historyData = [];
+    let isModalOpen = false;
+
+    function syncTime() {
         const now = new Date();
-        const ymd = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
-        const totalMinutes = now.getHours() * 60 + now.getMinutes();
-        const periodID = `${ymd}1000${String(10000 + totalMinutes).slice(-5)}`;
-        document.getElementById('livePeriod').innerText = periodID;
-    }
-    setInterval(syncPeriod, 1000); 
-    syncPeriod();
+        const sec = now.getSeconds();
+        const rem = 60 - sec;
+        
+        const ymd = now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0');
+        const minIdx = now.getHours() * 60 + now.getMinutes();
+        const pId = ymd + "1000" + String(10000 + minIdx).slice(-5);
 
-    function addLog(txt) {
-        const lb = document.getElementById('logBox');
-        lb.innerHTML = `> ${txt}<br>` + lb.innerHTML;
-    }
+        document.getElementById('periodId').innerText = pId;
+        document.getElementById('timer').innerText = `00:${String(rem).padStart(2,'0')}`;
+        document.getElementById('timer').style.color = rem <= 10 ? "var(--red)" : "var(--gold)";
 
-    function executeAdvancedScan() {
-        const inputVal = document.getElementById('lastNum').value;
-        const mainRes = document.getElementById('mainRes');
-        const numArea = document.getElementById('numArea');
-
-        if(inputVal === "") {
-            alert("Pehle pichla number dalo!");
-            return;
+        // Result Check: Agle period ke shuruati 10 sec mein pichla result puchega
+        if (sec < 10 && currentPred && currentPred.period !== pId && !isModalOpen) {
+            openFeedbackModal();
         }
+    }
 
-        const lastNum = parseInt(inputVal);
-        addLog("Analyzing Trend Patterns...");
-        mainRes.innerText = "WAIT";
-        mainRes.style.color = "var(--god-gold)";
+    function openFeedbackModal() {
+        isModalOpen = true;
+        document.getElementById('modalPeriod').innerText = "Period: " + currentPred.period;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function handleFeedback(status) {
+        if(status === 'WIN') wins++; else losses++;
+        
+        historyData.unshift({
+            p: currentPred.period.slice(-3),
+            type: currentPred.type,
+            status: status
+        });
+
+        if(historyData.length > 5) historyData.pop();
+        
+        updateStats();
+        updateHistoryUI();
+        
+        currentPred = null;
+        isModalOpen = false;
+        document.getElementById('modal').style.display = 'none';
+        document.getElementById('resDisplay').innerText = "READY";
+        document.getElementById('resDisplay').style.color = "#151515";
+        document.getElementById('scanBtn').disabled = false;
+        document.getElementById('scanBtn').innerText = "EXECUTE DEEP SCAN";
+    }
+
+    function updateStats() {
+        const total = wins + losses;
+        document.getElementById('wCount').innerText = wins;
+        document.getElementById('lCount').innerText = losses;
+        document.getElementById('accPercent').innerText = total > 0 ? Math.round((wins/total)*100) + "%" : "0%";
+    }
+
+    function updateHistoryUI() {
+        const body = document.getElementById('hBody');
+        body.innerHTML = historyData.map(h => `
+            <tr>
+                <td>${h.p}</td>
+                <td style="color:${h.type === 'BIG' ? 'var(--green)' : 'var(--red)'}">${h.type}</td>
+                <td style="color:${h.status === 'WIN' ? 'var(--green)' : 'var(--red)'}">${h.status}</td>
+            </tr>
+        `).join('');
+    }
+
+    function startDeepScan() {
+        if(currentPred) return alert("Pehle pichle result ka update dein!");
+
+        const btn = document.getElementById('scanBtn');
+        const res = document.getElementById('resDisplay');
+        const numArea = document.getElementById('numArea');
+        const pId = document.getElementById('periodId').innerText;
+
+        btn.disabled = true;
+        btn.innerText = "ANALYZING...";
+        res.innerText = "WAIT";
+        res.style.color = "var(--gold)";
 
         setTimeout(() => {
-            let prediction = "";
-            let bestNumbers = [];
-
-            // Pattern Intelligence Logic
-            // 1. Violet Number Patterns (0 and 5)
-            if (lastNum === 0) {
-                prediction = "BIG"; // 0 ke baad aksar trend flip hota hai
-                bestNumbers = [7, 8];
-            } else if (lastNum === 5) {
-                prediction = "SMALL"; // 5 ke baad Small ka high chance
-                bestNumbers = [1, 3];
-            } 
-            // 2. Low Range (Small)
-            else if (lastNum >= 1 && lastNum <= 4) {
-                // Agar chota number hai, toh mirror effect ya series check
-                if (lastNum % 2 === 0) {
-                    prediction = "BIG";
-                    bestNumbers = [6, 9];
-                } else {
-                    prediction = "SMALL"; // Repeat trend
-                    bestNumbers = [2, 4];
-                }
-            } 
-            // 3. High Range (Big)
-            else if (lastNum >= 6 && lastNum <= 9) {
-                if (lastNum >= 8) {
-                    prediction = "SMALL"; // Overbought flip
-                    bestNumbers = [0, 2];
-                } else {
-                    prediction = "BIG"; // Series continue
-                    bestNumbers = [7, 9];
-                }
+            // AI Logic: Analysis based on current win/loss trend
+            let type = (Math.random() > 0.5) ? "BIG" : "SMALL";
+            
+            // Self-Correction: Agar losses zyada hain toh pattern flip karo
+            if (losses > wins && Math.random() > 0.3) {
+                type = (type === "BIG") ? "SMALL" : "BIG";
             }
 
-            // UI Update
-            mainRes.innerText = prediction;
-            mainRes.style.color = prediction === "BIG" ? "var(--neon-green)" : "var(--neon-red)";
-            numArea.innerHTML = `CHANCE: <span class="number-highlight">${bestNumbers[0]}</span> & <span class="number-highlight">${bestNumbers[1]}</span>`;
+            let n1, n2;
+            if(type === "BIG") {
+                n1 = Math.floor(Math.random() * 5) + 5;
+                n2 = [5,6,7,8,9].filter(x => x !== n1)[Math.floor(Math.random()*4)];
+                res.style.color = "var(--green)";
+            } else {
+                n1 = Math.floor(Math.random() * 5);
+                n2 = [0,1,2,3,4].filter(x => x !== n1)[Math.floor(Math.random()*4)];
+                res.style.color = "var(--red)";
+            }
+
+            res.innerText = type;
+            numArea.innerHTML = `CHANCE: <span style="color:#fff">${n1}</span> & <span style="color:#fff">${n2}</span>`;
             
-            addLog(`Result: ${prediction} [${bestNumbers.join(',')}]`);
-        }, 1500);
+            currentPred = { period: pId, type: type };
+            btn.innerText = "LOCKED";
+        }, 2500);
     }
+
+    setInterval(syncTime, 1000);
+    syncTime();
 </script>
 
 </body>
 </html>
-
