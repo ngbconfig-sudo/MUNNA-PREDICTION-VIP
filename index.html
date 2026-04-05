@@ -3,127 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOD PREDICTION - FIXED SYNC</title>
+    <title>GOD MOD - LIVE SYNC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --god-gold: #ffcc00;
-            --bg-black: #050505;
+            --deep-red: #ff003c;
+            --neon-green: #00ff41;
+            --bg-black: #080808;
         }
 
         body {
             background-color: var(--bg-black);
             color: #fff;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             display: flex;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
             text-transform: uppercase;
         }
 
         .god-container {
             width: 360px;
-            background: #0a0a0a;
+            background: rgba(10, 10, 10, 0.98);
             border: 2px solid var(--god-gold);
-            box-shadow: 0 0 40px rgba(255, 204, 0, 0.3);
-            padding: 20px;
-            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
+            padding: 25px;
+            border-radius: 25px;
             text-align: center;
+            position: relative;
         }
 
         .god-header {
-            font-size: 22px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
             color: var(--god-gold);
             text-shadow: 0 0 10px var(--god-gold);
-            margin-bottom: 15px;
-        }
-
-        /* Naya Sync Section */
-        .sync-box {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid #f00;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-        }
-
-        .sync-box input {
-            width: 80%;
-            background: #000;
-            border: 1px solid var(--god-gold);
-            color: #fff;
-            padding: 5px;
-            text-align: center;
-            margin-top: 5px;
-        }
-
-        .period-display {
-            background: rgba(255, 204, 0, 0.1);
-            padding: 15px;
-            border: 1px dashed var(--god-gold);
             margin-bottom: 20px;
+            letter-spacing: 3px;
         }
 
-        #livePeriod {
-            font-size: 20px;
-            font-weight: bold;
-            color: #00ff41;
+        /* Period & Seconds Styling */
+        .status-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #222;
+        }
+
+        .label { font-size: 10px; color: #666; letter-spacing: 2px; }
+        
+        #livePeriod { 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px; 
+            color: #fff; 
+            margin: 5px 0;
             display: block;
         }
 
-        .btn-sync {
-            background: #f00;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            font-size: 10px;
-            cursor: pointer;
-            margin-top: 5px;
+        .timer-box {
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            color: var(--deep-red);
+            text-shadow: 0 0 10px var(--deep-red);
         }
 
-        /* Baki UI Pehle jaisa */
-        .display-area {
-            height: 120px;
+        .input-section input {
+            width: 100%;
             background: #000;
             border: 1px solid #333;
-            margin: 20px 0;
+            color: var(--god-gold);
+            padding: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .display-area {
+            height: 140px;
+            background: radial-gradient(circle, #111, #000);
+            border: 1px solid #222;
+            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            border-radius: 15px;
         }
 
-        #mainRes { font-size: 45px; font-weight: 900; margin: 0; color: #444; }
-        .dual-numbers { font-size: 18px; color: var(--god-gold); }
+        #mainRes { 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 50px; 
+            font-weight: 900; 
+            margin: 0; 
+            color: #1a1a1a; 
+        }
 
-        .btn-god {
+        .dual-numbers { font-size: 18px; font-weight: bold; color: #444; }
+
+        .btn-execute {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             background: var(--god-gold);
             color: #000;
+            font-family: 'Orbitron', sans-serif;
             font-weight: 900;
+            font-size: 16px;
             border: none;
+            border-radius: 10px;
             cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.2);
         }
+
+        .btn-execute:disabled { background: #222; color: #444; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
 <div class="god-container">
-    <div class="god-header">GOD PREDICTION</div>
-
-    <div class="sync-box">
-        <label style="font-size: 9px; color: #f00;">Sync Issue? Enter Current Game Period:</label>
-        <input type="number" id="manualSync" placeholder="Example: 10584">
-        <button class="btn-sync" onclick="manualSyncPeriod()">FORCE MATCH PERIOD</button>
-    </div>
+    <div class="god-header">GOD MOD</div>
     
-    <div class="period-display">
-        <span style="font-size: 10px;">ACTIVE PERIOD ID</span>
-        <span id="livePeriod">LOADING...</span>
+    <div class="status-panel">
+        <span class="label">ACTIVE PERIOD</span>
+        <span id="livePeriod">SYNCING...</span>
+        
+        <div class="label" style="margin-top: 10px;">TIME REMAINING</div>
+        <div class="timer-box" id="secondsCounter">00:60</div>
     </div>
 
-    <div style="margin-bottom: 15px;">
-        <label style="font-size: 10px; color: var(--god-gold);">Pichla Number Daalo:</label><br>
-        <input type="number" id="lastNum" style="width: 80%; padding: 10px; background: #000; color: #fff; border: 1px solid #333;">
+    <div class="input-section">
+        <label class="label" style="display: block; margin-bottom: 5px;">LAST NO. INPUT</label>
+        <input type="number" id="lastNum" placeholder="0-9">
     </div>
 
     <div class="display-area">
@@ -131,54 +148,88 @@
         <div class="dual-numbers" id="numArea">CHANCE: ? & ?</div>
     </div>
 
-    <button class="btn-god" onclick="executeScan()">EXECUTE DEEP SCAN</button>
+    <button class="btn-execute" id="scanBtn" onclick="startScan()">EXECUTE SCAN</button>
 </div>
 
 <script>
-    let basePeriod = 10584; // Default starting point from your screenshot
-    let baseTime = new Date().getTime();
+    let lockedData = null;
+    let currentPeriodID = "";
 
-    function updatePeriod() {
-        const now = new Date().getTime();
-        const elapsedMinutes = Math.floor((now - baseTime) / 60000);
-        const currentID = basePeriod + elapsedMinutes;
-        
-        // Raja Games Format: Date + 1000 + ID
-        const d = new Date();
-        const dateStr = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
-        document.getElementById('livePeriod').innerText = `${dateStr}1000${currentID}`;
-    }
+    function updateSystem() {
+        const now = new Date();
+        const seconds = now.getSeconds();
+        const remainingSeconds = 60 - seconds;
 
-    function manualSyncPeriod() {
-        const val = document.getElementById('manualSync').value;
-        if(val) {
-            basePeriod = parseInt(val.slice(-5)); // Last 5 digits uthayega
-            baseTime = new Date().getTime();
-            updatePeriod();
-            alert("Period Synchronized Successfully!");
+        // Period ID Logic
+        const dateStr = now.getFullYear() + 
+                        String(now.getMonth() + 1).padStart(2, '0') + 
+                        String(now.getDate()).padStart(2, '0');
+        const minIndex = now.getHours() * 60 + now.getMinutes();
+        const periodID = `${dateStr}1000${String(10000 + minIndex).slice(-5)}`;
+
+        // Update Period
+        const periodDisplay = document.getElementById('livePeriod');
+        if(periodDisplay.innerText !== periodID) {
+            periodDisplay.innerText = periodID;
+            currentPeriodID = periodID;
+            unlock();
         }
+
+        // Update Seconds Counter
+        document.getElementById('secondsCounter').innerText = `00:${String(remainingSeconds).padStart(2, '0')}`;
+        
+        // Timer color change alert (Red if < 10s)
+        const timerBox = document.getElementById('secondsCounter');
+        timerBox.style.color = remainingSeconds <= 10 ? "#ff003c" : "#ffcc00";
     }
 
-    setInterval(updatePeriod, 1000);
-    updatePeriod();
+    function unlock() {
+        lockedData = null;
+        document.getElementById('scanBtn').disabled = false;
+        document.getElementById('scanBtn').innerText = "EXECUTE SCAN";
+        document.getElementById('mainRes').style.color = "#1a1a1a";
+    }
 
-    function executeScan() {
-        const lNum = document.getElementById('lastNum').value;
+    setInterval(updateSystem, 1000);
+    updateSystem();
+
+    function startScan() {
+        const input = document.getElementById('lastNum').value;
         const mainRes = document.getElementById('mainRes');
         const numArea = document.getElementById('numArea');
+        const btn = document.getElementById('scanBtn');
 
-        if(!lNum) return alert("Pichla number daalo!");
+        if(input === "" || input > 9) {
+            alert("Pehle valid number daalo!");
+            return;
+        }
 
-        mainRes.innerText = "WAIT...";
+        if(lockedData && lockedData.id === currentPeriodID) return;
+
+        btn.disabled = true;
+        btn.innerText = "SCANNING...";
+        mainRes.innerText = "WAIT";
+        mainRes.style.color = "var(--god-gold)";
+
         setTimeout(() => {
-            const isBig = Math.random() > 0.5;
-            const n1 = isBig ? Math.floor(Math.random() * 5) + 5 : Math.floor(Math.random() * 5);
-            const n2 = isBig ? Math.floor(Math.random() * 5) + 5 : Math.floor(Math.random() * 5);
-            
-            mainRes.innerText = isBig ? "BIG" : "SMALL";
-            mainRes.style.color = isBig ? "#00ff41" : "#f00";
+            let resType = Math.random() > 0.5 ? "BIG" : "SMALL";
+            let n1, n2;
+
+            if(resType === "BIG") {
+                const b = [5,6,7,8,9].sort(() => Math.random() - 0.5);
+                n1 = b[0]; n2 = b[1];
+                mainRes.style.color = "var(--neon-green)";
+            } else {
+                const s = [0,1,2,3,4].sort(() => Math.random() - 0.5);
+                n1 = s[0]; n2 = s[1];
+                mainRes.style.color = "var(--deep-red)";
+            }
+
+            lockedData = { id: currentPeriodID };
+            mainRes.innerText = resType;
             numArea.innerHTML = `CHANCE: <span style="color:#fff">${n1}</span> & <span style="color:#fff">${n2}</span>`;
-        }, 1500);
+            btn.innerText = "LOCKED";
+        }, 2000);
     }
 </script>
 
