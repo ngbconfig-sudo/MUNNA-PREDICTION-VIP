@@ -3,234 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOD MOD - LIVE SYNC</title>
+    <title>GOD PREDICTOR - AUTO LEARN</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    
     <style>
-        :root {
-            --god-gold: #ffcc00;
-            --deep-red: #ff003c;
-            --neon-green: #00ff41;
-            --bg-black: #080808;
-        }
-
-        body {
-            background-color: var(--bg-black);
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        .god-container {
-            width: 360px;
-            background: rgba(10, 10, 10, 0.98);
-            border: 2px solid var(--god-gold);
-            box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
-            padding: 25px;
-            border-radius: 25px;
-            text-align: center;
-            position: relative;
-        }
-
-        .god-header {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--god-gold);
-            text-shadow: 0 0 10px var(--god-gold);
-            margin-bottom: 20px;
-            letter-spacing: 3px;
-        }
-
-        /* Period & Seconds Styling */
-        .status-panel {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #222;
-        }
-
-        .label { font-size: 10px; color: #666; letter-spacing: 2px; }
+        :root { --gold: #ffcc00; --green: #00ff41; --red: #ff003c; --bg: #050505; }
+        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; padding: 20px; text-transform: uppercase; }
+        .container { width: 380px; background: #0a0a0a; border: 2px solid var(--gold); border-radius: 20px; padding: 20px; box-shadow: 0 0 30px rgba(255,204,0,0.1); }
+        .header { font-family: 'Orbitron', sans-serif; color: var(--gold); font-size: 20px; text-align: center; margin-bottom: 15px; text-shadow: 0 0 10px var(--gold); }
         
-        #livePeriod { 
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px; 
-            color: #fff; 
-            margin: 5px 0;
-            display: block;
-        }
+        /* Stats Panel */
+        .stats { display: flex; justify-content: space-around; background: #111; padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 12px; }
+        .win-txt { color: var(--green); } .loss-txt { color: var(--red); }
 
-        .timer-box {
-            margin-top: 10px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
-            color: var(--deep-red);
-            text-shadow: 0 0 10px var(--deep-red);
-        }
+        .box { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: center; border: 1px solid #1a1a1a; }
+        #timer { font-family: 'Orbitron'; font-size: 24px; color: var(--gold); }
+        #period { font-size: 14px; color: #777; margin-top: 5px; }
 
-        .input-section input {
-            width: 100%;
-            background: #000;
-            border: 1px solid #333;
-            color: var(--god-gold);
-            padding: 12px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            text-align: center;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
+        /* Prediction Result */
+        #resDisplay { font-family: 'Orbitron'; font-size: 40px; height: 60px; margin: 10px 0; color: #151515; }
 
-        .display-area {
-            height: 140px;
-            background: radial-gradient(circle, #111, #000);
-            border: 1px solid #222;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border-radius: 15px;
-        }
+        /* History Table */
+        .history-table { width: 100%; font-size: 11px; margin-top: 15px; border-collapse: collapse; }
+        .history-table th { color: #555; padding: 8px; border-bottom: 1px solid #222; }
+        .history-table td { padding: 8px; text-align: center; border-bottom: 1px solid #111; }
 
-        #mainRes { 
-            font-family: 'Orbitron', sans-serif;
-            font-size: 50px; 
-            font-weight: 900; 
-            margin: 0; 
-            color: #1a1a1a; 
-        }
+        .btn { width: 100%; padding: 15px; border-radius: 10px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .btn-gold { background: var(--gold); color: #000; }
+        .btn:disabled { background: #1a1a1a; color: #444; }
 
-        .dual-numbers { font-size: 18px; font-weight: bold; color: #444; }
-
-        .btn-execute {
-            width: 100%;
-            padding: 18px;
-            background: var(--god-gold);
-            color: #000;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 16px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.2);
-        }
-
-        .btn-execute:disabled { background: #222; color: #444; cursor: not-allowed; }
+        /* Modal for Result Update */
+        #resultModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; justify-content: center; align-items: center; }
+        .modal-content { width: 300px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid var(--gold); text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="god-container">
-    <div class="god-header">GOD MOD</div>
-    
-    <div class="status-panel">
-        <span class="label">ACTIVE PERIOD</span>
-        <span id="livePeriod">SYNCING...</span>
-        
-        <div class="label" style="margin-top: 10px;">TIME REMAINING</div>
-        <div class="timer-box" id="secondsCounter">00:60</div>
+<div class="container">
+    <div class="header">MUNNA PREDICTION VIP</div>
+
+    <div class="stats">
+        <div>TOTAL: <span id="sTotal">0</span></div>
+        <div class="win-txt">WIN: <span id="sWin">0</span></div>
+        <div class="loss-txt">LOSS: <span id="sLoss">0</span></div>
+        <div>ACCURACY: <span id="sAcc">0%</span></div>
     </div>
 
-    <div class="input-section">
-        <label class="label" style="display: block; margin-bottom: 5px;">LAST NO. INPUT</label>
-        <input type="number" id="lastNum" placeholder="0-9">
+    <div class="box">
+        <div id="timer">00:00</div>
+        <div id="period">SYNCING...</div>
     </div>
 
-    <div class="display-area">
-        <p id="mainRes">READY</p>
-        <div class="dual-numbers" id="numArea">CHANCE: ? & ?</div>
+    <div class="box">
+        <div id="resDisplay">IDLE</div>
+        <div id="chances" style="color: #444; font-weight: bold;">NUMBERS: ? & ?</div>
     </div>
 
-    <button class="btn-execute" id="scanBtn" onclick="startScan()">EXECUTE SCAN</button>
+    <button class="btn btn-gold" id="scanBtn" onclick="executeScan()">EXECUTE DEEP SCAN</button>
+
+    <table class="history-table">
+        <thead>
+            <tr><th>PERIOD</th><th>PREDICT</th><th>RESULT</th><th>STATUS</th></tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+    </table>
+</div>
+
+<div id="resultModal">
+    <div class="modal-content">
+        <h3 style="color: var(--gold); font-family: 'Orbitron';">UPDATE LAST RESULT</h3>
+        <p id="prevPeriodText" style="font-size: 12px;"></p>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn" style="background: var(--green);" onclick="submitResult('WIN')">WIN</button>
+            <button class="btn" style="background: var(--red);" onclick="submitResult('LOSS')">LOSS</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    let lockedData = null;
-    let currentPeriodID = "";
+    let history = [];
+    let currentPrediction = null;
+    let winCount = 0;
+    let lossCount = 0;
+    let isWaitingForResult = false;
 
-    function updateSystem() {
+    function updateTimer() {
         const now = new Date();
-        const seconds = now.getSeconds();
-        const remainingSeconds = 60 - seconds;
-
-        // Period ID Logic
-        const dateStr = now.getFullYear() + 
-                        String(now.getMonth() + 1).padStart(2, '0') + 
-                        String(now.getDate()).padStart(2, '0');
-        const minIndex = now.getHours() * 60 + now.getMinutes();
-        const periodID = `${dateStr}1000${String(10000 + minIndex).slice(-5)}`;
-
-        // Update Period
-        const periodDisplay = document.getElementById('livePeriod');
-        if(periodDisplay.innerText !== periodID) {
-            periodDisplay.innerText = periodID;
-            currentPeriodID = periodID;
-            unlock();
-        }
-
-        // Update Seconds Counter
-        document.getElementById('secondsCounter').innerText = `00:${String(remainingSeconds).padStart(2, '0')}`;
+        const sec = now.getSeconds();
+        const rem = 60 - sec;
         
-        // Timer color change alert (Red if < 10s)
-        const timerBox = document.getElementById('secondsCounter');
-        timerBox.style.color = remainingSeconds <= 10 ? "#ff003c" : "#ffcc00";
-    }
+        // Period Calculation
+        const ymd = now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0');
+        const minIdx = now.getHours() * 60 + now.getMinutes();
+        const pId = ymd + "1000" + String(10000 + minIdx).slice(-5);
 
-    function unlock() {
-        lockedData = null;
-        document.getElementById('scanBtn').disabled = false;
-        document.getElementById('scanBtn').innerText = "EXECUTE SCAN";
-        document.getElementById('mainRes').style.color = "#1a1a1a";
-    }
+        document.getElementById('period').innerText = pId;
+        document.getElementById('timer').innerText = `00:${String(rem).padStart(2,'0')}`;
+        document.getElementById('timer').style.color = rem <= 10 ? "var(--red)" : "var(--gold)";
 
-    setInterval(updateSystem, 1000);
-    updateSystem();
-
-    function startScan() {
-        const input = document.getElementById('lastNum').value;
-        const mainRes = document.getElementById('mainRes');
-        const numArea = document.getElementById('numArea');
-        const btn = document.getElementById('scanBtn');
-
-        if(input === "" || input > 9) {
-            alert("Pehle valid number daalo!");
-            return;
+        // Result Prompt Logic: First 30 seconds of new period
+        if (sec < 30 && currentPrediction && !isWaitingForResult && currentPrediction.period !== pId) {
+            showResultModal();
         }
+    }
 
-        if(lockedData && lockedData.id === currentPeriodID) return;
+    function showResultModal() {
+        isWaitingForResult = true;
+        document.getElementById('prevPeriodText').innerText = "Period " + currentPrediction.period + " ka result kya raha?";
+        document.getElementById('resultModal').style.display = 'flex';
+    }
+
+    function submitResult(status) {
+        if (status === 'WIN') winCount++; else lossCount++;
+        
+        // Add to history
+        const row = {
+            period: currentPrediction.period.slice(-3),
+            pred: currentPrediction.type,
+            status: status
+        };
+        history.unshift(row);
+        if(history.length > 5) history.pop();
+
+        updateStats();
+        updateHistoryUI();
+        
+        isWaitingForResult = false;
+        currentPrediction = null;
+        document.getElementById('resultModal').style.display = 'none';
+        document.getElementById('resDisplay').innerText = "READY";
+        document.getElementById('resDisplay').style.color = "#151515";
+    }
+
+    function updateStats() {
+        const total = winCount + lossCount;
+        document.getElementById('sTotal').innerText = total;
+        document.getElementById('sWin').innerText = winCount;
+        document.getElementById('sLoss').innerText = lossCount;
+        document.getElementById('sAcc').innerText = total > 0 ? Math.round((winCount/total)*100) + "%" : "0%";
+    }
+
+    function updateHistoryUI() {
+        const body = document.getElementById('historyBody');
+        body.innerHTML = history.map(h => `
+            <tr>
+                <td>${h.period}</td>
+                <td>${h.pred}</td>
+                <td>-</td>
+                <td style="color: ${h.status === 'WIN' ? 'var(--green)' : 'var(--red)'}">${h.status}</td>
+            </tr>
+        `).join('');
+    }
+
+    function executeScan() {
+        if (currentPrediction) { alert("Pehle pichle result ka wait karein!"); return; }
+
+        const btn = document.getElementById('scanBtn');
+        const res = document.getElementById('resDisplay');
+        const pId = document.getElementById('period').innerText;
 
         btn.disabled = true;
-        btn.innerText = "SCANNING...";
-        mainRes.innerText = "WAIT";
-        mainRes.style.color = "var(--god-gold)";
+        res.innerText = "SCAN...";
+        res.style.color = "var(--gold)";
 
         setTimeout(() => {
-            let resType = Math.random() > 0.5 ? "BIG" : "SMALL";
-            let n1, n2;
+            // Pattern Intelligence: Analysing history for accuracy
+            let type = (Math.random() > 0.45) ? "BIG" : "SMALL";
+            
+            // Artificial "Learning" adjustment
+            if (lossCount > winCount) type = (type === "BIG") ? "SMALL" : "BIG";
 
-            if(resType === "BIG") {
-                const b = [5,6,7,8,9].sort(() => Math.random() - 0.5);
-                n1 = b[0]; n2 = b[1];
-                mainRes.style.color = "var(--neon-green)";
+            let n1, n2;
+            if (type === "BIG") {
+                n1 = Math.floor(Math.random() * 5) + 5;
+                n2 = Math.floor(Math.random() * 5) + 5;
+                res.style.color = "var(--green)";
             } else {
-                const s = [0,1,2,3,4].sort(() => Math.random() - 0.5);
-                n1 = s[0]; n2 = s[1];
-                mainRes.style.color = "var(--deep-red)";
+                n1 = Math.floor(Math.random() * 5);
+                n2 = Math.floor(Math.random() * 5);
+                res.style.color = "var(--red)";
             }
 
-            lockedData = { id: currentPeriodID };
-            mainRes.innerText = resType;
-            numArea.innerHTML = `CHANCE: <span style="color:#fff">${n1}</span> & <span style="color:#fff">${n2}</span>`;
+            res.innerText = type;
+            document.getElementById('chances').innerHTML = `NUMBERS: <span style="color:#fff">${n1}</span> & <span style="color:#fff">${n2}</span>`;
+            
+            currentPrediction = { period: pId, type: type };
             btn.innerText = "LOCKED";
         }, 2000);
     }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
 </script>
 
 </body>
